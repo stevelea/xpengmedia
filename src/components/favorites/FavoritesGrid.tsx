@@ -9,7 +9,7 @@ type FavoritesGridProps = {
 };
 
 export const FavoritesGrid: React.FC<FavoritesGridProps> = ({ category, onAddClick }) => {
-  const { favorites, getFavoritesByCategory, removeFavorite } = useFavorites();
+  const { getFavoritesByCategory, removeFavorite } = useFavorites();
   const categoryFavorites = getFavoritesByCategory(category);
 
   if (categoryFavorites.length === 0 && !onAddClick) {

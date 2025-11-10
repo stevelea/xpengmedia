@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiStar, FiClock, FiTrendingUp, FiFilter, FiX, FiSearch, FiGrid, FiList } from 'react-icons/fi';
+import { motion } from 'framer-motion';
+import { FiStar, FiClock, FiTrendingUp, FiFilter, FiX, FiSearch, FiGrid, FiList, FiPlus } from 'react-icons/fi';
 import { useEnhancedFavorites } from '../../context/EnhancedFavoritesContext';
 import FavoriteForm from './FavoriteForm';
-import { Dialog } from '@headlessui/react';
+import { Dialog, DialogBackdrop } from '@headlessui/react';
 
 type ViewMode = 'grid' | 'list';
 type SortOption = 'alphabetical' | 'recent' | 'popular' | 'category';
@@ -12,7 +12,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
   const { 
     favorites, 
     categories, 
-    getFavoritesByCategory, 
+     
     getPinnedFavorites, 
     getRecentFavorites,
     removeFavorite,
@@ -356,7 +356,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
         className="fixed inset-0 z-50 overflow-y-auto"
       >
         <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-          <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
+          <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
           
           <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
             &#8203;

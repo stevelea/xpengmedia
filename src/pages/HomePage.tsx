@@ -1,22 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FavoritesGrid } from '../components/favorites/FavoritesGrid';
 import { AddFavoriteModal } from '../components/favorites/AddFavoriteModal';
 import { SearchBar } from '../components/SearchBar';
 import { useFavorites } from '../context/FavoritesContext';
-import { useTheme } from '../context/ThemeContext';
-import { PlusIcon, ArrowUpIcon, XMarkIcon, StarIcon, ClockIcon, FireIcon } from '@heroicons/react/24/outline';
-import { FiSearch, FiX, FiGlobe, FiClock, FiTrendingUp, FiFilter } from 'react-icons/fi';
+import { PlusIcon, ArrowUpIcon } from '@heroicons/react/24/outline';
 
 export const HomePage: React.FC = () => {
-  const { categories, currentCountry, getCurrentCountry } = useFavorites();
-  const { theme } = useTheme();
+  const { categories } = useFavorites();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const searchInputRef = useRef<HTMLInputElement>(null);
 
   // Gestion du défilement pour afficher le bouton de retour en haut
   useEffect(() => {
@@ -40,51 +34,6 @@ export const HomePage: React.FC = () => {
     });
   };
 
-  // Filtrer les catégories en fonction de la recherche
-  const filteredCategories = categories.filter(category => 
-    category.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  // Effet pour gérer le focus sur la barre de recherche avec le raccourci Ctrl+K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      } else if (e.key === 'Escape') {
-        setSearchQuery('');
-        searchInputRef.current?.blur();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  // Obtenir les informations sur le pays actuel
-  const currentCountryData = getCurrentCountry();
-
-  // Styles pour le thème
-  const themeStyles = {
-    light: {
-      bg: 'bg-gray-50',
-      card: 'bg-white',
-      text: 'text-gray-800',
-      border: 'border-gray-200',
-      hover: 'hover:bg-gray-100',
-      active: 'bg-gray-200',
-    },
-    dark: {
-      bg: 'bg-gray-900',
-      card: 'bg-gray-800',
-      text: 'text-gray-100',
-      border: 'border-gray-700',
-      hover: 'hover:bg-gray-700',
-      active: 'bg-gray-600',
-    },
-  };
-
-  const currentTheme = themeStyles[theme];
 
   return (
     <div className="container mx-auto px-4 py-6 pb-20">

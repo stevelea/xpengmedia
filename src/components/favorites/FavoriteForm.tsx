@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, DialogBackdrop, Transition } from '@headlessui/react';
 import { FiX, FiLink, FiTag, FiPlus, FiXCircle } from 'react-icons/fi';
 import { motion } from 'framer-motion';
 import { useEnhancedFavorites } from '../../context/EnhancedFavoritesContext';
@@ -160,7 +160,7 @@ const FavoriteForm: React.FC<FavoriteFormProps> = ({ isOpen, onClose, initialDat
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-50" />
+            <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-50" />
           </Transition.Child>
 
           {/* Centrer le contenu */}

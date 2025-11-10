@@ -3,14 +3,6 @@ import { useFavorites } from '../context/FavoritesContext';
 import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
 
-type SearchResult = {
-  id: string;
-  name: string;
-  url: string;
-  icon: string;
-  category: string;
-};
-
 export const SearchBar: React.FC = () => {
   const { favorites } = useFavorites();
   const [query, setQuery] = useState('');

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, FilmIcon, MusicNoteIcon, GamepadIcon, WifiIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, FilmIcon, MusicalNoteIcon, TvIcon, BoltIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
 
 type NavItem = {
   name: string;
@@ -11,9 +11,9 @@ type NavItem = {
 const navItems: NavItem[] = [
   { name: 'Accueil', icon: <HomeIcon className="h-6 w-6" />, path: '/' },
   { name: 'Vidéos', icon: <FilmIcon className="h-6 w-6" />, path: '/videos' },
-  { name: 'Musique', icon: <MusicNoteIcon className="h-6 w-6" />, path: '/music' },
-  { name: 'Jeux', icon: <GamepadIcon className="h-6 w-6" />, path: '/games' },
-  { name: 'Recharge', icon: <WifiIcon className="h-6 w-6" />, path: '/charging' },
+  { name: 'Musique', icon: <MusicalNoteIcon className="h-6 w-6" />, path: '/music' },
+  { name: 'Jeux', icon: <TvIcon className="h-6 w-6" />, path: '/games' },
+  { name: 'Recharge', icon: <BoltIcon className="h-6 w-6" />, path: '/charging' },
   { name: 'Paramètres', icon: <Cog6ToothIcon className="h-6 w-6" />, path: '/settings' },
 ];
 

@@ -1,29 +1,13 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from './AuthContext';
-import { db } from '../lib/firebase';
-import { doc, setDoc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
-
-type FavoriteItem = {
-  id: string;
-  name: string;
-  url: string;
-  icon: string;
-  category: string;
-  isPinned?: boolean;
-  lastVisited?: Date;
-  visitCount?: number;
-  tags?: string[];
-  createdAt: Date;
-  updatedAt: Date;
-};
+import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
+import type { FavoriteItem } from '../types/favorites';
 
 type FavoritesContextType = {
   favorites: FavoriteItem[];
   categories: string[];
   tags: string[];
-  addFavorite: (item: Omit<FavoriteItem, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
-  updateFavorite: (id: string, updates: Partial<FavoriteItem>) => Promise<void>;
-  removeFavorite: (id: string) => Promise<void>;
+  addFavorite: (item: Omit<FavoriteItem, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateFavorite: (id: string, updates: Partial<FavoriteItem>) => void;
+  removeFavorite: (id: string) => void;
   togglePin: (id: string) => void;
   getFavoritesByCategory: (category: string) => FavoriteItem[];
   getFavoritesByTag: (tag: string) => FavoriteItem[];
@@ -31,132 +15,77 @@ type FavoritesContextType = {
   getRecentFavorites: (limit?: number) => FavoriteItem[];
   addCategory: (category: string) => void;
   addTag: (tag: string) => void;
-  syncFavorites: () => Promise<void>;
-  isSyncing: boolean;
-  lastSync: Date | null;
+  isFormOpen: boolean;
+  setIsFormOpen: (isOpen: boolean) => void;
 };
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
-export const EnhancedFavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
+export const EnhancedFavoritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [favorites, setFavorites] = useState<FavoriteItem[]>([]);
   const [categories, setCategories] = useState<string[]>([]);
   const [tags, setTags] = useState<string[]>([]);
-  const [isSyncing, setIsSyncing] = useState(false);
-  const [lastSync, setLastSync] = useState<Date | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
-  // Charger les favoris depuis le stockage local
+  // Charger les données depuis le stockage local
   useEffect(() => {
-    const loadLocalFavorites = () => {
+    const loadFromLocalStorage = () => {
       const savedFavorites = localStorage.getItem('favorites');
       if (savedFavorites) {
-        setFavorites(JSON.parse(savedFavorites));
+        setFavorites(JSON.parse(savedFavorites, (key, value) => {
+          if (key === 'createdAt' || key === 'updatedAt' || key === 'lastVisited') {
+            return new Date(value);
+          }
+          return value;
+        }));
       }
-      
+
       const savedCategories = localStorage.getItem('favoriteCategories');
       if (savedCategories) {
         setCategories(JSON.parse(savedCategories));
       }
-      
+
       const savedTags = localStorage.getItem('favoriteTags');
       if (savedTags) {
         setTags(JSON.parse(savedTags));
       }
     };
 
-    loadLocalFavorites();
+    loadFromLocalStorage();
   }, []);
 
-  // Synchroniser avec Firestore si l'utilisateur est connecté
-  const syncWithFirestore = useCallback(async () => {
-    if (!user) return;
-    
-    setIsSyncing(true);
-    try {
-      const userRef = doc(db, 'users', user.uid);
-      const userDoc = await getDoc(userRef);
-      
-      if (userDoc.exists()) {
-        // Fusionner les favoris locaux et distants
-        const remoteData = userDoc.data();
-        const mergedFavorites = mergeFavorites(favorites, remoteData.favorites || []);
-        const mergedCategories = Array.from(new Set([...categories, ...(remoteData.categories || [])]));
-        const mergedTags = Array.from(new Set([...tags, ...(remoteData.tags || [])]));
-        
-        setFavorites(mergedFavorites);
-        setCategories(mergedCategories);
-        setTags(mergedTags);
-        
-        // Mettre à jour Firestore avec les données fusionnées
-        await updateDoc(userRef, {
-          favorites: mergedFavorites,
-          categories: mergedCategories,
-          tags: mergedTags,
-          lastSynced: new Date().toISOString()
-        });
-      } else {
-        // Créer un nouveau document utilisateur
-        await setDoc(userRef, {
-          favorites,
-          categories,
-          tags,
-          lastSynced: new Date().toISOString()
-        });
-      }
-      
-      setLastSync(new Date());
-    } catch (error) {
-      console.error('Erreur lors de la synchronisation avec Firestore:', error);
-    } finally {
-      setIsSyncing(false);
-    }
-  }, [user, favorites, categories, tags]);
-
-  // Fonction utilitaire pour fusionner les favoris
-  const mergeFavorites = (local: FavoriteItem[], remote: FavoriteItem[]): FavoriteItem[] => {
-    const merged = [...local];
-    const localIds = new Set(local.map(f => f.id));
-    
-    remote.forEach(remoteItem => {
-      if (!localIds.has(remoteItem.id)) {
-        merged.push({
-          ...remoteItem,
-          // Convertir les timestamps Firestore en objets Date
-          createdAt: remoteItem.createdAt instanceof Date ? remoteItem.createdAt : new Date(remoteItem.createdAt),
-          updatedAt: remoteItem.updatedAt instanceof Date ? remoteItem.updatedAt : new Date(remoteItem.updatedAt)
-        });
-      }
-    });
-    
-    return merged;
-  };
+  // Sauvegarder dans le stockage local à chaque modification
+  const saveToLocalStorage = useCallback((newFavorites: FavoriteItem[]) => {
+    localStorage.setItem('favorites', JSON.stringify(newFavorites));
+    localStorage.setItem('favoriteCategories', JSON.stringify(categories));
+    localStorage.setItem('favoriteTags', JSON.stringify(tags));
+  }, [categories, tags]);
 
   // Ajouter un favori
-  const addFavorite = async (item: Omit<FavoriteItem, 'id' | 'createdAt' | 'updatedAt'>) => {
+  const addFavorite = useCallback((item: Omit<FavoriteItem, 'id' | 'createdAt' | 'updatedAt'>) => {
     const newFavorite: FavoriteItem = {
       ...item,
-      id: generateId(),
+      id: Date.now().toString(),
       isPinned: false,
       visitCount: 0,
       tags: item.tags || [],
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    
+
     setFavorites(prev => {
       const updated = [...prev, newFavorite];
-      localStorage.setItem('favorites', JSON.stringify(updated));
+      saveToLocalStorage(updated);
       return updated;
     });
-    
+
     // Mettre à jour les catégories et tags si nécessaire
     if (!categories.includes(item.category)) {
       const newCategories = [...categories, item.category];
       setCategories(newCategories);
       localStorage.setItem('favoriteCategories', JSON.stringify(newCategories));
     }
-    
+
     if (item.tags) {
       const newTags = Array.from(new Set([...tags, ...item.tags]));
       if (newTags.length > tags.length) {
@@ -164,98 +93,75 @@ export const EnhancedFavoritesProvider: React.FC<{ children: React.ReactNode }> 
         localStorage.setItem('favoriteTags', JSON.stringify(newTags));
       }
     }
-    
-    // Synchroniser avec Firestore si connecté
-    if (user) {
-      await syncWithFirestore();
-    }
-  };
+  }, [categories, tags, saveToLocalStorage]);
 
   // Mettre à jour un favori
-  const updateFavorite = async (id: string, updates: Partial<FavoriteItem>) => {
+  const updateFavorite = useCallback((id: string, updates: Partial<FavoriteItem>) => {
     setFavorites(prev => {
       const updated = prev.map(fav => 
         fav.id === id ? { ...fav, ...updates, updatedAt: new Date() } : fav
       );
-      localStorage.setItem('favorites', JSON.stringify(updated));
+      saveToLocalStorage(updated);
       return updated;
     });
-    
-    // Synchroniser avec Firestore si connecté
-    if (user) {
-      await syncWithFirestore();
-    }
-  };
+  }, [saveToLocalStorage]);
 
   // Supprimer un favori
-  const removeFavorite = async (id: string) => {
+  const removeFavorite = useCallback((id: string) => {
     setFavorites(prev => {
       const updated = prev.filter(fav => fav.id !== id);
-      localStorage.setItem('favorites', JSON.stringify(updated));
+      saveToLocalStorage(updated);
       return updated;
     });
-    
-    // Synchroniser avec Firestore si connecté
-    if (user) {
-      await syncWithFirestore();
-    }
-  };
+  }, [saveToLocalStorage]);
 
   // Épingler/Désépingler un favori
-  const togglePin = (id: string) => {
+  const togglePin = useCallback((id: string) => {
     setFavorites(prev => {
       const updated = prev.map(fav => 
         fav.id === id ? { ...fav, isPinned: !fav.isPinned, updatedAt: new Date() } : fav
       );
-      localStorage.setItem('favorites', JSON.stringify(updated));
+      saveToLocalStorage(updated);
       return updated;
     });
-  };
+  }, [saveToLocalStorage]);
 
   // Ajouter une catégorie
-  const addCategory = (category: string) => {
+  const addCategory = useCallback((category: string) => {
     if (!categories.includes(category)) {
       const newCategories = [...categories, category];
       setCategories(newCategories);
       localStorage.setItem('favoriteCategories', JSON.stringify(newCategories));
     }
-  };
+  }, [categories]);
 
   // Ajouter un tag
-  const addTag = (tag: string) => {
+  const addTag = useCallback((tag: string) => {
     if (!tags.includes(tag)) {
       const newTags = [...tags, tag];
       setTags(newTags);
       localStorage.setItem('favoriteTags', JSON.stringify(newTags));
     }
-  };
+  }, [tags]);
 
-  // Obtenir les favoris par catégorie
-  const getFavoritesByCategory = (category: string) => {
+  // Fonctions utilitaires
+  const getFavoritesByCategory = useCallback((category: string) => {
     return favorites.filter(fav => fav.category === category);
-  };
+  }, [favorites]);
 
-  // Obtenir les favoris par tag
-  const getFavoritesByTag = (tag: string) => {
+  const getFavoritesByTag = useCallback((tag: string) => {
     return favorites.filter(fav => fav.tags?.includes(tag));
-  };
+  }, [favorites]);
 
-  // Obtenir les favoris épinglés
-  const getPinnedFavorites = () => {
+  const getPinnedFavorites = useCallback(() => {
     return favorites.filter(fav => fav.isPinned);
-  };
+  }, [favorites]);
 
-  // Obtenir les favoris récents
-  const getRecentFavorites = (limit: number = 5) => {
+  const getRecentFavorites = useCallback((limit: number = 5) => {
     return [...favorites]
       .sort((a, b) => (b.lastVisited?.getTime() || 0) - (a.lastVisited?.getTime() || 0))
       .slice(0, limit);
-  };
-
-  // Générer un ID unique
-  const generateId = () => {
-    return Math.random().toString(36).substr(2, 9);
-  };
+  }, [favorites]);
 
   return (
     <FavoritesContext.Provider
@@ -273,9 +179,8 @@ export const EnhancedFavoritesProvider: React.FC<{ children: React.ReactNode }> 
         getRecentFavorites,
         addCategory,
         addTag,
-        syncFavorites: syncWithFirestore,
-        isSyncing,
-        lastSync
+        isFormOpen,
+        setIsFormOpen
       }}
     >
       {children}
