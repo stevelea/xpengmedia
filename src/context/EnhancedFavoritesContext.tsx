@@ -27,22 +27,47 @@ export const EnhancedFavoritesProvider: React.FC<{ children: ReactNode }> = ({ c
   const [tags, setTags] = useState<string[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
 
+  // Favoris par défaut
+  const getDefaultFavorites = (): FavoriteItem[] => [
+    { id: '1', name: 'YouTube', url: 'https://youtube.com', icon: '▶️', category: 'Vidéos', isPinned: true, visitCount: 0, tags: ['streaming', 'vidéo'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '2', name: 'Netflix', url: 'https://netflix.com', icon: '🎬', category: 'Vidéos', isPinned: false, visitCount: 0, tags: ['streaming', 'films'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '3', name: 'Spotify', url: 'https://spotify.com', icon: '🎵', category: 'Musique', isPinned: true, visitCount: 0, tags: ['streaming', 'musique'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '4', name: 'Twitch', url: 'https://twitch.tv', icon: '🎮', category: 'Jeux', isPinned: false, visitCount: 0, tags: ['streaming', 'gaming'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '5', name: 'Twitter', url: 'https://twitter.com', icon: '🐦', category: 'Social', isPinned: false, visitCount: 0, tags: ['réseaux sociaux'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '6', name: 'Reddit', url: 'https://reddit.com', icon: '🤖', category: 'Social', isPinned: false, visitCount: 0, tags: ['forum'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '7', name: 'Gmail', url: 'https://gmail.com', icon: '✉️', category: 'Utilitaires', isPinned: true, visitCount: 0, tags: ['email'], createdAt: new Date(), updatedAt: new Date() },
+    { id: '8', name: 'Google Drive', url: 'https://drive.google.com', icon: '📁', category: 'Utilitaires', isPinned: false, visitCount: 0, tags: ['stockage'], createdAt: new Date(), updatedAt: new Date() },
+  ];
+
+  const getDefaultCategories = (): string[] => ['Vidéos', 'Musique', 'Jeux', 'Social', 'Utilitaires', 'Actualités', 'Sport', 'Shopping'];
+
   // Charger les données depuis le stockage local
   useEffect(() => {
     const loadFromLocalStorage = () => {
       const savedFavorites = localStorage.getItem('favorites');
       if (savedFavorites) {
-        setFavorites(JSON.parse(savedFavorites, (key, value) => {
+        const parsed = JSON.parse(savedFavorites, (key, value) => {
           if (key === 'createdAt' || key === 'updatedAt' || key === 'lastVisited') {
             return new Date(value);
           }
           return value;
-        }));
+        });
+        setFavorites(parsed.length > 0 ? parsed : getDefaultFavorites());
+      } else {
+        // Première visite - charger les favoris par défaut
+        const defaults = getDefaultFavorites();
+        setFavorites(defaults);
+        localStorage.setItem('favorites', JSON.stringify(defaults));
       }
 
       const savedCategories = localStorage.getItem('favoriteCategories');
       if (savedCategories) {
-        setCategories(JSON.parse(savedCategories));
+        const parsed = JSON.parse(savedCategories);
+        setCategories(parsed.length > 0 ? parsed : getDefaultCategories());
+      } else {
+        const defaults = getDefaultCategories();
+        setCategories(defaults);
+        localStorage.setItem('favoriteCategories', JSON.stringify(defaults));
       }
 
       const savedTags = localStorage.getItem('favoriteTags');
