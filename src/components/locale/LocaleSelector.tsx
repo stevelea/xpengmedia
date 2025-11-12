@@ -51,7 +51,7 @@ export const LocaleSelector: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="absolute right-0 top-full z-50 mt-2 w-64 rounded-2xl border border-slate-200/70 bg-white/95 shadow-xl backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-900/95"
+            className="fixed right-4 top-24 z-[9999] w-72 rounded-2xl border border-cyan-500/30 bg-white/98 shadow-[0_0_40px_rgba(6,182,212,0.3)] backdrop-blur-2xl dark:border-cyan-500/40 dark:bg-slate-900/98"
           >
             <div className="p-2">
               <div className="mb-2 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">

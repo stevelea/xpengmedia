@@ -2,10 +2,12 @@ import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
+import { useLocale } from '../../context/LocaleContext';
 import { LocaleSelector } from '../locale/LocaleSelector';
 
 export const Navbar: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLocale();
 
   return (
     <nav className="border-b border-white/10 bg-white/80 backdrop-blur-xl transition-colors duration-500 dark:border-slate-800 dark:bg-slate-950/70">
@@ -22,12 +24,12 @@ export const Navbar: React.FC = () => {
 
         <div className="hidden items-center gap-1 rounded-full border border-slate-200/70 bg-white/70 p-1 shadow-sm transition dark:border-slate-800 dark:bg-slate-900/70 md:flex">
           {[
-            { name: 'Accueil', path: '/' },
-            { name: 'Vidéos', path: '/videos' },
-            { name: 'Musique', path: '/music' },
-            { name: 'Jeux', path: '/games' },
-            { name: 'Recharge', path: '/charging' },
-            { name: 'Autres', path: '/other-services' },
+            { nameKey: 'home', path: '/' },
+            { nameKey: 'videos', path: '/videos' },
+            { nameKey: 'music', path: '/music' },
+            { nameKey: 'games', path: '/games' },
+            { nameKey: 'charging', path: '/charging' },
+            { nameKey: 'others', path: '/other-services' },
           ].map((item) => (
             <NavLink
               key={item.path}
@@ -40,7 +42,7 @@ export const Navbar: React.FC = () => {
                 }`
               }
             >
-              {item.name}
+              {t(item.nameKey)}
             </NavLink>
           ))}
         </div>
