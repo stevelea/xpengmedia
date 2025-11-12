@@ -6,7 +6,7 @@
   "homepage": "https://dlnraja.github.io/xpengmedia",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && node -e \"require('fs').copyFileSync('public/iptv-player.html', 'dist/iptv-player.html')\"",
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",

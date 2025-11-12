@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XPENG IPTV Player - Web App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .setup-form, .player-section {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 30px;
+            border-radius: 16px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #f1f5f9;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #06b6d4;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(6, 182, 212, 0.4);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            margin-left: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .channel-card {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .channel-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            border-color: #06b6d4;
+        }
+        
+        .channel-card h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #f1f5f9;
+        }
+        
+        .channel-card p {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        
+        .video-player {
+            margin-top: 20px;
+            background: #000;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        video {
+            width: 100%;
+            max-height: 600px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .status-message {
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .status-success {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.5);
+            color: #86efac;
+        }
+        
+        .status-error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.5);
+            color: #fca5a5;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #f1f5f9;
+            font-size: 14px;
+        }
+        
+        .current-playing {
+            background: rgba(6, 182, 212, 0.2);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #06b6d4;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 XPENG IPTV Player</h1>
+            <p>Web App avec sauvegarde automatique</p>
+        </div>
+        
+        <div id="setupSection" class="setup-form">
+            <h2 style="margin-bottom: 20px;">📡 Configuration IPTV</h2>
+            
+            <div class="form-group">
+                <label for="connectionType">Type de connexion :</label>
+                <select id="connectionType" onchange="updateFormFields()">
+                    <option value="m3u">URL M3U/M3U8</option>
+                    <option value="xtream">Xtream Codes API</option>
+                </select>
+            </div>
+            
+            <div id="m3uFields">
+                <div class="form-group">
+                    <label for="m3uUrl">URL de la playlist M3U :</label>
+                    <input type="url" id="m3uUrl" placeholder="https://example.com/playlist.m3u8">
+                </div>
+            </div>
+            
+            <div id="xtreamFields" class="hidden">
+                <div class="form-group">
+                    <label for="xtreamUrl">URL du serveur :</label>
+                    <input type="url" id="xtreamUrl" placeholder="http://server.com:port">
+                </div>
+                <div class="form-group">
+                    <label for="xtreamUsername">Nom d'utilisateur :</label>
+                    <input type="text" id="xtreamUsername" placeholder="username">
+                </div>
+                <div class="form-group">
+                    <label for="xtreamPassword">Mot de passe :</label>
+                    <input type="password" id="xtreamPassword" placeholder="password">
+                </div>
+            </div>
+            
+            <button onclick="saveAndConnect()">💾 Sauvegarder et Charger</button>
+            <button class="btn-secondary" onclick="clearStorage()">🗑️ Effacer les données</button>
+        </div>
+        
+        <div id="playerSection" class="player-section hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>📺 Chaînes disponibles</h2>
+                <button class="btn-secondary" onclick="showSetup()">⚙️ Configuration</button>
+            </div>
+            
+            <input type="text" id="searchBox" class="search-box" placeholder="🔍 Rechercher une chaîne..." onkeyup="filterChannels()">
+            
+            <div id="statusMessage"></div>
+            
+            <div id="currentPlaying" class="current-playing hidden">
+                <strong>▶️ En cours :</strong> <span id="playingName">-</span>
+            </div>
+            
+            <div id="videoContainer" class="video-player hidden">
+                <video id="videoPlayer" controls autoplay></video>
+            </div>
+            
+            <div id="channelsList" class="channels-grid"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script>
+        let channels = [];
+        let hls = null;
+        
+        // Charger la configuration sauvegardée au démarrage
+        window.onload = function() {
+            loadSavedConfig();
+        };
+        
+        function updateFormFields() {
+            const type = document.getElementById('connectionType').value;
+            document.getElementById('m3uFields').classList.toggle('hidden', type !== 'm3u');
+            document.getElementById('xtreamFields').classList.toggle('hidden', type !== 'xtream');
+        }
+        
+        function saveAndConnect() {
+            const type = document.getElementById('connectionType').value;
+            let config = { type };
+            
+            if (type === 'm3u') {
+                config.url = document.getElementById('m3uUrl').value;
+                if (!config.url) {
+                    showStatus('Veuillez entrer une URL M3U', 'error');
+                    return;
+                }
+            } else {
+                config.url = document.getElementById('xtreamUrl').value;
+                config.username = document.getElementById('xtreamUsername').value;
+                config.password = document.getElementById('xtreamPassword').value;
+                if (!config.url || !config.username || !config.password) {
+                    showStatus('Veuillez remplir tous les champs', 'error');
+                    return;
+                }
+            }
+            
+            // Sauvegarder dans localStorage
+            localStorage.setItem('iptvConfig', JSON.stringify(config));
+            showStatus('✅ Configuration sauvegardée !', 'success');
+            
+            // Charger les chaînes
+            loadChannels(config);
+        }
+        
+        function loadSavedConfig() {
+            const saved = localStorage.getItem('iptvConfig');
+            if (saved) {
+                const config = JSON.parse(saved);
+                document.getElementById('connectionType').value = config.type;
+                updateFormFields();
+                
+                if (config.type === 'm3u') {
+                    document.getElementById('m3uUrl').value = config.url;
+                } else {
+                    document.getElementById('xtreamUrl').value = config.url;
+                    document.getElementById('xtreamUsername').value = config.username;
+                    document.getElementById('xtreamPassword').value = config.password;
+                }
+                
+                // Auto-charger les chaînes
+                showStatus('🔄 Chargement de la configuration sauvegardée...', 'success');
+                setTimeout(() => loadChannels(config), 500);
+            }
+        }
+        
+        async function loadChannels(config) {
+            try {
+                if (config.type === 'm3u') {
+                    await loadM3U(config.url);
+                } else {
+                    await loadXtream(config);
+                }
+            } catch (error) {
+                showStatus('❌ Erreur: ' + error.message, 'error');
+            }
+        }
+        
+        async function loadM3U(url) {
+            showStatus('🔄 Chargement de la playlist M3U...', 'success');
+            
+            // Utiliser CORS proxy si nécessaire
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const fetchUrl = url.startsWith('http://') ? proxyUrl + url : url;
+            
+            try {
+                const response = await fetch(fetchUrl);
+                const text = await response.text();
+                
+                channels = parseM3U(text);
+                displayChannels();
+                showPlayer();
+                showStatus(`✅ ${channels.length} chaînes chargées !`, 'success');
+            } catch (error) {
+                // Si CORS proxy échoue, essayer direct
+                try {
+                    const response = await fetch(url);
+                    const text = await response.text();
+                    channels = parseM3U(text);
+                    displayChannels();
+                    showPlayer();
+                    showStatus(`✅ ${channels.length} chaînes chargées !`, 'success');
+                } catch (err) {
+                    showStatus('❌ Impossible de charger la playlist. Vérifiez l\'URL.', 'error');
+                }
+            }
+        }
+        
+        function parseM3U(text) {
+            const lines = text.split('\n');
+            const parsed = [];
+            let current = {};
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                if (line.startsWith('#EXTINF:')) {
+                    const match = line.match(/,(.+)$/);
+                    current.name = match ? match[1].trim() : 'Chaîne ' + (parsed.length + 1);
+                } else if (line && !line.startsWith('#')) {
+                    current.url = line;
+                    if (current.name) {
+                        parsed.push({...current});
+                    }
+                    current = {};
+                }
+            }
+            
+            return parsed;
+        }
+        
+        async function loadXtream(config) {
+            showStatus('🔄 Connexion au serveur Xtream...', 'success');
+            
+            const apiUrl = `${config.url}/player_api.php?username=${config.username}&password=${config.password}&action=get_live_streams`;
+            
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                
+                channels = data.map(ch => ({
+                    name: ch.name,
+                    url: `${config.url}/live/${config.username}/${config.password}/${ch.stream_id}.m3u8`,
+                    category: ch.category_name
+                }));
+                
+                displayChannels();
+                showPlayer();
+                showStatus(`✅ ${channels.length} chaînes chargées !`, 'success');
+            } catch (error) {
+                showStatus('❌ Erreur de connexion Xtream. Vérifiez vos identifiants.', 'error');
+            }
+        }
+        
+        function displayChannels() {
+            const container = document.getElementById('channelsList');
+            container.innerHTML = '';
+            
+            channels.forEach((channel, index) => {
+                const card = document.createElement('div');
+                card.className = 'channel-card';
+                card.onclick = () => playChannel(channel);
+                
+                card.innerHTML = `
+                    <h3>📺 ${channel.name}</h3>
+                    ${channel.category ? `<p>${channel.category}</p>` : ''}
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        function filterChannels() {
+            const search = document.getElementById('searchBox').value.toLowerCase();
+            const cards = document.querySelectorAll('.channel-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                card.style.display = text.includes(search) ? 'block' : 'none';
+            });
+        }
+        
+        function playChannel(channel) {
+            const video = document.getElementById('videoPlayer');
+            const container = document.getElementById('videoContainer');
+            const playing = document.getElementById('currentPlaying');
+            const playingName = document.getElementById('playingName');
+            
+            container.classList.remove('hidden');
+            playing.classList.remove('hidden');
+            playingName.textContent = channel.name;
+            
+            // Arrêter HLS précédent
+            if (hls) {
+                hls.destroy();
+            }
+            
+            // Détecter si c'est HLS
+            if (channel.url.includes('.m3u8')) {
+                if (Hls.isSupported()) {
+                    hls = new Hls();
+                    hls.loadSource(channel.url);
+                    hls.attachMedia(video);
+                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    video.src = channel.url;
+                }
+            } else {
+                video.src = channel.url;
+            }
+            
+            video.play();
+            
+            // Scroll vers le player
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        
+        function showPlayer() {
+            document.getElementById('setupSection').classList.add('hidden');
+            document.getElementById('playerSection').classList.remove('hidden');
+        }
+        
+        function showSetup() {
+            document.getElementById('setupSection').classList.remove('hidden');
+            document.getElementById('playerSection').classList.add('hidden');
+        }
+        
+        function showStatus(message, type) {
+            const status = document.getElementById('statusMessage');
+            status.textContent = message;
+            status.className = 'status-message status-' + type;
+            status.style.display = 'block';
+            
+            setTimeout(() => {
+                status.style.display = 'none';
+            }, 5000);
+        }
+        
+        function clearStorage() {
+            if (confirm('Voulez-vous vraiment effacer toutes les données sauvegardées ?')) {
+                localStorage.removeItem('iptvConfig');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

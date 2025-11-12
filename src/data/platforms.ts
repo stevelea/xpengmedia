@@ -85,6 +85,15 @@ export const videoCategories: PlatformCategory[] = [
         tags: ['TV', 'Orange', 'Gratuit'],
       },
       {
+        id: 'xpeng-iptv-player',
+        name: 'XPENG IPTV Player',
+        description: '🎯 Player IPTV intégré - M3U & Xtream avec sauvegarde automatique de vos identifiants.',
+        url: '/iptv-player.html',
+        icon: 'https://cdn-icons-png.flaticon.com/512/5977/5977590.png',
+        availability: ['global'],
+        tags: ['IPTV', 'M3U', 'Xtream', 'XPENG Intégré'],
+      },
+      {
         id: 'ottplayer',
         name: 'OTTPlayer.tv',
         description: 'Lecteur IPTV web - Ajoutez vos playlists M3U directement dans le navigateur.',
