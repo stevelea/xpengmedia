@@ -54,13 +54,7 @@ export const LocaleSelector: React.FC = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              style={{ 
-                position: 'fixed',
-                inset: 0,
-                backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                backdropFilter: 'blur(4px)',
-                zIndex: 2147483646,
-              }}
+              className="fixed inset-0 z-[99998] bg-black/40 backdrop-blur-sm"
             />
             
             {/* Menu déroulant */}
@@ -74,10 +68,9 @@ export const LocaleSelector: React.FC = () => {
                 position: 'fixed',
                 top: `${buttonPosition.top}px`,
                 right: `${buttonPosition.right}px`,
-                zIndex: 2147483647,
                 maxHeight: '80vh',
               }}
-              className="w-72 rounded-2xl border-4 border-cyan-500 bg-white shadow-[0_0_80px_10px_rgba(6,182,212,0.6)] dark:bg-slate-900"
+              className="z-[99999] w-72 rounded-2xl border-4 border-cyan-500 bg-white shadow-[0_0_80px_10px_rgba(6,182,212,0.6)] dark:bg-slate-900"
             >
             <div className="p-2">
               <div className="mb-2 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">

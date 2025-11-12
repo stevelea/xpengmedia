@@ -6,24 +6,24 @@
 
 @layer base {
   :root {
-    --background: 205 50% 98%;
+    --background: 195 65% 97%;
     --foreground: 220 45% 12%;
-    --card: 205 45% 96%;
+    --card: 195 55% 95%;
     --card-foreground: 220 45% 12%;
-    --popover: 205 45% 96%;
+    --popover: 195 55% 95%;
     --popover-foreground: 220 45% 12%;
     --primary: 191 92% 48%;
     --primary-foreground: 205 50% 98%;
     --secondary: 199 90% 52%;
     --secondary-foreground: 205 50% 98%;
-    --muted: 205 35% 92%;
+    --muted: 195 45% 90%;
     --muted-foreground: 220 35% 42%;
-    --accent: 191 85% 88%;
+    --accent: 191 85% 86%;
     --accent-foreground: 220 45% 15%;
     --destructive: 2 87% 58%;
     --destructive-foreground: 0 0% 100%;
-    --border: 205 40% 88%;
-    --input: 205 40% 88%;
+    --border: 195 50% 86%;
+    --input: 195 50% 86%;
     --ring: 191 92% 48%;
     --radius: 0.75rem;
   }
@@ -61,10 +61,10 @@
     font-feature-settings: 'rlig' 1, 'calt' 1;
     min-height: 100vh;
     background-image: 
-      radial-gradient(ellipse at top left, rgba(6, 182, 212, 0.15), transparent 50%),
-      radial-gradient(ellipse at top right, rgba(14, 165, 233, 0.12), transparent 50%),
-      radial-gradient(ellipse at bottom center, rgba(56, 189, 248, 0.08), transparent 60%),
-      radial-gradient(ellipse at center, rgba(6, 78, 59, 0.05), transparent 70%);
+      radial-gradient(ellipse at top left, rgba(6, 182, 212, 0.25), transparent 50%),
+      radial-gradient(ellipse at top right, rgba(14, 165, 233, 0.20), transparent 50%),
+      radial-gradient(ellipse at bottom center, rgba(56, 189, 248, 0.15), transparent 60%),
+      radial-gradient(ellipse at center, rgba(125, 211, 252, 0.12), transparent 70%);
     background-attachment: fixed;
   }
   
