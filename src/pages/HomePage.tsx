@@ -4,7 +4,7 @@ import { FavoritesGrid } from '../components/favorites/FavoritesGrid';
 import { AddFavoriteModal } from '../components/favorites/AddFavoriteModal';
 import { SearchBar } from '../components/SearchBar';
 import { useFavorites } from '../context/FavoritesContext';
-import { PlusIcon, ArrowUpIcon, PlayIcon, MusicalNoteIcon, PuzzlePieceIcon, BoltIcon, SparklesIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ArrowUpIcon, PlayIcon, MusicalNoteIcon, PuzzlePieceIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { videoCategories, musicCategories, gamesCategories, chargingCategories, otherServicesCategories } from '../data/platforms';
 import type { PlatformLink } from '../data/platforms';
@@ -330,156 +330,207 @@ export const HomePage: React.FC = () => {
         </div>
       </motion.section>
 
-      {/* Plateformes par catégories */}
+      {/* Toutes les catégories de plateformes avec style XPENG */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.3 }}
-        className="mt-12 space-y-10"
+        className="mt-8 space-y-8 md:mt-12 md:space-y-10"
       >
-        {/* Vidéos */}
-        <div>
-          <div className="mb-4 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
-              <PlayIcon className="h-6 w-6 text-cyan-500" />
+        {/* Vidéos - Toutes les sous-catégories */}
+        {videoCategories.map((category) => (
+          <div key={category.id}>
+            <div className="mb-3 overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-4 shadow-lg backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`h-1 w-8 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-lg font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                    {category.subtitle}
+                  </p>
+                  {category.highlight && (
+                    <span className="mt-2 inline-block rounded-full bg-cyan-500/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-600 dark:bg-cyan-500/20 dark:text-cyan-400 md:px-3 md:py-1 md:text-xs">
+                      ✨ {category.highlight}
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 md:text-sm">
+                  {getVisiblePlatforms(category.platforms).length} services
+                </div>
+              </div>
             </div>
-            <div>
-              <h2 className="text-xl font-semibold text-slate-900 dark:text-white md:text-2xl">
-                {t('videos')} & Streaming
-              </h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 md:text-sm">
-                {getVisiblePlatforms(videoCategories.flatMap(c => c.platforms)).length} services
-              </p>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 md:gap-3 lg:grid-cols-6 xl:grid-cols-8">
+              {getVisiblePlatforms(category.platforms).map((platform) => (
+                <EditablePlatformCard
+                  key={platform.id}
+                  platform={platform}
+                  isEditable={isEditMode}
+                  onRemove={handleRemovePlatform}
+                />
+              ))}
             </div>
-            <Link to="/videos" className="ml-auto text-xs font-medium text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 md:text-sm">
-              Voir tout →
-            </Link>
           </div>
-          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8">
-            {getVisiblePlatforms(videoCategories.flatMap(c => c.platforms)).map((platform) => (
-              <EditablePlatformCard
-                key={platform.id}
-                platform={platform}
-                isEditable={isEditMode}
-                onRemove={handleRemovePlatform}
-              />
-            ))}
-            <AddServiceButton onClick={() => setIsAddModalOpen(true)} label="Service" />
-            <AddUrlButton onClick={() => setIsCustomUrlModalOpen(true)} label="URL" />
-          </div>
-        </div>
+        ))}
 
-        {/* Musique */}
-        <div>
-          <div className="mb-4 flex items-center gap-3">
-            <MusicalNoteIcon className="h-8 w-8 text-pink-500" />
-            <div>
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
-                Musique & Audio
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {musicCategories.flatMap(c => c.platforms).length} services disponibles
-              </p>
+        {/* Musique - Toutes les sous-catégories */}
+        {musicCategories.map((category) => (
+          <div key={category.id}>
+            <div className="mb-3 overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-4 shadow-lg backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`h-1 w-8 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-lg font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                    {category.subtitle}
+                  </p>
+                  {category.highlight && (
+                    <span className="mt-2 inline-block rounded-full bg-pink-500/10 px-2 py-0.5 text-[10px] font-semibold text-pink-600 dark:bg-pink-500/20 dark:text-pink-400 md:px-3 md:py-1 md:text-xs">
+                      ✨ {category.highlight}
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 md:text-sm">
+                  {getVisiblePlatforms(category.platforms).length} services
+                </div>
+              </div>
             </div>
-            <Link to="/music" className="ml-auto text-sm text-pink-600 hover:text-pink-700 dark:text-pink-400">
-              Voir tout →
-            </Link>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 md:gap-3 lg:grid-cols-6 xl:grid-cols-8">
+              {getVisiblePlatforms(category.platforms).map((platform) => (
+                <EditablePlatformCard
+                  key={platform.id}
+                  platform={platform}
+                  isEditable={isEditMode}
+                  onRemove={handleRemovePlatform}
+                />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {getVisiblePlatforms(musicCategories.flatMap(c => c.platforms)).map((platform) => (
-              <EditablePlatformCard
-                key={platform.id}
-                platform={platform}
-                isEditable={isEditMode}
-                onRemove={handleRemovePlatform}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
 
-        {/* Jeux */}
-        <div>
-          <div className="mb-4 flex items-center gap-3">
-            <PuzzlePieceIcon className="h-8 w-8 text-purple-500" />
-            <div>
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
-                Jeux & Gaming
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {gamesCategories.flatMap(c => c.platforms).length} services disponibles
-              </p>
+        {/* Jeux - Toutes les sous-catégories */}
+        {gamesCategories.map((category) => (
+          <div key={category.id}>
+            <div className="mb-3 overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-4 shadow-lg backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`h-1 w-8 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-lg font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                    {category.subtitle}
+                  </p>
+                  {category.highlight && (
+                    <span className="mt-2 inline-block rounded-full bg-purple-500/10 px-2 py-0.5 text-[10px] font-semibold text-purple-600 dark:bg-purple-500/20 dark:text-purple-400 md:px-3 md:py-1 md:text-xs">
+                      ✨ {category.highlight}
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 md:text-sm">
+                  {getVisiblePlatforms(category.platforms).length} services
+                </div>
+              </div>
             </div>
-            <Link to="/games" className="ml-auto text-sm text-purple-600 hover:text-purple-700 dark:text-purple-400">
-              Voir tout →
-            </Link>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 md:gap-3 lg:grid-cols-6 xl:grid-cols-8">
+              {getVisiblePlatforms(category.platforms).map((platform) => (
+                <EditablePlatformCard
+                  key={platform.id}
+                  platform={platform}
+                  isEditable={isEditMode}
+                  onRemove={handleRemovePlatform}
+                />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {getVisiblePlatforms(gamesCategories.flatMap(c => c.platforms)).map((platform) => (
-              <EditablePlatformCard
-                key={platform.id}
-                platform={platform}
-                isEditable={isEditMode}
-                onRemove={handleRemovePlatform}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
 
-        {/* Recharge */}
-        <div>
-          <div className="mb-4 flex items-center gap-3">
-            <BoltIcon className="h-8 w-8 text-yellow-500" />
-            <div>
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
-                Recharge & Superchargers
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {chargingCategories.flatMap(c => c.platforms).length} services disponibles
-              </p>
+        {/* Recharge - Toutes les sous-catégories */}
+        {chargingCategories.map((category) => (
+          <div key={category.id}>
+            <div className="mb-3 overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-4 shadow-lg backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`h-1 w-8 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-lg font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                    {category.subtitle}
+                  </p>
+                  {category.highlight && (
+                    <span className="mt-2 inline-block rounded-full bg-yellow-500/10 px-2 py-0.5 text-[10px] font-semibold text-yellow-600 dark:bg-yellow-500/20 dark:text-yellow-400 md:px-3 md:py-1 md:text-xs">
+                      ✨ {category.highlight}
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 md:text-sm">
+                  {getVisiblePlatforms(category.platforms).length} services
+                </div>
+              </div>
             </div>
-            <Link to="/charging" className="ml-auto text-sm text-yellow-600 hover:text-yellow-700 dark:text-yellow-400">
-              Voir tout →
-            </Link>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 md:gap-3 lg:grid-cols-6 xl:grid-cols-8">
+              {getVisiblePlatforms(category.platforms).map((platform) => (
+                <EditablePlatformCard
+                  key={platform.id}
+                  platform={platform}
+                  isEditable={isEditMode}
+                  onRemove={handleRemovePlatform}
+                />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {getVisiblePlatforms(chargingCategories.flatMap(c => c.platforms)).map((platform) => (
-              <EditablePlatformCard
-                key={platform.id}
-                platform={platform}
-                isEditable={isEditMode}
-                onRemove={handleRemovePlatform}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
 
-        {/* Autres Services */}
-        <div>
-          <div className="mb-4 flex items-center gap-3">
-            <SparklesIcon className="h-8 w-8 text-indigo-500" />
-            <div>
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
-                Services EV & Outils
-              </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {otherServicesCategories.flatMap(c => c.platforms).length} services disponibles
-              </p>
+        {/* Autres Services - Toutes les sous-catégories */}
+        {otherServicesCategories.map((category) => (
+          <div key={category.id}>
+            <div className="mb-3 overflow-hidden rounded-2xl border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-4 shadow-lg backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6">
+              <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className={`h-1 w-8 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-lg font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-1 text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                    {category.subtitle}
+                  </p>
+                  {category.highlight && (
+                    <span className="mt-2 inline-block rounded-full bg-indigo-500/10 px-2 py-0.5 text-[10px] font-semibold text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-400 md:px-3 md:py-1 md:text-xs">
+                      ✨ {category.highlight}
+                    </span>
+                  )}
+                </div>
+                <div className="text-xs text-slate-500 dark:text-slate-400 md:text-sm">
+                  {getVisiblePlatforms(category.platforms).length} services
+                </div>
+              </div>
             </div>
-            <Link to="/other-services" className="ml-auto text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">
-              Voir tout →
-            </Link>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-5 md:gap-3 lg:grid-cols-6 xl:grid-cols-8">
+              {getVisiblePlatforms(category.platforms).map((platform) => (
+                <EditablePlatformCard
+                  key={platform.id}
+                  platform={platform}
+                  isEditable={isEditMode}
+                  onRemove={handleRemovePlatform}
+                />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {getVisiblePlatforms(otherServicesCategories.flatMap(c => c.platforms)).map((platform) => (
-              <EditablePlatformCard
-                key={platform.id}
-                platform={platform}
-                isEditable={isEditMode}
-                onRemove={handleRemovePlatform}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
       </motion.section>
 
       {/* Toutes les plateformes en un bloc */}
