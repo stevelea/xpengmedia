@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 
 export type Region = 'global' | 'france' | 'germany' | 'spain' | 'italy' | 'uk' | 'netherlands' | 'belgium' | 'sweden' | 'norway' | 'denmark' | 'switzerland' | 'austria' | 'usa' | 'australia' | 'china' | 'singapore' | 'uae' | 'qatar' | 'israel';
 
@@ -377,22 +377,27 @@ export const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     localStorage.setItem('xpeng_locale', JSON.stringify(locale));
   }, [locale]);
 
-  const setLocale = (newLocale: Locale) => {
+  // Fonction setLocale avec useCallback pour stabiliser la référence
+  const setLocale = useCallback((newLocale: Locale) => {
     console.log('🔄 LocaleContext: Setting new locale', newLocale);
-    console.log('📍 Locale actuel avant changement:', locale);
     setLocaleState(newLocale);
-    console.log('✅ setLocaleState appelé avec:', newLocale);
-  };
+  }, []);
 
-  // Fonction de traduction
-  const t = (key: string): string => {
+  // Fonction de traduction avec useCallback qui dépend de locale
+  const t = useCallback((key: string): string => {
     const lang = locale.language;
     const translation = translations[lang]?.[key] || translations['en']?.[key] || key;
     return translation;
-  };
+  }, [locale.language]);
+
+  // Mémoriser la valeur du contexte pour forcer les re-renders
+  const contextValue = useMemo(
+    () => ({ locale, setLocale, availableRegions: regions, t }),
+    [locale, setLocale, t]
+  );
 
   return (
-    <LocaleContext.Provider value={{ locale, setLocale, availableRegions: regions, t }}>
+    <LocaleContext.Provider value={contextValue}>
       {children}
     </LocaleContext.Provider>
   );
