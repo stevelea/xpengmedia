@@ -11,14 +11,14 @@ export const Navbar: React.FC = () => {
 
   return (
     <nav className="border-b border-white/10 bg-white/80 backdrop-blur-xl transition-colors duration-500 dark:border-slate-800 dark:bg-slate-950/70">
-      <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-2">
-          <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-3 py-2 dark:from-cyan-500 dark:to-blue-500">
-            <span className="text-base font-bold tracking-tight text-white dark:text-white">XPENG</span>
+      <div className="mx-auto flex h-16 landscape:h-12 w-full max-w-6xl items-center justify-between px-3 landscape:px-2 sm:px-6 lg:px-8">
+        <Link to="/" className="flex items-center gap-1.5 landscape:gap-1">
+          <div className="flex items-center gap-1.5 rounded-lg landscape:rounded-md bg-gradient-to-r from-slate-900 to-slate-700 px-2 py-1.5 landscape:px-2 landscape:py-1 dark:from-cyan-500 dark:to-blue-500">
+            <span className="text-sm landscape:text-xs font-bold tracking-tight text-white dark:text-white">XPENG</span>
           </div>
-          <div className="leading-tight">
-            <p className="text-sm font-semibold text-slate-800 dark:text-white">Media Hub</p>
-            <p className="text-xs text-slate-500 dark:text-slate-400">Experience</p>
+          <div className="leading-tight hidden sm:block">
+            <p className="text-xs landscape:text-[10px] font-semibold text-slate-800 dark:text-white">Media Hub</p>
+            <p className="text-[10px] landscape:text-[8px] text-slate-500 dark:text-slate-400">Experience</p>
           </div>
         </Link>
 
@@ -52,13 +52,13 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={toggleTheme}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/70 text-slate-600 transition hover:scale-105 hover:text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
+            className="inline-flex h-9 w-9 landscape:h-8 landscape:w-8 items-center justify-center rounded-full border border-white/20 bg-white/70 text-slate-600 transition hover:scale-105 hover:text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
             aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
           >
             {theme === 'dark' ? (
-              <FiSun className="h-5 w-5 text-amber-300" />
+              <FiSun className="h-4 w-4 landscape:h-3.5 landscape:w-3.5 text-amber-300" />
             ) : (
-              <FiMoon className="h-5 w-5 text-slate-700" />
+              <FiMoon className="h-4 w-4 landscape:h-3.5 landscape:w-3.5 text-slate-700" />
             )}
           </button>
         </div>

@@ -143,7 +143,7 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-2 py-2 pb-20 md:px-6 md:py-4 md:pb-24">
+    <div className="mx-auto max-w-7xl space-y-3 px-3 py-3 landscape:space-y-2 landscape:px-2 landscape:py-2 sm:px-6 md:space-y-6 md:py-6 lg:space-y-8 lg:px-8 lg:py-8">
       {/* Barre de recherche en premier */}
       <motion.section
         initial={{ opacity: 0, y: -20 }}
@@ -265,10 +265,10 @@ export const HomePage: React.FC = () => {
               )}
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-800 dark:text-white md:text-xl lg:text-2xl">
+              <h2 className="text-xs font-bold text-slate-800 dark:text-white landscape:text-sm md:text-xl lg:text-2xl">
                 {hasUsageData ? t('myFavorites') : t('smartRecommendations')}
               </h2>
-              <p className="text-[10px] text-slate-600 dark:text-slate-400 md:text-xs lg:text-sm">
+              <p className="text-[9px] text-slate-600 dark:text-slate-400 landscape:text-[10px] md:text-xs lg:text-sm">
                 {hasUsageData 
                   ? t('adaptedToYou')
                   : t('popularServices')}
@@ -286,7 +286,7 @@ export const HomePage: React.FC = () => {
         </div>
         
         {/* Grille compacte optimisée mobile portrait */}
-        <div className="grid grid-cols-5 gap-2 md:grid-cols-6 md:gap-3 lg:grid-cols-8">
+        <div className="grid grid-cols-5 gap-1.5 landscape:grid-cols-8 landscape:gap-2 md:grid-cols-6 md:gap-3 lg:grid-cols-8">
           {smartFavorites.map((platform) => (
             <motion.a
               key={platform.id}
@@ -296,10 +296,10 @@ export const HomePage: React.FC = () => {
               onClick={() => trackClick(platform.id)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative flex flex-col items-center gap-1 rounded-xl border border-slate-200/70 bg-white/80 p-2 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500 md:gap-2 md:rounded-2xl md:p-4"
+              className="group relative flex flex-col items-center gap-0.5 rounded-lg border border-slate-200/70 bg-white/80 p-1.5 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500 landscape:gap-1 landscape:p-2 md:gap-2 md:rounded-2xl md:p-4"
             >
-              <div className="text-2xl md:text-3xl" aria-hidden>{platform.icon}</div>
-              <h3 className="text-[9px] font-semibold text-center text-slate-800 dark:text-white line-clamp-2 md:text-xs">{platform.name}</h3>
+              <div className="text-xl landscape:text-2xl md:text-3xl" aria-hidden>{platform.icon}</div>
+              <h3 className="text-[8px] font-semibold text-center text-slate-800 dark:text-white line-clamp-2 landscape:text-[9px] md:text-xs">{platform.name}</h3>
               <div className="absolute right-0.5 top-0.5 opacity-0 group-hover:opacity-100 transition-opacity md:right-1 md:top-1">
                 <StarIcon className="h-2.5 w-2.5 text-amber-500 md:h-3 md:w-3" />
               </div>

@@ -36,14 +36,14 @@ export const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full max-w-2xl mx-auto mb-8" ref={searchRef}>
+    <div className="relative w-full max-w-2xl mx-auto mb-4 landscape:mb-2" ref={searchRef}>
       <div className="relative">
-        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+        <div className="absolute inset-y-0 left-0 pl-2 landscape:pl-2 flex items-center pointer-events-none">
+          <MagnifyingGlassIcon className="h-4 w-4 landscape:h-3.5 landscape:w-3.5 text-gray-400" />
         </div>
         <input
           type="text"
-          className="block w-full pl-10 pr-10 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+          className="block w-full pl-8 landscape:pl-7 pr-8 landscape:pr-7 py-2 landscape:py-1.5 text-sm landscape:text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           placeholder="Rechercher un site, une catégorie..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
