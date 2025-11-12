@@ -48,11 +48,14 @@ export const HomePage: React.FC = () => {
       norway: ['global', 'europe'],
       denmark: ['global', 'europe'],
       switzerland: ['global', 'europe'],
+      austria: ['global', 'europe'],
       uk: ['global', 'europe'],
       usa: ['global', 'north-america'],
+      australia: ['global', 'australia'],
       china: ['global', 'china', 'asia'],
       singapore: ['global', 'asia'],
       uae: ['global', 'middle-east'],
+      qatar: ['global', 'middle-east'],
       israel: ['global', 'middle-east'],
     };
 

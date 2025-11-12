@@ -1,4 +1,4 @@
-export type AvailabilityScope = 'global' | 'china' | 'europe' | 'north-america' | 'asia' | 'middle-east';
+export type AvailabilityScope = 'global' | 'china' | 'europe' | 'north-america' | 'asia' | 'australia' | 'middle-east';
 
 export interface PlatformLink {
   id: string;
@@ -559,6 +559,69 @@ export const videoCategories: PlatformCategory[] = [
         icon: '🌸',
         availability: ['europe'],
         tags: ['Anime', 'France', 'VF/VOSTFR'],
+      },
+      {
+        id: 'stan',
+        name: 'Stan',
+        description: 'Australian streaming service with local and international content.',
+        url: 'https://www.stan.com.au',
+        icon: '🦘',
+        availability: ['australia'],
+        tags: ['Australia', 'Streaming', 'Local'],
+      },
+      {
+        id: 'abc-iview',
+        name: 'ABC iview',
+        description: 'Free Australian public broadcaster streaming service.',
+        url: 'https://iview.abc.net.au',
+        icon: '📺',
+        availability: ['australia'],
+        tags: ['Australia', 'Free', 'Public'],
+      },
+      {
+        id: 'sbs-on-demand',
+        name: 'SBS On Demand',
+        description: 'Free multicultural streaming from Australian broadcaster.',
+        url: 'https://www.sbs.com.au/ondemand',
+        icon: '🌏',
+        availability: ['australia'],
+        tags: ['Australia', 'Free', 'Multicultural'],
+      },
+      {
+        id: '7plus',
+        name: '7plus',
+        description: 'Free streaming from Seven Network Australia.',
+        url: 'https://7plus.com.au',
+        icon: '7️⃣',
+        availability: ['australia'],
+        tags: ['Australia', 'Free', 'TV'],
+      },
+      {
+        id: '9now',
+        name: '9Now',
+        description: 'Free streaming from Nine Network Australia.',
+        url: 'https://www.9now.com.au',
+        icon: '9️⃣',
+        availability: ['australia'],
+        tags: ['Australia', 'Free', 'TV'],
+      },
+      {
+        id: '10play',
+        name: '10 play',
+        description: 'Free streaming from Network 10 Australia.',
+        url: 'https://10play.com.au',
+        icon: '🔟',
+        availability: ['australia'],
+        tags: ['Australia', 'Free', 'TV'],
+      },
+      {
+        id: 'kayo-sports',
+        name: 'Kayo Sports',
+        description: 'Australian sports streaming service with live events.',
+        url: 'https://kayosports.com.au',
+        icon: '🏏',
+        availability: ['australia'],
+        tags: ['Australia', 'Sport', 'Live'],
       },
       {
         id: 'emby',
