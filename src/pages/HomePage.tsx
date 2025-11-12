@@ -33,13 +33,9 @@ export const HomePage: React.FC = () => {
 
   // Fonction de filtrage par région
   const filterByRegion = (platforms: PlatformLink[]): PlatformLink[] => {
-    // Si région globale, afficher tous les services
-    if (locale.region === 'global') {
-      return platforms;
-    }
-
     // Mapping des régions vers leurs availabilityScope
     const regionMap: Record<string, string[]> = {
+      global: ['global', 'europe', 'north-america', 'australia', 'middle-east'], // EXCLU: china, asia
       france: ['global', 'europe'],
       germany: ['global', 'europe'],
       spain: ['global', 'europe'],
@@ -54,7 +50,7 @@ export const HomePage: React.FC = () => {
       uk: ['global', 'europe'],
       usa: ['global', 'north-america'],
       australia: ['global', 'australia'],
-      china: ['global', 'china', 'asia'],
+      china: ['global', 'china', 'asia'], // Mainland China séparée
       singapore: ['global', 'asia'],
       uae: ['global', 'middle-east'],
       qatar: ['global', 'middle-east'],
