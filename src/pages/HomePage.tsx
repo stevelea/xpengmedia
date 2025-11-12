@@ -10,6 +10,8 @@ import { videoCategories, musicCategories, gamesCategories, chargingCategories, 
 import type { PlatformLink } from '../data/platforms';
 import { EditablePlatformCard } from '../components/platforms/EditablePlatformCard';
 import { ScrollIndicator } from '../components/ui/ScrollIndicator';
+import { useSmartFavorites } from '../hooks/useSmartFavorites';
+import { StarIcon } from '@heroicons/react/24/solid';
 
 export const HomePage: React.FC = () => {
   const { categories } = useFavorites();
@@ -27,6 +29,9 @@ export const HomePage: React.FC = () => {
     ...chargingCategories.flatMap(cat => cat.platforms),
     ...otherServicesCategories.flatMap(cat => cat.platforms),
   ];
+
+  // Hook de favoris intelligents
+  const { smartFavorites, trackClick, hasUsageData } = useSmartFavorites(allPlatforms);
 
   // Gestion du défilement pour afficher le bouton de retour en haut
   useEffect(() => {
@@ -183,7 +188,7 @@ export const HomePage: React.FC = () => {
       {/* Indicateur de scroll XPENG */}
       <ScrollIndicator />
 
-      {/* Services principaux optimisés tablette */}
+      {/* Mes Favoris - Adaptation intelligente */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -192,35 +197,54 @@ export const HomePage: React.FC = () => {
       >
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/30">
-              <PlayIcon className="h-6 w-6 text-white" />
+            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg shadow-amber-500/30">
+              <StarIcon className="h-6 w-6 text-white" />
+              {hasUsageData && (
+                <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-[10px] font-bold text-white">
+                  AI
+                </div>
+              )}
             </div>
             <div>
               <h2 className="text-xl font-bold text-slate-900 dark:text-white md:text-2xl">
-                Services populaires
+                {hasUsageData ? 'Mes Favoris' : 'Services Recommandés'}
               </h2>
               <p className="text-xs text-slate-600 dark:text-slate-400 md:text-sm">
-                Accès rapide aux plateformes principales
+                {hasUsageData 
+                  ? 'Adaptés automatiquement à vos habitudes' 
+                  : 'Les plus populaires pour commencer'}
               </p>
             </div>
           </div>
-          <Link 
-            to="/videos" 
-            className="rounded-full bg-cyan-500/10 px-4 py-2 text-xs font-semibold text-cyan-600 transition hover:bg-cyan-500/20 dark:text-cyan-400 md:text-sm"
-          >
-            Voir tout
-          </Link>
+          {hasUsageData && (
+            <div className="flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5">
+              <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-500" />
+              <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-400">
+                Apprentissage actif
+              </span>
+            </div>
+          )}
         </div>
         
-        {/* Grille compacte pour tablette - affiche 8 services */}
+        {/* Grille compacte pour tablette - 8 favoris intelligents */}
         <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
-          {getVisiblePlatforms(videoCategories.flatMap(c => c.platforms)).slice(0, 8).map((platform) => (
-            <EditablePlatformCard
+          {smartFavorites.map((platform) => (
+            <motion.a
               key={platform.id}
-              platform={platform}
-              isEditable={isEditMode}
-              onRemove={handleRemovePlatform}
-            />
+              href={platform.url}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => trackClick(platform.id)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="group relative flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500"
+            >
+              <div className="text-3xl" aria-hidden>{platform.icon}</div>
+              <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white line-clamp-2">{platform.name}</h3>
+              <div className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                <StarIcon className="h-3 w-3 text-amber-500" />
+              </div>
+            </motion.a>
           ))}
         </div>
       </motion.section>
