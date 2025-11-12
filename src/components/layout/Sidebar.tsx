@@ -1,6 +1,14 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { HomeIcon, FilmIcon, MusicalNoteIcon, TvIcon, BoltIcon, Cog6ToothIcon } from '@heroicons/react/24/outline';
+import { NavLink } from 'react-router-dom';
+import {
+  HomeIcon,
+  FilmIcon,
+  MusicalNoteIcon,
+  PuzzlePieceIcon,
+  Cog6ToothIcon,
+  MapPinIcon,
+  SparklesIcon,
+} from '@heroicons/react/24/outline';
 
 type NavItem = {
   name: string;
@@ -12,31 +20,36 @@ const navItems: NavItem[] = [
   { name: 'Accueil', icon: <HomeIcon className="h-6 w-6" />, path: '/' },
   { name: 'Vidéos', icon: <FilmIcon className="h-6 w-6" />, path: '/videos' },
   { name: 'Musique', icon: <MusicalNoteIcon className="h-6 w-6" />, path: '/music' },
-  { name: 'Jeux', icon: <TvIcon className="h-6 w-6" />, path: '/games' },
-  { name: 'Recharge', icon: <BoltIcon className="h-6 w-6" />, path: '/charging' },
+  { name: 'Jeux', icon: <PuzzlePieceIcon className="h-6 w-6" />, path: '/games' },
+  { name: 'Recharge', icon: <MapPinIcon className="h-6 w-6" />, path: '/charging' },
+  { name: 'Autres', icon: <SparklesIcon className="h-6 w-6" />, path: '/other-services' },
   { name: 'Paramètres', icon: <Cog6ToothIcon className="h-6 w-6" />, path: '/settings' },
 ];
 
 export const Sidebar: React.FC = () => {
-  const location = useLocation();
-
   return (
-    <aside className="w-64 bg-white dark:bg-gray-800 shadow-md flex-shrink-0 hidden md:block">
-      <nav className="p-4">
+    <aside className="hidden w-64 flex-shrink-0 border-r border-white/10 bg-white/70 backdrop-blur-xl transition dark:border-slate-800 dark:bg-slate-950/60 md:block">
+      <nav className="p-5">
         <ul className="space-y-2">
           {navItems.map((item) => (
             <li key={item.path}>
-              <Link
+              <NavLink
                 to={item.path}
-                className={`flex items-center space-x-3 p-3 rounded-lg transition-colors ${
-                  location.pathname === item.path
-                    ? 'bg-primary-100 text-primary-700 dark:bg-primary-900 dark:text-primary-100'
-                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
-                }`}
+                className={({ isActive }) =>
+                  `group flex items-center gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-200 ${
+                    isActive
+                      ? 'bg-slate-900 text-white shadow-lg ring-1 ring-slate-900/20 dark:bg-white dark:text-slate-900'
+                      : 'text-slate-600 hover:bg-white hover:shadow dark:text-slate-300 dark:hover:bg-slate-800/70'
+                  }`
+                }
               >
-                <span className="text-primary-600 dark:text-primary-400">{item.icon}</span>
-                <span className="font-medium">{item.name}</span>
-              </Link>
+                <span
+                  className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900/5 text-slate-700 transition group-hover:scale-105 dark:bg-white/10 dark:text-slate-100"
+                >
+                  {item.icon}
+                </span>
+                <span>{item.name}</span>
+              </NavLink>
             </li>
           ))}
         </ul>

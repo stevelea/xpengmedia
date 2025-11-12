@@ -1,0 +1,439 @@
+export type AvailabilityScope = 'global' | 'china' | 'europe' | 'north-america' | 'asia' | 'middle-east';
+
+export interface PlatformLink {
+  id: string;
+  name: string;
+  description: string;
+  url: string;
+  icon: string;
+  availability: AvailabilityScope[];
+  tags?: string[];
+  isPremium?: boolean;
+}
+
+export interface PlatformCategory {
+  id: string;
+  title: string;
+  subtitle: string;
+  highlight?: string;
+  colorFrom: string;
+  colorTo: string;
+  platforms: PlatformLink[];
+}
+
+export const videoCategories: PlatformCategory[] = [
+  {
+    id: 'global-streaming',
+    title: 'Streaming international',
+    subtitle: 'Vos plateformes vidéo favorites accessibles partout',
+    highlight: 'Qualité 4K & Dolby Atmos',
+    colorFrom: 'from-slate-900',
+    colorTo: 'to-cyan-500',
+    platforms: [
+      {
+        id: 'netflix',
+        name: 'Netflix',
+        description: 'Films, séries et documentaires exclusifs.',
+        url: 'https://www.netflix.com',
+        icon: '🎬',
+        availability: ['global'],
+        tags: ['4K', 'Dolby Vision'],
+      },
+      {
+        id: 'youtube',
+        name: 'YouTube',
+        description: 'Vidéos, live et chaînes du monde entier.',
+        url: 'https://www.youtube.com',
+        icon: '▶️',
+        availability: ['global'],
+        tags: ['Live', 'Shorts'],
+      },
+      {
+        id: 'prime-video',
+        name: 'Prime Video',
+        description: 'Blockbusters et séries Amazon Originals.',
+        url: 'https://www.primevideo.com',
+        icon: '⭐',
+        availability: ['global'],
+        tags: ['Prime', 'Originals'],
+      },
+    ],
+  },
+  {
+    id: 'europe',
+    title: 'Sélection Europe',
+    subtitle: 'Les services les plus appréciés en Europe',
+    colorFrom: 'from-blue-600',
+    colorTo: 'to-indigo-500',
+    platforms: [
+      {
+        id: 'salto',
+        name: 'France.tv',
+        description: 'Replay et direct de l’audiovisuel public français.',
+        url: 'https://www.france.tv',
+        icon: '🇫🇷',
+        availability: ['europe'],
+        tags: ['Replay', 'Direct'],
+      },
+      {
+        id: 'bbc-iplayer',
+        name: 'BBC iPlayer',
+        description: 'Programmes BBC avec interface cinématographique.',
+        url: 'https://www.bbc.co.uk/iplayer',
+        icon: '🇬🇧',
+        availability: ['europe'],
+        tags: ['Live', 'News'],
+      },
+      {
+        id: 'ard-mediathek',
+        name: 'ARD Mediathek',
+        description: 'Plateforme allemande avec contenus culturels.',
+        url: 'https://www.ardmediathek.de',
+        icon: '🇩🇪',
+        availability: ['europe'],
+      },
+    ],
+  },
+  {
+    id: 'asia',
+    title: 'Expérience Asie & Chine',
+    subtitle: 'Contenus premium pour les conducteurs XPENG en Asie',
+    highlight: 'Optimisé pour Xmart OS',
+    colorFrom: 'from-emerald-500',
+    colorTo: 'to-lime-400',
+    platforms: [
+      {
+        id: 'bilibili',
+        name: 'Bilibili',
+        description: 'Le meilleur de l’animation et du e-sport chinois.',
+        url: 'https://www.bilibili.com',
+        icon: '🐼',
+        availability: ['china', 'asia'],
+        tags: ['Anime', 'Live'],
+      },
+      {
+        id: 'iqiyi',
+        name: 'iQIYI',
+        description: 'Séries, cinéma et variétés chinoises.',
+        url: 'https://www.iq.com',
+        icon: '🎞️',
+        availability: ['china'],
+        tags: ['HDR'],
+      },
+      {
+        id: 'tencent-video',
+        name: 'Tencent Video',
+        description: 'Blockbusters et drama populaires asiatiques.',
+        url: 'https://v.qq.com',
+        icon: '🀄',
+        availability: ['china', 'asia'],
+      },
+    ],
+  },
+];
+
+export const musicCategories: PlatformCategory[] = [
+  {
+    id: 'global-music',
+    title: 'Audio haute fidélité',
+    subtitle: 'Services compatibles XPENG Sound',
+    highlight: 'Dolby Atmos & Hi-Res',
+    colorFrom: 'from-purple-600',
+    colorTo: 'to-pink-500',
+    platforms: [
+      {
+        id: 'spotify',
+        name: 'Spotify',
+        description: 'Playlists adaptées à vos trajets XPENG.',
+        url: 'https://www.spotify.com',
+        icon: '🎧',
+        availability: ['global'],
+        tags: ['Car Mode'],
+      },
+      {
+        id: 'apple-music',
+        name: 'Apple Music',
+        description: 'Audio spatial et Lossless.',
+        url: 'https://music.apple.com',
+        icon: '🍎',
+        availability: ['global'],
+        tags: ['Hi-Res'],
+        isPremium: true,
+      },
+      {
+        id: 'deezer',
+        name: 'Deezer',
+        description: 'Flow personnalisé pour la route.',
+        url: 'https://www.deezer.com',
+        icon: '🎶',
+        availability: ['europe'],
+      },
+    ],
+  },
+  {
+    id: 'asia-music',
+    title: 'Sélection XPENG Chine',
+    subtitle: 'Services intégrés à Xmart OS',
+    colorFrom: 'from-teal-500',
+    colorTo: 'to-sky-500',
+    platforms: [
+      {
+        id: 'qq-music',
+        name: 'QQ Music',
+        description: 'Immense catalogue asiatique et karaoke embarqué.',
+        url: 'https://y.qq.com',
+        icon: '🎤',
+        availability: ['china', 'asia'],
+        tags: ['Lyrics'],
+      },
+      {
+        id: 'netease',
+        name: 'NetEase Cloud Music',
+        description: 'Communauté musicale chinoise, podcasts et live.',
+        url: 'https://music.163.com',
+        icon: '☁️',
+        availability: ['china'],
+      },
+    ],
+  },
+];
+
+export const gamesCategories: PlatformCategory[] = [
+  {
+    id: 'quick-play',
+    title: 'Jeux instantanés',
+    subtitle: 'Divertissement rapide pendant la recharge',
+    colorFrom: 'from-orange-500',
+    colorTo: 'to-amber-400',
+    platforms: [
+      {
+        id: 'geforce-now',
+        name: 'GeForce NOW',
+        description: 'Streaming de jeux PC haut de gamme dans votre XPENG.',
+        url: 'https://www.nvidia.com/geforce-now',
+        icon: '🕹️',
+        availability: ['global'],
+        tags: ['Cloud'],
+      },
+      {
+        id: 'arcade',
+        name: 'XPENG Arcade',
+        description: 'Jeux casual adaptés à l’écran central.',
+        url: 'https://www.xpeng.com',
+        icon: '🚗',
+        availability: ['china', 'europe'],
+        tags: ['In-car'],
+      },
+      {
+        id: 'stadia',
+        name: 'Boosteroid',
+        description: 'Alternative Stadia pour le cloud gaming.',
+        url: 'https://www.boosteroid.com',
+        icon: '☁️',
+        availability: ['europe'],
+      },
+    ],
+  },
+  {
+    id: 'kids',
+    title: 'Famille & enfants',
+    subtitle: 'Jeux éducatifs et sûrs pour la cabine XPENG',
+    colorFrom: 'from-pink-500',
+    colorTo: 'to-rose-400',
+    platforms: [
+      {
+        id: 'lego',
+        name: 'LEGO Play',
+        description: 'Mini-jeux interactifs LEGO.',
+        url: 'https://www.lego.com/en-us/kids',
+        icon: '🧱',
+        availability: ['global'],
+      },
+      {
+        id: 'pbs-kids',
+        name: 'PBS Kids Games',
+        description: 'Jeux éducatifs adaptés aux plus jeunes.',
+        url: 'https://pbskids.org/games',
+        icon: '🎈',
+        availability: ['north-america'],
+      },
+    ],
+  },
+];
+
+export const chargingCategories: PlatformCategory[] = [
+  {
+    id: 'xpeng-supercharging',
+    title: 'XPENG Supercharging',
+    subtitle: 'Trouvez la borne la plus proche de votre itinéraire',
+    highlight: 'Réseau 480 kW',
+    colorFrom: 'from-slate-800',
+    colorTo: 'to-slate-600',
+    platforms: [
+      {
+        id: 'xpeng-map',
+        name: 'XPENG Stations',
+        description: 'Planifiez et surveillez les superchargers XPENG.',
+        url: 'https://www.xpeng.com/supercharging',
+        icon: '⚡',
+        availability: ['china'],
+        tags: ['Official'],
+      },
+      {
+        id: 'charger-share',
+        name: 'ChargerShare',
+        description: 'Partage de bornes XPENG avec réservation anticipée.',
+        url: 'https://share.xpeng.com',
+        icon: '🔄',
+        availability: ['china'],
+      },
+    ],
+  },
+  {
+    id: 'global-charging',
+    title: 'Réseaux globaux',
+    subtitle: 'Compatibles avec les adaptateurs XPENG',
+    colorFrom: 'from-sky-600',
+    colorTo: 'to-cyan-500',
+    platforms: [
+      {
+        id: 'plugshare',
+        name: 'PlugShare',
+        description: 'Carte communautaire de bornes dans le monde.',
+        url: 'https://www.plugshare.com',
+        icon: '🗺️',
+        availability: ['global'],
+        tags: ['Community'],
+      },
+      {
+        id: 'chargepoint',
+        name: 'ChargePoint',
+        description: 'Réseau européen et nord-américain majeur.',
+        url: 'https://www.chargepoint.com',
+        icon: '🔌',
+        availability: ['north-america', 'europe'],
+      },
+      {
+        id: 'tesla-supercharger',
+        name: 'Tesla Supercharger (NACS)',
+        description: 'Accès via adaptateur XPENG compatible NACS.',
+        url: 'https://www.tesla.com/supercharger',
+        icon: '⚙️',
+        availability: ['north-america', 'europe'],
+        tags: ['High Power'],
+      },
+    ],
+  },
+];
+
+export const otherServicesCategories: PlatformCategory[] = [
+  {
+    id: 'ev-entertainment',
+    title: 'Divertissement EV communautaire',
+    subtitle: 'Portails optimisés pour écrans de véhicules électriques',
+    highlight: 'Compatible XPENG & Tesla',
+    colorFrom: 'from-indigo-600',
+    colorTo: 'to-purple-500',
+    platforms: [
+      {
+        id: 's3xytheater',
+        name: 's3xytheater',
+        description: 'Hub de divertissement plein écran pour Tesla et véhicules compatibles.',
+        url: 'https://www.s3xytheater.fr',
+        icon: '🎭',
+        availability: ['global'],
+        tags: ['Plein écran', 'France'],
+      },
+      {
+        id: 'abettertheater',
+        name: 'A Better Theater',
+        description: 'Portail communautaire avec streaming, jeux et services web optimisés.',
+        url: 'https://abettertheater.com',
+        icon: '🎬',
+        availability: ['global'],
+        tags: ['Community', 'Streaming'],
+      },
+      {
+        id: 'abettertheater-members',
+        name: 'ABT Members',
+        description: 'Espace membre premium A Better Theater avec contenu exclusif.',
+        url: 'https://members.abettertheater.com',
+        icon: '⭐',
+        availability: ['global'],
+        tags: ['Premium', 'Members'],
+      },
+      {
+        id: 'teslaos',
+        name: 'TeslaOS.io',
+        description: 'Interface web optimisée pour navigateur embarqué Tesla/XPENG.',
+        url: 'https://teslaos.io',
+        icon: '💻',
+        availability: ['global'],
+        tags: ['Dashboard', 'Apps'],
+      },
+      {
+        id: 'myteslanu',
+        name: 'MyTesla.nu',
+        description: 'Portail personnel avec flux de médias et outils véhicule.',
+        url: 'http://mytesla.nu',
+        icon: '🚗',
+        availability: ['global'],
+        tags: ['Personnalisable', 'Media Hub'],
+      },
+      {
+        id: 'teslafi',
+        name: 'TeslaFi',
+        description: 'Suivi et analyse détaillée de votre véhicule électrique.',
+        url: 'https://www.teslafi.com',
+        icon: '📊',
+        availability: ['global'],
+        tags: ['Tracking', 'Analytics'],
+      },
+      {
+        id: 'tessie',
+        name: 'Tessie',
+        description: 'Application de contrôle et automatisation pour Tesla/EV.',
+        url: 'https://tessie.com',
+        icon: '📱',
+        availability: ['global'],
+        tags: ['Control', 'Automation'],
+      },
+    ],
+  },
+  {
+    id: 'ev-tools',
+    title: 'Outils & utilitaires EV',
+    subtitle: 'Applications pratiques pour conducteurs de véhicules électriques',
+    colorFrom: 'from-teal-600',
+    colorTo: 'to-emerald-500',
+    platforms: [
+      {
+        id: 'abetterrouteplanner',
+        name: 'A Better Route Planner',
+        description: "Planificateur d'itinéraire intelligent pour VE avec optimisation des arrêts recharge.",
+        url: 'https://abetterrouteplanner.com',
+        icon: '🗺️',
+        availability: ['global'],
+        tags: ['Navigation', 'Gratuit'],
+      },
+      {
+        id: 'chargemap',
+        name: 'Chargemap',
+        description: 'Carte collaborative des bornes de recharge en Europe.',
+        url: 'https://chargemap.com',
+        icon: '🔋',
+        availability: ['europe'],
+        tags: ['Recharge', 'Community'],
+      },
+      {
+        id: 'evnotify',
+        name: 'EVNotify',
+        description: "Notifications intelligentes de l'état de charge de votre XPENG.",
+        url: 'https://evnotify.de',
+        icon: '📱',
+        availability: ['global'],
+        tags: ['Notifications'],
+      },
+    ],
+  },
+];

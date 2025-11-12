@@ -2,13 +2,23 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>XPeng Media</title>
+    <title>XPeng Media - Redirection</title>
     <script type="text/javascript">
-      // Redirect to index.html for HashRouter
-      window.location.replace('/xpengmedia/');
+      // Get the path and redirect to the same path with the base URL
+      const path = window.location.pathname;
+      const base = '/xpengmedia';
+      
+      // Redirect to the correct path with hash-based routing
+      if (path.startsWith(base + '/') || path === base) {
+        // Already on the correct base path, just redirect to index.html
+        window.location.href = base + '/#' + window.location.pathname.replace(base, '') + window.location.search + window.location.hash;
+      } else {
+        // Not on the base path, redirect to the base path
+        window.location.href = base + '/#' + window.location.pathname + window.location.search + window.location.hash;
+      }
     </script>
   </head>
   <body>
-    <p>Redirecting...</p>
+    <p>Redirection en cours vers XPeng Media Hub...</p>
   </body>
 </html>

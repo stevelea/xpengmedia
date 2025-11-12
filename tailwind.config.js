@@ -2,10 +2,9 @@
 module.exports = {
   darkMode: ['class'],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx,js,jsx}',
+    './components/**/*.{ts,tsx,js,jsx}',
+    './pages/**/*.{ts,tsx,js,jsx}',
   ],
   theme: {
     container: {
@@ -17,7 +16,40 @@ module.exports = {
     },
     extend: {
       colors: {
-        // Couleurs XPeng
+        border: 'hsl(var(--border))',
+        input: 'hsl(var(--input))',
+        ring: 'hsl(var(--ring))',
+        background: 'hsl(var(--background))',
+        foreground: 'hsl(var(--foreground))',
+        primary: {
+          DEFAULT: 'hsl(var(--primary))',
+          foreground: 'hsl(var(--primary-foreground))',
+        },
+        secondary: {
+          DEFAULT: 'hsl(var(--secondary))',
+          foreground: 'hsl(var(--secondary-foreground))',
+        },
+        destructive: {
+          DEFAULT: 'hsl(var(--destructive))',
+          foreground: 'hsl(var(--destructive-foreground))',
+        },
+        muted: {
+          DEFAULT: 'hsl(var(--muted))',
+          foreground: 'hsl(var(--muted-foreground))',
+        },
+        accent: {
+          DEFAULT: 'hsl(var(--accent))',
+          foreground: 'hsl(var(--accent-foreground))',
+        },
+        popover: {
+          DEFAULT: 'hsl(var(--popover))',
+          foreground: 'hsl(var(--popover-foreground))',
+        },
+        card: {
+          DEFAULT: 'hsl(var(--card))',
+          foreground: 'hsl(var(--card-foreground))',
+        },
+        // Couleurs XPeng complémentaires
         xpeng: {
           DEFAULT: '#1A6AE0',
           light: '#4D8EFF',
@@ -36,27 +68,6 @@ module.exports = {
             900: '#0F172A',
           },
         },
-        // Thème clair
-        light: {
-          primary: '#1A6AE0',
-          secondary: '#475569',
-          accent: '#4D8EFF',
-          background: '#FFFFFF',
-          card: '#F8FAFC',
-          text: '#1E293B',
-          border: '#E2E8F0',
-        },
-        // Thème sombre
-        dark: {
-          primary: '#4D8EFF',
-          secondary: '#94A3B8',
-          accent: '#1A6AE0',
-          background: '#0F172A',
-          card: '#1E293B',
-          text: '#F8FAFC',
-          border: '#334155',
-        },
-        // Autres couleurs
         success: {
           DEFAULT: '#10B981',
           light: '#6EE7B7',
@@ -78,17 +89,14 @@ module.exports = {
           dark: '#2563EB',
         },
       },
-      // Extensions de l'espacement
       spacing: {
         128: '32rem',
         144: '36rem',
       },
-      // Bordures arrondies personnalisées
       borderRadius: {
         '4xl': '2rem',
         '5xl': '2.5rem',
       },
-      // Animations personnalisées
       keyframes: {
         'fade-in': {
           '0%': { opacity: '0' },
@@ -118,17 +126,15 @@ module.exports = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
-      // Ombres personnalisées
       boxShadow: {
-        'card': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+        card: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
         'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
         'dark-card': '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2)',
         'dark-card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2)',
       },
-      // Transitions personnalisées
       transitionProperty: {
-        'height': 'height',
-        'spacing': 'margin, padding',
+        height: 'height',
+        spacing: 'margin, padding',
       },
     },
   },
@@ -136,11 +142,8 @@ module.exports = {
     require('tailwindcss-animate'),
     require('@tailwindcss/typography'),
     require('@tailwindcss/forms'),
-    require('@tailwindcss/line-clamp'),
     require('@tailwindcss/aspect-ratio'),
   ],
-  // Configuration pour le mode sombre
-  darkMode: 'class',
   variants: {
     extend: {
       opacity: ['disabled'],

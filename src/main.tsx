@@ -6,6 +6,7 @@ import { FavoritesProvider } from './context/FavoritesContext';
 import './index.css';
 import App from './App';
 
+// Utilisation de HashRouter pour une meilleure compatibilité avec GitHub Pages
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HashRouter>

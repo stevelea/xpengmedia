@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 import { FiSun, FiMoon, FiChevronDown, FiGlobe, FiCheck } from 'react-icons/fi';
 import { useTheme } from '../../context/ThemeContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { Transition } from '@headlessui/react';
 import { Fragment } from 'react';
+import xpengLogo from '../../assets/xpeng-logo.svg';
 
 interface CountrySelectorProps {
   countries: Array<{
@@ -94,35 +96,66 @@ export const Navbar: React.FC = () => {
   const { countries, currentCountry, setCurrentCountry } = useFavorites();
 
   return (
-    <nav className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <div className="flex-shrink-0 flex items-center gap-2">
-              <span className="text-2xl">🚗</span>
-              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent">
-                XPeng Media
-              </span>
-            </div>
+    <nav className="border-b border-white/10 bg-white/80 backdrop-blur-xl transition-colors duration-500 dark:border-slate-800 dark:bg-slate-950/70">
+      <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link to="/" className="flex items-center gap-3">
+          <span className="inline-flex h-9 w-24 items-center justify-center rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900">
+            <img src={xpengLogo} alt="XPENG" className="h-5" />
+          </span>
+          <div className="leading-tight">
+            <p className="text-xs uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">Media Hub</p>
+            <p className="text-lg font-semibold text-slate-900 dark:text-white">XPENG Experience</p>
           </div>
+        </Link>
 
-          <div className="flex items-center space-x-2">
-            {/* Sélecteur de pays */}
-            <CountrySelector countries={countries} currentCountry={currentCountry} onSelect={setCurrentCountry} />
-
-            {/* Bouton de thème */}
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none transition-colors duration-200"
-              aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+        <div className="hidden items-center gap-1 rounded-full border border-slate-200/70 bg-white/70 p-1 shadow-sm transition dark:border-slate-800 dark:bg-slate-900/70 md:flex">
+          {[
+            { name: 'Accueil', path: '/' },
+            { name: 'Vidéos', path: '/videos' },
+            { name: 'Musique', path: '/music' },
+            { name: 'Jeux', path: '/games' },
+            { name: 'Recharge', path: '/charging' },
+            { name: 'Autres', path: '/other-services' },
+          ].map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `inline-flex items-center rounded-full px-4 py-2 text-sm font-medium transition ${
+                  isActive
+                    ? 'bg-slate-900 text-white shadow dark:bg-white dark:text-slate-900'
+                    : 'text-slate-600 hover:bg-white/70 dark:text-slate-300 dark:hover:bg-slate-800'
+                }`
+              }
             >
-              {theme === 'dark' ? (
-                <FiSun className="h-5 w-5 text-yellow-400" />
-              ) : (
-                <FiMoon className="h-5 w-5 text-blue-600" />
-              )}
-            </button>
-          </div>
+              {item.name}
+            </NavLink>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <CountrySelector countries={countries} currentCountry={currentCountry} onSelect={setCurrentCountry} />
+
+          <button
+            onClick={toggleTheme}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/70 text-slate-600 transition hover:scale-105 hover:text-slate-900 focus:outline-none dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
+            aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+          >
+            {theme === 'dark' ? (
+              <FiSun className="h-5 w-5 text-amber-300" />
+            ) : (
+              <FiMoon className="h-5 w-5 text-slate-700" />
+            )}
+          </button>
+
+          <a
+            href="https://www.xpeng.com"
+            target="_blank"
+            rel="noreferrer"
+            className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl md:inline-flex"
+          >
+            Espace propriétaire
+          </a>
         </div>
       </div>
     </nav>

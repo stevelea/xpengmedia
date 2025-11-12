@@ -1,51 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 207 90% 54%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 13 89% 57%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 207 90% 54%;
-    --radius: 0.5rem;
+    --background: 210 40% 99%;
+    --foreground: 222 47% 11%;
+    --card: 210 40% 98%;
+    --card-foreground: 222 47% 11%;
+    --popover: 210 40% 98%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 214 88% 46%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 199 90% 52%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 210 28% 93%;
+    --muted-foreground: 218 19% 38%;
+    --accent: 196 100% 88%;
+    --accent-foreground: 214 88% 28%;
+    --destructive: 2 87% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 213 27% 84%;
+    --input: 213 27% 84%;
+    --ring: 214 88% 46%;
+    --radius: 0.75rem;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 207 90% 54%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 13 89% 57%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 207 90% 54%;
+    --background: 222 47% 9%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 13%;
+    --card-foreground: 210 40% 96%;
+    --popover: 222 47% 13%;
+    --popover-foreground: 210 40% 96%;
+    --primary: 199 90% 62%;
+    --primary-foreground: 222 47% 9%;
+    --secondary: 214 88% 36%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 222 47% 16%;
+    --muted-foreground: 214 32% 75%;
+    --accent: 199 90% 45%;
+    --accent-foreground: 222 47% 8%;
+    --destructive: 356 78% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 222 47% 18%;
+    --input: 222 47% 18%;
+    --ring: 199 90% 62%;
   }
 }
 
@@ -55,54 +57,26 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-family: 'Urbanist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    min-height: 100vh;
+    background-image: radial-gradient(circle at top left, rgba(74, 222, 255, 0.12), transparent 55%),
+      radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.15), transparent 45%);
+    background-attachment: fixed;
   }
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-slate-900 dark:text-slate-50;
+  }
+  a {
+    @apply text-primary transition-colors;
   }
   a:hover {
-    color: #747bff;
+    @apply text-secondary;
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply rounded-3xl border border-white/10 bg-white/40 shadow-[0_25px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:bg-slate-900/60;
   }
 }
