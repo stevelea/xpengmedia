@@ -12,11 +12,18 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   size = 'md',
   className = '',
 }) => {
-  // Tailles uniformes pour tous les contextes
+  // Tailles uniformes pour tous les contextes - FIXÉES pour homogénéité
   const sizeClasses = {
-    sm: 'w-10 h-10 text-xl',
-    md: 'w-12 h-12 text-2xl',
-    lg: 'w-16 h-16 text-3xl',
+    sm: 'w-11 h-11 min-w-[2.75rem] min-h-[2.75rem]',
+    md: 'w-12 h-12 min-w-[3rem] min-h-[3rem]',
+    lg: 'w-14 h-14 min-w-[3.5rem] min-h-[3.5rem]',
+  };
+  
+  // Taille d'emoji fixe pour tous les contextes
+  const emojiSize = {
+    sm: 'text-[1.5rem]',  // 24px
+    md: 'text-[1.75rem]', // 28px
+    lg: 'text-[2rem]',    // 32px
   };
 
   return (
@@ -37,7 +44,7 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
       `}
       aria-hidden="true"
     >
-      <span className="flex items-center justify-center leading-none">
+      <span className={`flex items-center justify-center leading-none ${emojiSize[size]}`}>
         {icon}
       </span>
     </div>
