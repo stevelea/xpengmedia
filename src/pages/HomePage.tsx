@@ -143,13 +143,13 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-2 py-4 pb-24 md:px-6">
+    <div className="container mx-auto px-2 py-2 pb-20 md:px-6 md:py-4 md:pb-24">
       {/* Barre de recherche en premier */}
       <motion.section
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="mb-6"
+        className="mb-3 md:mb-6"
       >
         <SearchBar />
       </motion.section>
@@ -159,7 +159,7 @@ export const HomePage: React.FC = () => {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="relative overflow-hidden rounded-3xl border-2 border-cyan-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-6 py-6 shadow-[0_20px_60px_-20px_rgba(6,182,212,0.3)] backdrop-blur-xl md:px-10 md:py-8"
+        className="relative overflow-hidden rounded-2xl border-2 border-cyan-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-4 py-4 shadow-[0_20px_60px_-20px_rgba(6,182,212,0.3)] backdrop-blur-xl md:rounded-3xl md:px-10 md:py-8"
       >
         {/* Halos lumineux en arrière-plan */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
@@ -168,37 +168,37 @@ export const HomePage: React.FC = () => {
         </div>
         
         <div className="relative z-10 max-w-4xl text-white">
-            <div className="flex items-center gap-3">
-              <div className="h-1 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400">XPENG MEDIA HUB</p>
+            <div className="flex items-center gap-2">
+              <div className="h-0.5 w-8 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 md:h-1 md:w-12" />
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-cyan-400 md:text-xs md:tracking-[0.3em]">XPENG MEDIA HUB</p>
             </div>
-            <h1 className="mt-3 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
+            <h1 className="mt-2 text-xl font-bold leading-tight md:mt-3 md:text-4xl lg:text-5xl">
               Une cabine immersive, vos plateformes favorites
             </h1>
-            <p className="mt-3 text-sm text-white/70 md:text-base lg:max-w-2xl">
+            <p className="mt-2 text-xs text-white/70 md:mt-3 md:text-base lg:max-w-2xl">
               Interface optimisée pour Xmart OS avec services vidéo, musique, jeux et recharge.
             </p>
 
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="mt-3 flex flex-wrap gap-1.5 md:gap-2 md:mt-5">
               <Link
                 to="/videos"
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition hover:shadow-cyan-500/50"
+                className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg shadow-cyan-500/30 transition hover:shadow-cyan-500/50 md:gap-2 md:px-4 md:py-2 md:text-sm"
               >
-                <PlayIcon className="h-4 w-4" />
+                <PlayIcon className="h-3 w-3 md:h-4 md:w-4" />
                 Vidéos
               </Link>
               <Link
                 to="/music"
-                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 px-4 py-2 text-sm font-semibold text-white/90 transition hover:bg-cyan-500/10"
+                className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-cyan-500/10 md:gap-2 md:px-4 md:py-2 md:text-sm"
               >
-                <MusicalNoteIcon className="h-4 w-4" />
+                <MusicalNoteIcon className="h-3 w-3 md:h-4 md:w-4" />
                 Musique
               </Link>
               <Link
                 to="/games"
-                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 px-4 py-2 text-sm font-semibold text-white/90 transition hover:bg-cyan-500/10"
+                className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-cyan-500/10 md:gap-2 md:px-4 md:py-2 md:text-sm"
               >
-                <PuzzlePieceIcon className="h-4 w-4" />
+                <PuzzlePieceIcon className="h-3 w-3 md:h-4 md:w-4" />
                 Jeux
               </Link>
             </div>
@@ -252,23 +252,23 @@ export const HomePage: React.FC = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-8"
+        className="mt-4 md:mt-8"
       >
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg shadow-amber-500/30">
-              <StarIcon className="h-6 w-6 text-white" />
+        <div className="mb-2 flex items-center justify-between md:mb-4">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 shadow-lg shadow-amber-500/30 md:h-10 md:w-10 md:rounded-xl">
+              <StarIcon className="h-4 w-4 text-white md:h-6 md:w-6" />
               {hasUsageData && (
-                <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyan-500 text-[10px] font-bold text-white">
+                <div className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-cyan-500 text-[8px] font-bold text-white md:-right-1 md:-top-1 md:h-5 md:w-5 md:text-[10px]">
                   AI
                 </div>
               )}
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900 dark:text-white md:text-2xl">
+              <h2 className="text-sm font-bold text-slate-900 dark:text-white md:text-xl lg:text-2xl">
                 {hasUsageData ? t('myFavorites') : t('smartRecommendations')}
               </h2>
-              <p className="text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+              <p className="text-[10px] text-slate-600 dark:text-slate-400 md:text-xs lg:text-sm">
                 {hasUsageData 
                   ? t('adaptedToYou')
                   : t('popularServices')}
@@ -276,17 +276,17 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
           {hasUsageData && (
-            <div className="flex items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-3 py-1.5">
-              <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-500" />
-              <span className="text-xs font-semibold text-cyan-600 dark:text-cyan-400">
+            <div className="hidden items-center gap-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-1 md:flex md:px-3 md:py-1.5">
+              <div className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-500 md:h-2 md:w-2" />
+              <span className="text-[10px] font-semibold text-cyan-600 dark:text-cyan-400 md:text-xs">
                 {t('learningActive')}
               </span>
             </div>
           )}
         </div>
         
-        {/* Grille compacte pour tablette - 8 favoris intelligents + boutons d'ajout */}
-        <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
+        {/* Grille compacte optimisée mobile portrait */}
+        <div className="grid grid-cols-5 gap-2 md:grid-cols-6 md:gap-3 lg:grid-cols-8">
           {smartFavorites.map((platform) => (
             <motion.a
               key={platform.id}
@@ -296,12 +296,12 @@ export const HomePage: React.FC = () => {
               onClick={() => trackClick(platform.id)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group relative flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500"
+              className="group relative flex flex-col items-center gap-1 rounded-xl border border-slate-200/70 bg-white/80 p-2 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500 md:gap-2 md:rounded-2xl md:p-4"
             >
-              <div className="text-3xl" aria-hidden>{platform.icon}</div>
-              <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white line-clamp-2">{platform.name}</h3>
-              <div className="absolute right-1 top-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <StarIcon className="h-3 w-3 text-amber-500" />
+              <div className="text-2xl md:text-3xl" aria-hidden>{platform.icon}</div>
+              <h3 className="text-[9px] font-semibold text-center text-slate-900 dark:text-white line-clamp-2 md:text-xs">{platform.name}</h3>
+              <div className="absolute right-0.5 top-0.5 opacity-0 group-hover:opacity-100 transition-opacity md:right-1 md:top-1">
+                <StarIcon className="h-2.5 w-2.5 text-amber-500 md:h-3 md:w-3" />
               </div>
             </motion.a>
           ))}
