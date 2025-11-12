@@ -18,6 +18,7 @@ import { AddCustomUrlModal } from '../components/modals/AddCustomUrlModal';
 import { AddServiceFromListModal } from '../components/modals/AddServiceFromListModal';
 import { StarIcon } from '@heroicons/react/24/solid';
 import { PlatformIcon } from '../components/icons/PlatformIcon';
+import { filterPlatformsByRegion } from '../utils/regionFilter';
 
 export const HomePage: React.FC = () => {
   const { categories } = useFavorites();
@@ -31,39 +32,6 @@ export const HomePage: React.FC = () => {
   const [hiddenPlatforms, setHiddenPlatforms] = useState<Set<string>>(new Set());
   const [customServices, setCustomServices] = useState<PlatformLink[]>([]);
 
-  // Fonction de filtrage par région
-  const filterByRegion = (platforms: PlatformLink[]): PlatformLink[] => {
-    // Mapping des régions vers leurs availabilityScope
-    const regionMap: Record<string, string[]> = {
-      global: ['global', 'europe', 'north-america', 'australia', 'middle-east'], // EXCLU: china, asia
-      france: ['global', 'europe'],
-      germany: ['global', 'europe'],
-      spain: ['global', 'europe'],
-      italy: ['global', 'europe'],
-      netherlands: ['global', 'europe'],
-      belgium: ['global', 'europe'],
-      sweden: ['global', 'europe'],
-      norway: ['global', 'europe'],
-      denmark: ['global', 'europe'],
-      switzerland: ['global', 'europe'],
-      austria: ['global', 'europe'],
-      uk: ['global', 'europe'],
-      usa: ['global', 'north-america'],
-      australia: ['global', 'australia'],
-      china: ['global', 'china', 'asia'], // Mainland China séparée
-      singapore: ['global', 'asia'],
-      uae: ['global', 'middle-east'],
-      qatar: ['global', 'middle-east'],
-      israel: ['global', 'middle-east'],
-    };
-
-    const allowedScopes = regionMap[locale.region] || ['global'];
-    
-    return platforms.filter(platform => 
-      platform.availability.some(av => allowedScopes.includes(av))
-    );
-  };
-
   // Sélection des plateformes populaires à afficher par défaut
   const allPlatformsRaw: PlatformLink[] = [
     ...videoCategories.flatMap(cat => cat.platforms),
@@ -73,8 +41,8 @@ export const HomePage: React.FC = () => {
     ...otherServicesCategories.flatMap(cat => cat.platforms),
   ];
 
-  // Filtrer par région
-  const allPlatforms = filterByRegion(allPlatformsRaw);
+  // Filtrer par région avec le système intelligent
+  const allPlatforms = filterPlatformsByRegion(allPlatformsRaw, locale.region);
 
   // Hook de favoris intelligents
   const { smartFavorites, trackClick, hasUsageData } = useSmartFavorites(allPlatforms);
@@ -121,7 +89,7 @@ export const HomePage: React.FC = () => {
 
   // Filtrer les plateformes visibles (cachées + région)
   const getVisiblePlatforms = (platforms: PlatformLink[]) => {
-    const filtered = filterByRegion(platforms);
+    const filtered = filterPlatformsByRegion(platforms, locale.region);
     return filtered.filter(p => !hiddenPlatforms.has(p.id));
   };
 
