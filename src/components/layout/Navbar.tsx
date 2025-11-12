@@ -146,15 +146,6 @@ export const Navbar: React.FC = () => {
               <FiMoon className="h-5 w-5 text-slate-700" />
             )}
           </button>
-
-          <a
-            href="https://www.xpeng.com"
-            target="_blank"
-            rel="noreferrer"
-            className="hidden items-center gap-2 rounded-full bg-gradient-to-r from-blue-600 via-sky-500 to-cyan-400 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl md:inline-flex"
-          >
-            Espace propriétaire
-          </a>
         </div>
       </div>
     </nav>
