@@ -34,7 +34,7 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
         rounded-xl
         bg-gradient-to-br from-cyan-50 to-blue-50
         dark:from-slate-800 dark:to-slate-700
-        border-2 border-cyan-200/50 dark:border-cyan-500/30
+        border border-cyan-200/60 dark:border-cyan-500/40
         shadow-sm
         transition-all duration-200
         group-hover:scale-105
