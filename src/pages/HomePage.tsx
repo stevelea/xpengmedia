@@ -100,14 +100,15 @@ export const HomePage: React.FC = () => {
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.1 }}
-        className="relative overflow-hidden rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 p-[1px] shadow-[0_20px_60px_-20px_rgba(6,182,212,0.3)]"
+        className="relative overflow-hidden rounded-3xl border-2 border-cyan-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 px-6 py-6 shadow-[0_20px_60px_-20px_rgba(6,182,212,0.3)] backdrop-blur-xl md:px-10 md:py-8"
       >
-        <div className="relative rounded-[calc(1.5rem-1px)] bg-slate-950/80 px-6 py-6 backdrop-blur-xl md:px-10 md:py-8">
-          <div className="absolute inset-y-0 right-0 hidden w-1/3 translate-x-8 overflow-hidden lg:block">
-            <div className="absolute -top-10 right-4 h-48 w-48 rounded-full bg-cyan-500/30 blur-3xl" />
-            <div className="absolute bottom-5 right-10 h-32 w-32 rounded-full bg-blue-400/20 blur-3xl" />
-          </div>
-          <div className="relative z-10 max-w-4xl text-white">
+        {/* Halos lumineux en arrière-plan */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-3xl">
+          <div className="absolute -top-20 right-1/4 h-64 w-64 rounded-full bg-cyan-500/20 blur-3xl" />
+          <div className="absolute bottom-0 left-1/4 h-48 w-48 rounded-full bg-blue-500/15 blur-3xl" />
+        </div>
+        
+        <div className="relative z-10 max-w-4xl text-white">
             <div className="flex items-center gap-3">
               <div className="h-1 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400">XPENG MEDIA HUB</p>
@@ -143,7 +144,6 @@ export const HomePage: React.FC = () => {
               </Link>
             </div>
           </div>
-        </div>
       </motion.section>
 
       {/* Bouton d'édition */}
