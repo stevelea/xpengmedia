@@ -4,16 +4,19 @@ import { FavoritesGrid } from '../components/favorites/FavoritesGrid';
 import { AddFavoriteModal } from '../components/favorites/AddFavoriteModal';
 import { SearchBar } from '../components/SearchBar';
 import { useFavorites } from '../context/FavoritesContext';
-import { PlusIcon, ArrowUpIcon, PlayIcon, MusicalNoteIcon, PuzzlePieceIcon, BoltIcon, ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ArrowUpIcon, PlayIcon, MusicalNoteIcon, PuzzlePieceIcon, BoltIcon, SparklesIcon, PencilIcon, CheckIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { videoCategories, musicCategories, gamesCategories, chargingCategories, otherServicesCategories } from '../data/platforms';
 import type { PlatformLink } from '../data/platforms';
+import { EditablePlatformCard } from '../components/platforms/EditablePlatformCard';
 
 export const HomePage: React.FC = () => {
   const { categories } = useFavorites();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [hiddenPlatforms, setHiddenPlatforms] = useState<Set<string>>(new Set());
 
   // Sélection des plateformes populaires à afficher par défaut
   const allPlatforms: PlatformLink[] = [
@@ -46,6 +49,33 @@ export const HomePage: React.FC = () => {
     });
   };
 
+  // Charger les plateformes cachées depuis localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem('hiddenPlatforms');
+    if (saved) {
+      setHiddenPlatforms(new Set(JSON.parse(saved)));
+    }
+  }, []);
+
+  // Sauvegarder les plateformes cachées dans localStorage
+  useEffect(() => {
+    localStorage.setItem('hiddenPlatforms', JSON.stringify(Array.from(hiddenPlatforms)));
+  }, [hiddenPlatforms]);
+
+  // Gérer la suppression d'une plateforme
+  const handleRemovePlatform = (platformId: string) => {
+    setHiddenPlatforms(prev => new Set([...prev, platformId]));
+  };
+
+  // Filtrer les plateformes visibles
+  const getVisiblePlatforms = (platforms: PlatformLink[]) => {
+    return platforms.filter(p => !hiddenPlatforms.has(p.id));
+  };
+
+  // Toggle mode édition
+  const toggleEditMode = () => {
+    setIsEditMode(!isEditMode);
+  };
 
   return (
     <div className="container mx-auto px-2 py-6 pb-24 md:px-6">
@@ -118,6 +148,45 @@ export const HomePage: React.FC = () => {
         <SearchBar />
       </motion.section>
 
+      {/* Bouton d'édition */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className="mt-8 flex justify-end"
+      >
+        <button
+          onClick={toggleEditMode}
+          className={`flex items-center gap-2 rounded-full px-6 py-3 font-medium shadow-lg transition-all ${
+            isEditMode
+              ? 'bg-green-500 text-white hover:bg-green-600'
+              : 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-600 hover:to-blue-600'
+          }`}
+        >
+          {isEditMode ? (
+            <>
+              <CheckIcon className="h-5 w-5" />
+              <span>Terminer</span>
+            </>
+          ) : (
+            <>
+              <PencilIcon className="h-5 w-5" />
+              <span>Personnaliser</span>
+            </>
+          )}
+        </button>
+      </motion.div>
+
+      {isEditMode && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-center text-sm text-yellow-700 dark:text-yellow-300"
+        >
+          <span className="font-semibold">Mode édition activé</span> - Appuyez longuement sur une icône pour la masquer
+        </motion.div>
+      )}
+
       {/* Plateformes par catégories */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
@@ -142,19 +211,13 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {videoCategories.flatMap(c => c.platforms).map((platform) => (
-              <motion.a
+            {getVisiblePlatforms(videoCategories.flatMap(c => c.platforms)).map((platform) => (
+              <EditablePlatformCard
                 key={platform.id}
-                href={platform.url}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.05 }}
-                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-cyan-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-cyan-500"
-              >
-                <div className="text-3xl" aria-hidden>{platform.icon}</div>
-                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
-                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
-              </motion.a>
+                platform={platform}
+                isEditable={isEditMode}
+                onRemove={handleRemovePlatform}
+              />
             ))}
           </div>
         </div>
@@ -176,19 +239,13 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {musicCategories.flatMap(c => c.platforms).map((platform) => (
-              <motion.a
+            {getVisiblePlatforms(musicCategories.flatMap(c => c.platforms)).map((platform) => (
+              <EditablePlatformCard
                 key={platform.id}
-                href={platform.url}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.05 }}
-                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-pink-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-pink-500"
-              >
-                <div className="text-3xl" aria-hidden>{platform.icon}</div>
-                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
-                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
-              </motion.a>
+                platform={platform}
+                isEditable={isEditMode}
+                onRemove={handleRemovePlatform}
+              />
             ))}
           </div>
         </div>
@@ -210,19 +267,13 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {gamesCategories.flatMap(c => c.platforms).map((platform) => (
-              <motion.a
+            {getVisiblePlatforms(gamesCategories.flatMap(c => c.platforms)).map((platform) => (
+              <EditablePlatformCard
                 key={platform.id}
-                href={platform.url}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.05 }}
-                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-purple-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-purple-500"
-              >
-                <div className="text-3xl" aria-hidden>{platform.icon}</div>
-                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
-                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
-              </motion.a>
+                platform={platform}
+                isEditable={isEditMode}
+                onRemove={handleRemovePlatform}
+              />
             ))}
           </div>
         </div>
@@ -244,19 +295,13 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {chargingCategories.flatMap(c => c.platforms).map((platform) => (
-              <motion.a
+            {getVisiblePlatforms(chargingCategories.flatMap(c => c.platforms)).map((platform) => (
+              <EditablePlatformCard
                 key={platform.id}
-                href={platform.url}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.05 }}
-                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-yellow-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-yellow-500"
-              >
-                <div className="text-3xl" aria-hidden>{platform.icon}</div>
-                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
-                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
-              </motion.a>
+                platform={platform}
+                isEditable={isEditMode}
+                onRemove={handleRemovePlatform}
+              />
             ))}
           </div>
         </div>
@@ -278,19 +323,13 @@ export const HomePage: React.FC = () => {
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-            {otherServicesCategories.flatMap(c => c.platforms).map((platform) => (
-              <motion.a
+            {getVisiblePlatforms(otherServicesCategories.flatMap(c => c.platforms)).map((platform) => (
+              <EditablePlatformCard
                 key={platform.id}
-                href={platform.url}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.05 }}
-                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-indigo-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-indigo-500"
-              >
-                <div className="text-3xl" aria-hidden>{platform.icon}</div>
-                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
-                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
-              </motion.a>
+                platform={platform}
+                isEditable={isEditMode}
+                onRemove={handleRemovePlatform}
+              />
             ))}
           </div>
         </div>
@@ -305,7 +344,7 @@ export const HomePage: React.FC = () => {
       >
         <div className="mb-6">
           <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
-            Toutes les plateformes ({allPlatforms.length})
+            Toutes les plateformes ({getVisiblePlatforms(allPlatforms).length})
           </h2>
           <p className="mt-2 text-slate-600 dark:text-slate-400">
             Vue d'ensemble complète de tous les services disponibles pour votre XPENG
@@ -313,37 +352,13 @@ export const HomePage: React.FC = () => {
         </div>
         
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
-          {allPlatforms.map((platform) => (
-            <motion.a
+          {getVisiblePlatforms(allPlatforms).map((platform) => (
+            <EditablePlatformCard
               key={platform.id}
-              href={platform.url}
-              target="_blank"
-              rel="noreferrer"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              whileHover={{ scale: 1.05 }}
-              transition={{ duration: 0.2 }}
-              className="group relative flex flex-col items-center gap-3 rounded-3xl border border-slate-200/70 bg-white/80 p-5 shadow-sm backdrop-blur-xl transition-all hover:border-cyan-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-cyan-500"
-            >
-              <div className="text-4xl drop-shadow-sm" aria-hidden>
-                {platform.icon}
-              </div>
-              <div className="text-center">
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
-                  {platform.name}
-                </h3>
-                {platform.tags && platform.tags.length > 0 && (
-                  <div className="mt-2 flex flex-wrap justify-center gap-1">
-                    {platform.tags.slice(0, 2).map((tag) => (
-                      <span key={tag} className="rounded-full bg-cyan-100 px-2 py-0.5 text-xs font-medium text-cyan-800 dark:bg-cyan-900/40 dark:text-cyan-300">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-              <ArrowTopRightOnSquareIcon className="absolute right-2 top-2 h-4 w-4 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100 dark:text-slate-500" />
-            </motion.a>
+              platform={platform}
+              isEditable={isEditMode}
+              onRemove={handleRemovePlatform}
+            />
           ))}
         </div>
       </motion.section>
