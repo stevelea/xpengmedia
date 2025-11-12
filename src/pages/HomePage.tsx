@@ -12,16 +12,21 @@ import { EditablePlatformCard } from '../components/platforms/EditablePlatformCa
 import { ScrollIndicator } from '../components/ui/ScrollIndicator';
 import { useSmartFavorites } from '../hooks/useSmartFavorites';
 import { useLocale } from '../context/LocaleContext';
+import { AddServiceButton } from '../components/ui/AddServiceButton';
+import { AddUrlButton } from '../components/ui/AddUrlButton';
+import { AddCustomUrlModal } from '../components/modals/AddCustomUrlModal';
 import { StarIcon } from '@heroicons/react/24/solid';
 
 export const HomePage: React.FC = () => {
   const { categories } = useFavorites();
   const { locale, t } = useLocale();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isCustomUrlModalOpen, setIsCustomUrlModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [hiddenPlatforms, setHiddenPlatforms] = useState<Set<string>>(new Set());
+  const [customServices, setCustomServices] = useState<PlatformLink[]>([]);
 
   // Fonction de filtrage par région
   const filterByRegion = (platforms: PlatformLink[]): PlatformLink[] => {
@@ -121,6 +126,20 @@ export const HomePage: React.FC = () => {
   // Toggle mode édition
   const toggleEditMode = () => {
     setIsEditMode(!isEditMode);
+  };
+
+  // Ajouter un service personnalisé
+  const handleAddCustomUrl = (name: string, url: string, icon: string) => {
+    const newService: PlatformLink = {
+      id: `custom-${Date.now()}`,
+      name,
+      description: 'Service personnalisé',
+      url,
+      icon,
+      availability: ['global'],
+      tags: ['Personnalisé'],
+    };
+    setCustomServices(prev => [...prev, newService]);
   };
 
   return (
@@ -266,7 +285,7 @@ export const HomePage: React.FC = () => {
           )}
         </div>
         
-        {/* Grille compacte pour tablette - 8 favoris intelligents */}
+        {/* Grille compacte pour tablette - 8 favoris intelligents + boutons d'ajout */}
         <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
           {smartFavorites.map((platform) => (
             <motion.a
@@ -286,6 +305,28 @@ export const HomePage: React.FC = () => {
               </div>
             </motion.a>
           ))}
+          
+          {/* Services personnalisés */}
+          {customServices.map((service) => (
+            <EditablePlatformCard
+              key={service.id}
+              platform={service}
+              isEditable={isEditMode}
+              onRemove={handleRemovePlatform}
+            />
+          ))}
+          
+          {/* Bouton Ajouter un service */}
+          <AddServiceButton 
+            onClick={() => setIsAddModalOpen(true)}
+            label="Service"
+          />
+          
+          {/* Bouton Ajouter une URL */}
+          <AddUrlButton 
+            onClick={() => setIsCustomUrlModalOpen(true)}
+            label="URL"
+          />
         </div>
       </motion.section>
 
@@ -323,6 +364,8 @@ export const HomePage: React.FC = () => {
                 onRemove={handleRemovePlatform}
               />
             ))}
+            <AddServiceButton onClick={() => setIsAddModalOpen(true)} label="Service" />
+            <AddUrlButton onClick={() => setIsCustomUrlModalOpen(true)} label="URL" />
           </div>
         </div>
 
@@ -548,6 +591,13 @@ export const HomePage: React.FC = () => {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         defaultCategory={selectedCategory}
+      />
+
+      {/* Modal d'ajout d'URL personnalisée */}
+      <AddCustomUrlModal
+        isOpen={isCustomUrlModalOpen}
+        onClose={() => setIsCustomUrlModalOpen(false)}
+        onAdd={handleAddCustomUrl}
       />
     </div>
   );
