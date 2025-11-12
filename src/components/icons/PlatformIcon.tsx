@@ -43,20 +43,21 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
         ${sizeClasses[size]}
         flex items-center justify-center
         rounded-xl
-        bg-gradient-to-br from-cyan-50 to-blue-50
-        dark:from-slate-800 dark:to-slate-700
-        border border-cyan-200/60 dark:border-cyan-500/40
+        bg-white/80
+        dark:bg-white/10
+        backdrop-blur-sm
+        border border-slate-200/70 dark:border-slate-700/50
         shadow-sm
         transition-all duration-200
         group-hover:scale-105
-        group-hover:shadow-md
-        group-hover:border-cyan-300 dark:group-hover:border-cyan-400
+        group-hover:shadow-lg
+        group-hover:border-slate-300 dark:group-hover:border-slate-600
         ${className}
       `}
       aria-hidden="true"
     >
       {isUrl ? (
-        // Logo réel (image SVG avec fond transparent)
+        // Logo réel EN COULEUR avec fond transparent
         <img 
           src={icon} 
           alt={name || 'Service logo'} 
@@ -65,10 +66,11 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
             object-contain 
             transition-all 
             duration-200
-            p-1
+            p-1.5
           `}
           style={{
-            filter: 'drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1))',
+            filter: 'drop-shadow(0 1px 3px rgba(0, 0, 0, 0.15))',
+            imageRendering: 'crisp-edges',
           }}
           loading="lazy"
           onError={(e) => {
