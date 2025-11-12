@@ -4,7 +4,7 @@ import { FavoritesGrid } from '../components/favorites/FavoritesGrid';
 import { AddFavoriteModal } from '../components/favorites/AddFavoriteModal';
 import { SearchBar } from '../components/SearchBar';
 import { useFavorites } from '../context/FavoritesContext';
-import { PlusIcon, ArrowUpIcon, PlayIcon, MusicalNoteIcon, PuzzlePieceIcon, BoltIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, ArrowUpIcon, PlayIcon, MusicalNoteIcon, PuzzlePieceIcon, BoltIcon, ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/react/24/outline';
 import { Link } from 'react-router-dom';
 import { videoCategories, musicCategories, gamesCategories, chargingCategories, otherServicesCategories } from '../data/platforms';
 import type { PlatformLink } from '../data/platforms';
@@ -118,25 +118,201 @@ export const HomePage: React.FC = () => {
         <SearchBar />
       </motion.section>
 
-      {/* Toutes les plateformes disponibles */}
+      {/* Plateformes par catégories */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-12"
+        className="mt-12 space-y-10"
       >
-        <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
-              Toutes les plateformes disponibles
-            </h2>
-            <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
-              Explorez nos {allPlatforms.length} services vidéo, audio, jeux et outils
-            </p>
+        {/* Vidéos */}
+        <div>
+          <div className="mb-4 flex items-center gap-3">
+            <PlayIcon className="h-8 w-8 text-cyan-500" />
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                Vidéos & Streaming
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {videoCategories.flatMap(c => c.platforms).length} services disponibles
+              </p>
+            </div>
+            <Link to="/videos" className="ml-auto text-sm text-cyan-600 hover:text-cyan-700 dark:text-cyan-400">
+              Voir tout →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {videoCategories.flatMap(c => c.platforms).map((platform) => (
+              <motion.a
+                key={platform.id}
+                href={platform.url}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.05 }}
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-cyan-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-cyan-500"
+              >
+                <div className="text-3xl" aria-hidden>{platform.icon}</div>
+                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
+                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
+              </motion.a>
+            ))}
           </div>
         </div>
+
+        {/* Musique */}
+        <div>
+          <div className="mb-4 flex items-center gap-3">
+            <MusicalNoteIcon className="h-8 w-8 text-pink-500" />
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                Musique & Audio
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {musicCategories.flatMap(c => c.platforms).length} services disponibles
+              </p>
+            </div>
+            <Link to="/music" className="ml-auto text-sm text-pink-600 hover:text-pink-700 dark:text-pink-400">
+              Voir tout →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {musicCategories.flatMap(c => c.platforms).map((platform) => (
+              <motion.a
+                key={platform.id}
+                href={platform.url}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.05 }}
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-pink-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-pink-500"
+              >
+                <div className="text-3xl" aria-hidden>{platform.icon}</div>
+                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
+                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
+        {/* Jeux */}
+        <div>
+          <div className="mb-4 flex items-center gap-3">
+            <PuzzlePieceIcon className="h-8 w-8 text-purple-500" />
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                Jeux & Gaming
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {gamesCategories.flatMap(c => c.platforms).length} services disponibles
+              </p>
+            </div>
+            <Link to="/games" className="ml-auto text-sm text-purple-600 hover:text-purple-700 dark:text-purple-400">
+              Voir tout →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {gamesCategories.flatMap(c => c.platforms).map((platform) => (
+              <motion.a
+                key={platform.id}
+                href={platform.url}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.05 }}
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-purple-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-purple-500"
+              >
+                <div className="text-3xl" aria-hidden>{platform.icon}</div>
+                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
+                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
+        {/* Recharge */}
+        <div>
+          <div className="mb-4 flex items-center gap-3">
+            <BoltIcon className="h-8 w-8 text-yellow-500" />
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                Recharge & Superchargers
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {chargingCategories.flatMap(c => c.platforms).length} services disponibles
+              </p>
+            </div>
+            <Link to="/charging" className="ml-auto text-sm text-yellow-600 hover:text-yellow-700 dark:text-yellow-400">
+              Voir tout →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {chargingCategories.flatMap(c => c.platforms).map((platform) => (
+              <motion.a
+                key={platform.id}
+                href={platform.url}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.05 }}
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-yellow-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-yellow-500"
+              >
+                <div className="text-3xl" aria-hidden>{platform.icon}</div>
+                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
+                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+
+        {/* Autres Services */}
+        <div>
+          <div className="mb-4 flex items-center gap-3">
+            <SparklesIcon className="h-8 w-8 text-indigo-500" />
+            <div>
+              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+                Services EV & Outils
+              </h2>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {otherServicesCategories.flatMap(c => c.platforms).length} services disponibles
+              </p>
+            </div>
+            <Link to="/other-services" className="ml-auto text-sm text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">
+              Voir tout →
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {otherServicesCategories.flatMap(c => c.platforms).map((platform) => (
+              <motion.a
+                key={platform.id}
+                href={platform.url}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.05 }}
+                className="group flex flex-col items-center gap-2 rounded-2xl border border-slate-200/70 bg-white/80 p-4 shadow-sm backdrop-blur-xl transition-all hover:border-indigo-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-indigo-500"
+              >
+                <div className="text-3xl" aria-hidden>{platform.icon}</div>
+                <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">{platform.name}</h3>
+                <ArrowTopRightOnSquareIcon className="h-3 w-3 text-slate-400 opacity-0 transition-opacity group-hover:opacity-100" />
+              </motion.a>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* Toutes les plateformes en un bloc */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        className="mt-16"
+      >
+        <div className="mb-6">
+          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+            Toutes les plateformes ({allPlatforms.length})
+          </h2>
+          <p className="mt-2 text-slate-600 dark:text-slate-400">
+            Vue d'ensemble complète de tous les services disponibles pour votre XPENG
+          </p>
+        </div>
         
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {allPlatforms.map((platform) => (
             <motion.a
               key={platform.id}

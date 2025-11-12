@@ -5,7 +5,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { useFavorites } from '../../context/FavoritesContext';
 import { Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import xpengLogo from '../../assets/xpeng-logo.svg';
 
 interface CountrySelectorProps {
   countries: Array<{
@@ -98,13 +97,13 @@ export const Navbar: React.FC = () => {
   return (
     <nav className="border-b border-white/10 bg-white/80 backdrop-blur-xl transition-colors duration-500 dark:border-slate-800 dark:bg-slate-950/70">
       <div className="mx-auto flex h-20 w-full max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="inline-flex h-9 w-24 items-center justify-center rounded-full bg-slate-900 text-white dark:bg-white dark:text-slate-900">
-            <img src={xpengLogo} alt="XPENG" className="h-5" />
-          </span>
+        <Link to="/" className="flex items-center gap-2">
+          <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-slate-900 to-slate-700 px-3 py-2 dark:from-white dark:to-slate-200">
+            <span className="text-base font-bold tracking-tight text-white dark:text-slate-900">XPENG</span>
+          </div>
           <div className="leading-tight">
-            <p className="text-xs uppercase tracking-[0.35em] text-slate-500 dark:text-slate-400">Media Hub</p>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">XPENG Experience</p>
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">Media Hub</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Experience</p>
           </div>
         </Link>
 
