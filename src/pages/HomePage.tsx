@@ -177,10 +177,10 @@ export const HomePage: React.FC = () => {
               <p className="text-[10px] font-semibold uppercase tracking-wider text-cyan-400 md:text-xs md:tracking-[0.3em]">XPENG MEDIA HUB</p>
             </div>
             <h1 className="mt-2 text-xl font-bold leading-tight md:mt-3 md:text-4xl lg:text-5xl">
-              Une cabine immersive, vos plateformes favorites
+              {t('heroTitle')}
             </h1>
             <p className="mt-2 text-xs text-white/70 md:mt-3 md:text-base lg:max-w-2xl">
-              Interface optimisée pour Xmart OS avec services vidéo, musique, jeux et recharge.
+              {t('heroSubtitle')}
             </p>
 
             <div className="mt-3 flex flex-wrap gap-1.5 md:gap-2 md:mt-5">
@@ -189,21 +189,21 @@ export const HomePage: React.FC = () => {
                 className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-3 py-1.5 text-xs font-semibold text-white shadow-lg shadow-cyan-500/30 transition hover:shadow-cyan-500/50 md:gap-2 md:px-4 md:py-2 md:text-sm"
               >
                 <PlayIcon className="h-3 w-3 md:h-4 md:w-4" />
-                Vidéos
+                {t('videos')}
               </Link>
               <Link
                 to="/music"
                 className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-cyan-500/10 md:gap-2 md:px-4 md:py-2 md:text-sm"
               >
                 <MusicalNoteIcon className="h-3 w-3 md:h-4 md:w-4" />
-                Musique
+                {t('music')}
               </Link>
               <Link
                 to="/games"
                 className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/40 px-3 py-1.5 text-xs font-semibold text-white/90 transition hover:bg-cyan-500/10 md:gap-2 md:px-4 md:py-2 md:text-sm"
               >
                 <PuzzlePieceIcon className="h-3 w-3 md:h-4 md:w-4" />
-                Jeux
+                {t('games')}
               </Link>
             </div>
           </div>

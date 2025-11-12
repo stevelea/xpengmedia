@@ -62,6 +62,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Search services...',
     selectRegion: 'Select region',
     allServices: 'All services',
+    heroTitle: 'An immersive cabin, your favorite platforms',
+    heroSubtitle: 'Interface optimized for Xmart OS with video, music, games and charging services.',
   },
   fr: {
     home: 'Accueil',
@@ -78,6 +80,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Rechercher des services...',
     selectRegion: 'Sélectionner la région',
     allServices: 'Tous les services',
+    heroTitle: 'Une cabine immersive, vos plateformes favorites',
+    heroSubtitle: 'Interface optimisée pour Xmart OS avec services vidéo, musique, jeux et recharge.',
   },
   de: {
     home: 'Startseite',
@@ -94,6 +98,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Dienste suchen...',
     selectRegion: 'Region auswählen',
     allServices: 'Alle Dienste',
+    heroTitle: 'Eine immersive Kabine, Ihre Lieblingsplattformen',
+    heroSubtitle: 'Für Xmart OS optimierte Oberfläche mit Video-, Musik-, Spiele- und Ladediensten.',
   },
   es: {
     home: 'Inicio',
@@ -110,6 +116,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Buscar servicios...',
     selectRegion: 'Seleccionar región',
     allServices: 'Todos los servicios',
+    heroTitle: 'Una cabina inmersiva, tus plataformas favoritas',
+    heroSubtitle: 'Interfaz optimizada para Xmart OS con servicios de vídeo, música, juegos y carga.',
   },
   zh: {
     home: '主页',
@@ -126,6 +134,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: '搜索服务...',
     selectRegion: '选择地区',
     allServices: '所有服务',
+    heroTitle: '沉浸式座舱，您喜爱的平台',
+    heroSubtitle: '为Xmart OS优化的界面，提供视频、音乐、游戏和充电服务。',
   },
   it: {
     home: 'Home',
@@ -142,6 +152,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Cerca servizi...',
     selectRegion: 'Seleziona regione',
     allServices: 'Tutti i servizi',
+    heroTitle: 'Una cabina immersiva, le tue piattaforme preferite',
+    heroSubtitle: 'Interfaccia ottimizzata per Xmart OS con servizi video, musica, giochi e ricarica.',
   },
   nl: {
     home: 'Home',
@@ -158,6 +170,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Zoek services...',
     selectRegion: 'Selecteer regio',
     allServices: 'Alle services',
+    heroTitle: 'Een meeslepende cabine, uw favoriete platforms',
+    heroSubtitle: 'Interface geoptimaliseerd voor Xmart OS met video-, muziek-, game- en laasdiensten.',
   },
   sv: {
     home: 'Hem',
@@ -174,6 +188,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Sök tjänster...',
     selectRegion: 'Välj region',
     allServices: 'Alla tjänster',
+    heroTitle: 'En fördjúpande hytt, dina favoritplattformar',
+    heroSubtitle: 'Gränssnitt optimerat för Xmart OS med video-, musik-, spel- och laddningstjänster.',
   },
   no: {
     home: 'Hjem',
@@ -190,6 +206,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Søk tjenester...',
     selectRegion: 'Velg region',
     allServices: 'Alle tjenester',
+    heroTitle: 'En oppslukende kabin, dine favorittplattformer',
+    heroSubtitle: 'Grensesnitt optimalisert for Xmart OS med video-, musikk-, spill- og ladetjenester.',
   },
   da: {
     home: 'Hjem',
@@ -206,6 +224,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'Søg tjenester...',
     selectRegion: 'Vælg region',
     allServices: 'Alle tjenester',
+    heroTitle: 'En fordybende kabine, dine yndlingsplatforme',
+    heroSubtitle: 'Grænseflade optimeret til Xmart OS med video-, musik-, spil- og opladningstjenester.',
   },
   ar: {
     home: 'الرئيسية',
@@ -222,6 +242,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'ابحث عن الخدمات...',
     selectRegion: 'اختر المنطقة',
     allServices: 'جميع الخدمات',
+    heroTitle: 'كابينة غامرة، منصاتك المفضلة',
+    heroSubtitle: 'واجهة محسّنة لـ Xmart OS مع خدمات الفيديو والموسيقى والألعاب والشحن.',
   },
   he: {
     home: 'בית',
@@ -238,6 +260,8 @@ const translations: Record<string, Record<string, string>> = {
     searchPlaceholder: 'חפש שירותים...',
     selectRegion: 'בחר אזור',
     allServices: 'כל השירותים',
+    heroTitle: 'תא מרשים, הפלטפורמות המועדפות שלך',
+    heroSubtitle: 'ממשק מאופטמל עבור Xmart OS עם שירותי וידאו, מוזיקה, משחקים וטעינה.',
   },
 };
 
