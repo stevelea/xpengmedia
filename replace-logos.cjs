@@ -2,9 +2,9 @@
 const fs = require('fs');
 const path = require('path');
 
-// Mapping des logos (ID du service => URL du logo)
+// Mapping complet de TOUS les logos disponibles (ID du service => URL du logo)
 const logoMapping = {
-  // Streaming Global
+  // 🎬 Streaming Global
   'apple-tv': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/appletv.svg',
   'disney-plus': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/disneyplus.svg',
   'hbo-max': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/hbo.svg',
@@ -20,7 +20,7 @@ const logoMapping = {
   'vimeo': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/vimeo.svg',
   'dailymotion': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/dailymotion.svg',
   
-  // Musique
+  // 🎵 Musique
   'spotify': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/spotify.svg',
   'apple-music': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/applemusic.svg',
   'youtube-music': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/youtubemusic.svg',
@@ -31,35 +31,30 @@ const logoMapping = {
   'qobuz': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/qobuz.svg',
   'pandora': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/pandora.svg',
   
-  // Gaming
-  'steam': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/steam.svg',
-  'epic-games': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/epicgames.svg',
-  'xbox': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/xbox.svg',
-  'playstation': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/playstation.svg',
-  'nintendo': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/nintendoswitch.svg',
+  // 🎮 Gaming (IDs corrigés selon platforms.ts)
+  'steam-link': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/steam.svg',
+  'xbox-cloud': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/xbox.svg',
+  'playstation-plus': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/playstation.svg',
+  'nintendo-switch': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/nintendoswitch.svg',
   'geforce-now': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/nvidia.svg',
-  'battlenet': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/battlenet.svg',
-  'ea-app': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ea.svg',
-  'ubisoft': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ubisoft.svg',
-  'gog': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/gog.svg',
+  'epic-games-store': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/epicgames.svg',
+  'battle-net': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/battlenet.svg',
+  'ea-play': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ea.svg',
+  'ubisoft-connect': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ubisoft.svg',
+  'gog-galaxy': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/gog.svg',
   
-  // Web Services
-  'gmail': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/gmail.svg',
-  'outlook': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/microsoftoutlook.svg',
-  'google-drive': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/googledrive.svg',
-  'onedrive': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/microsoftonedrive.svg',
-  'dropbox': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/dropbox.svg',
-  'notion': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/notion.svg',
-  'trello': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/trello.svg',
-  'slack': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/slack.svg',
-  'zoom': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/zoom.svg',
-  'github': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/github.svg',
-  'whatsapp': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/whatsapp.svg',
-  'telegram': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/telegram.svg',
-  'wechat': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/wechat.svg',
+  // 🌐 Web Services (IDs corrigés selon platforms.ts)
+  'skype': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/skype.svg',
+  'teams': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/microsoftteams.svg',
+  'whatsapp-web': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/whatsapp.svg',
+  'telegram-web': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/telegram.svg',
+  'messenger': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/messenger.svg',
+  'signal': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/signal.svg',
+  'discord-web': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/discord.svg',
+  'wechat-web': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/wechat.svg',
   'weibo': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/sinaweibo.svg',
   
-  // Recharge & Navigation
+  // 🔋 Recharge & Navigation
   'tesla-supercharger': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tesla.svg',
   'chargepoint': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/chargepoint.svg',
   'waze': 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/waze.svg',
