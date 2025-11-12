@@ -241,48 +241,95 @@ const translations: Record<string, Record<string, string>> = {
   },
 };
 
-// Détection automatique de la langue du navigateur
+// Détection avancée avec timezone, user agent et langue
 const detectBrowserLocale = (): Locale => {
   const browserLang = navigator.language.toLowerCase();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const userAgent = navigator.userAgent.toLowerCase();
   
-  if (browserLang.startsWith('fr')) {
+  console.log('🌍 Détection auto:', { browserLang, timezone, userAgent: userAgent.substring(0, 100) });
+  
+  // Détection par timezone + langue combinées (plus précis)
+  if (timezone === 'Europe/Paris' || timezone === 'Europe/Brussels' || browserLang.startsWith('fr')) {
+    if (browserLang === 'fr-be' || timezone === 'Europe/Brussels') {
+      return { region: 'belgium', language: 'nl' };
+    }
     return { region: 'france', language: 'fr' };
-  } else if (browserLang.startsWith('de')) {
-    return { region: 'germany', language: 'de' };
-  } else if (browserLang.startsWith('es')) {
-    return { region: 'spain', language: 'es' };
-  } else if (browserLang.startsWith('it')) {
-    return { region: 'italy', language: 'it' };
-  } else if (browserLang.startsWith('nl')) {
-    return { region: 'netherlands', language: 'nl' };
-  } else if (browserLang.startsWith('sv')) {
-    return { region: 'sweden', language: 'sv' };
-  } else if (browserLang.startsWith('no')) {
-    return { region: 'norway', language: 'no' };
-  } else if (browserLang.startsWith('da')) {
-    return { region: 'denmark', language: 'da' };
-  } else if (browserLang.startsWith('zh')) {
-    return { region: 'china', language: 'zh' };
-  } else if (browserLang.startsWith('ar-qa')) {
-    return { region: 'qatar', language: 'ar' };
-  } else if (browserLang.startsWith('ar-ae')) {
-    return { region: 'uae', language: 'ar' };
-  } else if (browserLang.startsWith('ar')) {
-    return { region: 'uae', language: 'ar' };
-  } else if (browserLang.startsWith('he')) {
-    return { region: 'israel', language: 'he' };
-  } else if (browserLang.startsWith('en-gb')) {
-    return { region: 'uk', language: 'en' };
-  } else if (browserLang.startsWith('en-us')) {
-    return { region: 'usa', language: 'en' };
-  } else if (browserLang.startsWith('en-au')) {
-    return { region: 'australia', language: 'en' };
-  } else if (browserLang.startsWith('en-sg')) {
-    return { region: 'singapore', language: 'en' };
-  } else if (browserLang.startsWith('de-at')) {
-    return { region: 'austria', language: 'de' };
   }
   
+  if (timezone === 'Europe/Berlin' || timezone === 'Europe/Zurich' || timezone === 'Europe/Vienna') {
+    if (timezone === 'Europe/Vienna' || browserLang === 'de-at') {
+      return { region: 'austria', language: 'de' };
+    }
+    if (timezone === 'Europe/Zurich' || browserLang === 'de-ch') {
+      return { region: 'switzerland', language: 'de' };
+    }
+    if (browserLang.startsWith('de')) {
+      return { region: 'germany', language: 'de' };
+    }
+  }
+  
+  if (timezone === 'Europe/Madrid' || browserLang.startsWith('es')) {
+    return { region: 'spain', language: 'es' };
+  }
+  
+  if (timezone === 'Europe/Rome' || browserLang.startsWith('it')) {
+    return { region: 'italy', language: 'it' };
+  }
+  
+  if (timezone === 'Europe/Amsterdam' || browserLang === 'nl-nl') {
+    return { region: 'netherlands', language: 'nl' };
+  }
+  
+  if (timezone === 'Europe/Stockholm' || browserLang.startsWith('sv')) {
+    return { region: 'sweden', language: 'sv' };
+  }
+  
+  if (timezone === 'Europe/Oslo' || browserLang.startsWith('no')) {
+    return { region: 'norway', language: 'no' };
+  }
+  
+  if (timezone === 'Europe/Copenhagen' || browserLang.startsWith('da')) {
+    return { region: 'denmark', language: 'da' };
+  }
+  
+  if (timezone === 'Europe/London' || browserLang === 'en-gb') {
+    return { region: 'uk', language: 'en' };
+  }
+  
+  if (timezone.startsWith('America/') && browserLang === 'en-us') {
+    return { region: 'usa', language: 'en' };
+  }
+  
+  if (timezone.startsWith('Australia/') || browserLang === 'en-au') {
+    return { region: 'australia', language: 'en' };
+  }
+  
+  if (timezone === 'Asia/Shanghai' || timezone === 'Asia/Hong_Kong' || browserLang.startsWith('zh')) {
+    return { region: 'china', language: 'zh' };
+  }
+  
+  if (timezone === 'Asia/Singapore' || browserLang === 'en-sg') {
+    return { region: 'singapore', language: 'en' };
+  }
+  
+  if (timezone === 'Asia/Dubai' || timezone === 'Asia/Qatar') {
+    if (timezone === 'Asia/Qatar' || browserLang === 'ar-qa') {
+      return { region: 'qatar', language: 'ar' };
+    }
+    return { region: 'uae', language: 'ar' };
+  }
+  
+  if (timezone === 'Asia/Jerusalem' || browserLang.startsWith('he')) {
+    return { region: 'israel', language: 'he' };
+  }
+  
+  if (browserLang.startsWith('ar')) {
+    return { region: 'uae', language: 'ar' };
+  }
+  
+  // Global par défaut (TOUJOURS en anglais)
+  console.log('🌍 Aucune région spécifique détectée, utilisation de Global (EN)');
   return { region: 'global', language: 'en' };
 };
 
