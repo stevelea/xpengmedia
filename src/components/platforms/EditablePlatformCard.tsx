@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { XMarkIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import type { PlatformLink } from '../../data/platforms';
+import { PlatformIcon } from '../icons/PlatformIcon';
 
 interface EditablePlatformCardProps {
   platform: PlatformLink;
@@ -104,9 +105,7 @@ export const EditablePlatformCard: React.FC<EditablePlatformCardProps> = ({
                 : 'hover:border-cyan-300 hover:shadow-md dark:hover:border-cyan-500'
             }`}
           >
-            <div className="text-3xl" aria-hidden>
-              {platform.icon}
-            </div>
+            <PlatformIcon icon={platform.icon} name={platform.name} size="md" />
             <h3 className="text-xs font-semibold text-center text-slate-800 dark:text-white">
               {platform.name}
             </h3>
@@ -124,10 +123,10 @@ export const EditablePlatformCard: React.FC<EditablePlatformCardProps> = ({
                 exit={{ scale: 0, rotate: 180 }}
                 transition={{ type: 'spring', stiffness: 260, damping: 20 }}
                 onClick={handleRemove}
-                className="absolute -right-2 -top-2 z-10 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white shadow-lg hover:bg-red-600 active:scale-90"
+                className="absolute -right-2 -top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-lg ring-2 ring-white dark:ring-slate-900 hover:bg-red-600 hover:scale-110 active:scale-95 transition-all"
                 aria-label={`Supprimer ${platform.name}`}
               >
-                <XMarkIcon className="h-4 w-4" />
+                <XMarkIcon className="h-5 w-5" />
               </motion.button>
             )}
           </AnimatePresence>

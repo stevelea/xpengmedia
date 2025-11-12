@@ -16,6 +16,7 @@ import { AddServiceButton } from '../components/ui/AddServiceButton';
 import { AddUrlButton } from '../components/ui/AddUrlButton';
 import { AddCustomUrlModal } from '../components/modals/AddCustomUrlModal';
 import { StarIcon } from '@heroicons/react/24/solid';
+import { PlatformIcon } from '../components/icons/PlatformIcon';
 
 export const HomePage: React.FC = () => {
   const { categories } = useFavorites();
@@ -298,7 +299,7 @@ export const HomePage: React.FC = () => {
               whileTap={{ scale: 0.95 }}
               className="group relative flex flex-col items-center gap-0.5 rounded-lg border border-slate-200/70 bg-white/80 p-1.5 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500 landscape:gap-1 landscape:p-2 md:gap-2 md:rounded-2xl md:p-4"
             >
-              <div className="text-xl landscape:text-2xl md:text-3xl" aria-hidden>{platform.icon}</div>
+              <PlatformIcon icon={platform.icon} name={platform.name} size="sm" className="landscape:!w-12 landscape:!h-12 landscape:!text-2xl md:!w-14 md:!h-14 md:!text-3xl" />
               <h3 className="text-[8px] font-semibold text-center text-slate-800 dark:text-white line-clamp-2 landscape:text-[9px] md:text-xs">{platform.name}</h3>
               <div className="absolute right-0.5 top-0.5 opacity-0 group-hover:opacity-100 transition-opacity md:right-1 md:top-1">
                 <StarIcon className="h-2.5 w-2.5 text-amber-500 md:h-3 md:w-3" />
