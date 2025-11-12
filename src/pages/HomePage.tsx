@@ -265,7 +265,7 @@ export const HomePage: React.FC = () => {
               )}
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-900 dark:text-white md:text-xl lg:text-2xl">
+              <h2 className="text-sm font-bold text-slate-800 dark:text-white md:text-xl lg:text-2xl">
                 {hasUsageData ? t('myFavorites') : t('smartRecommendations')}
               </h2>
               <p className="text-[10px] text-slate-600 dark:text-slate-400 md:text-xs lg:text-sm">
@@ -299,7 +299,7 @@ export const HomePage: React.FC = () => {
               className="group relative flex flex-col items-center gap-1 rounded-xl border border-slate-200/70 bg-white/80 p-2 shadow-sm backdrop-blur-xl transition-all hover:border-amber-400 hover:shadow-md dark:border-slate-800 dark:bg-slate-900/70 dark:hover:border-amber-500 md:gap-2 md:rounded-2xl md:p-4"
             >
               <div className="text-2xl md:text-3xl" aria-hidden>{platform.icon}</div>
-              <h3 className="text-[9px] font-semibold text-center text-slate-900 dark:text-white line-clamp-2 md:text-xs">{platform.name}</h3>
+              <h3 className="text-[9px] font-semibold text-center text-slate-800 dark:text-white line-clamp-2 md:text-xs">{platform.name}</h3>
               <div className="absolute right-0.5 top-0.5 opacity-0 group-hover:opacity-100 transition-opacity md:right-1 md:top-1">
                 <StarIcon className="h-2.5 w-2.5 text-amber-500 md:h-3 md:w-3" />
               </div>
@@ -541,7 +541,7 @@ export const HomePage: React.FC = () => {
         className="mt-16"
       >
         <div className="mb-6">
-          <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-3xl font-bold text-slate-800 dark:text-white">
             Toutes les plateformes ({getVisiblePlatforms(allPlatforms).length})
           </h2>
           <p className="mt-2 text-slate-600 dark:text-slate-400">

@@ -107,7 +107,7 @@ export const EditablePlatformCard: React.FC<EditablePlatformCardProps> = ({
             <div className="text-3xl" aria-hidden>
               {platform.icon}
             </div>
-            <h3 className="text-xs font-semibold text-center text-slate-900 dark:text-white">
+            <h3 className="text-xs font-semibold text-center text-slate-800 dark:text-white">
               {platform.name}
             </h3>
             {!showRemove && (

@@ -14,7 +14,7 @@ export const Footer: React.FC = () => {
               href="https://github.com/dlnraja"
               target="_blank"
               rel="noreferrer"
-              className="font-medium text-slate-900 hover:text-cyan-600 dark:text-white dark:hover:text-cyan-400"
+              className="font-medium text-slate-800 hover:text-cyan-600 dark:text-white dark:hover:text-cyan-400"
             >
               Dylan Rajasekaram
             </a>

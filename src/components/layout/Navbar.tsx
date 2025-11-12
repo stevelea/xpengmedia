@@ -17,7 +17,7 @@ export const Navbar: React.FC = () => {
             <span className="text-base font-bold tracking-tight text-white dark:text-white">XPENG</span>
           </div>
           <div className="leading-tight">
-            <p className="text-sm font-semibold text-slate-900 dark:text-white">Media Hub</p>
+            <p className="text-sm font-semibold text-slate-800 dark:text-white">Media Hub</p>
             <p className="text-xs text-slate-500 dark:text-slate-400">Experience</p>
           </div>
         </Link>
@@ -52,7 +52,7 @@ export const Navbar: React.FC = () => {
 
           <button
             onClick={toggleTheme}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/70 text-slate-600 transition hover:scale-105 hover:text-slate-900 focus:outline-none dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-white/70 text-slate-600 transition hover:scale-105 hover:text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
             aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
           >
             {theme === 'dark' ? (

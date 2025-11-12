@@ -61,7 +61,7 @@ export const AddCustomUrlModal: React.FC<AddCustomUrlModalProps> = ({ isOpen, on
                 <LinkIcon className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">
                   Ajouter une URL personnalisée
                 </h2>
                 <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -82,7 +82,7 @@ export const AddCustomUrlModal: React.FC<AddCustomUrlModalProps> = ({ isOpen, on
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Ex: Mon site préféré"
                   required
-                  className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-slate-900 transition focus:border-purple-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-slate-800 transition focus:border-purple-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
 
@@ -97,7 +97,7 @@ export const AddCustomUrlModal: React.FC<AddCustomUrlModalProps> = ({ isOpen, on
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://exemple.com"
                   required
-                  className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-slate-900 transition focus:border-purple-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
+                  className="w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-slate-800 transition focus:border-purple-500 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-white"
                 />
               </div>
 
