@@ -5,7 +5,7 @@ import { useLocale } from '../../context/LocaleContext';
 import { ChevronDownIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 export const LocaleSelector: React.FC = () => {
-  const { locale, setLocale, availableRegions } = useLocale();
+  const { locale, setLocale, availableRegions, t } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ top: 0, right: 0 });
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -74,7 +74,7 @@ export const LocaleSelector: React.FC = () => {
             >
             <div className="p-2">
               <div className="mb-2 px-3 py-2 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                Sélectionner la région
+                {t('selectRegion')}
               </div>
               <div className="max-h-80 space-y-1 overflow-y-auto">
                 {availableRegions.map((region) => {
@@ -97,7 +97,7 @@ export const LocaleSelector: React.FC = () => {
                           <div className="font-medium">{region.name}</div>
                           {region.code === 'global' && (
                             <div className="text-xs text-slate-500 dark:text-slate-400">
-                              Tous les services
+                              {t('allServices')}
                             </div>
                           )}
                         </div>

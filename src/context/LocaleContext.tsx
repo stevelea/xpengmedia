@@ -60,6 +60,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'The most popular to start',
     learningActive: 'Active learning',
     searchPlaceholder: 'Search services...',
+    selectRegion: 'Select region',
+    allServices: 'All services',
   },
   fr: {
     home: 'Accueil',
@@ -74,6 +76,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'Les plus populaires pour commencer',
     learningActive: 'Apprentissage actif',
     searchPlaceholder: 'Rechercher des services...',
+    selectRegion: 'Sélectionner la région',
+    allServices: 'Tous les services',
   },
   de: {
     home: 'Startseite',
@@ -88,6 +92,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'Die beliebtesten zum Starten',
     learningActive: 'Aktives Lernen',
     searchPlaceholder: 'Dienste suchen...',
+    selectRegion: 'Region auswählen',
+    allServices: 'Alle Dienste',
   },
   es: {
     home: 'Inicio',
@@ -102,6 +108,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'Los más populares para empezar',
     learningActive: 'Aprendizaje activo',
     searchPlaceholder: 'Buscar servicios...',
+    selectRegion: 'Seleccionar región',
+    allServices: 'Todos los servicios',
   },
   zh: {
     home: '主页',
@@ -116,6 +124,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: '最受欢迎的开始',
     learningActive: '主动学习',
     searchPlaceholder: '搜索服务...',
+    selectRegion: '选择地区',
+    allServices: '所有服务',
   },
   it: {
     home: 'Home',
@@ -130,6 +140,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'I più popolari per iniziare',
     learningActive: 'Apprendimento attivo',
     searchPlaceholder: 'Cerca servizi...',
+    selectRegion: 'Seleziona regione',
+    allServices: 'Tutti i servizi',
   },
   nl: {
     home: 'Home',
@@ -144,6 +156,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'De populairste om mee te beginnen',
     learningActive: 'Actief leren',
     searchPlaceholder: 'Zoek services...',
+    selectRegion: 'Selecteer regio',
+    allServices: 'Alle services',
   },
   sv: {
     home: 'Hem',
@@ -158,6 +172,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'De populäraste att börja med',
     learningActive: 'Aktivt lärande',
     searchPlaceholder: 'Sök tjänster...',
+    selectRegion: 'Välj region',
+    allServices: 'Alla tjänster',
   },
   no: {
     home: 'Hjem',
@@ -172,6 +188,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'De mest populære for å starte',
     learningActive: 'Aktiv læring',
     searchPlaceholder: 'Søk tjenester...',
+    selectRegion: 'Velg region',
+    allServices: 'Alle tjenester',
   },
   da: {
     home: 'Hjem',
@@ -186,6 +204,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'De mest populære at starte med',
     learningActive: 'Aktiv læring',
     searchPlaceholder: 'Søg tjenester...',
+    selectRegion: 'Vælg region',
+    allServices: 'Alle tjenester',
   },
   ar: {
     home: 'الرئيسية',
@@ -200,6 +220,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'الأكثر شعبية للبدء',
     learningActive: 'التعلم النشط',
     searchPlaceholder: 'ابحث عن الخدمات...',
+    selectRegion: 'اختر المنطقة',
+    allServices: 'جميع الخدمات',
   },
   he: {
     home: 'בית',
@@ -214,6 +236,8 @@ const translations: Record<string, Record<string, string>> = {
     popularServices: 'הפופולריים ביותר להתחלה',
     learningActive: 'למידה פעילה',
     searchPlaceholder: 'חפש שירותים...',
+    selectRegion: 'בחר אזור',
+    allServices: 'כל השירותים',
   },
 };
 
