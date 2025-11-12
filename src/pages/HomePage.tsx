@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { videoCategories, musicCategories, gamesCategories, chargingCategories, otherServicesCategories } from '../data/platforms';
 import type { PlatformLink } from '../data/platforms';
 import { EditablePlatformCard } from '../components/platforms/EditablePlatformCard';
+import { ScrollIndicator } from '../components/ui/ScrollIndicator';
 
 export const HomePage: React.FC = () => {
   const { categories } = useFavorites();
@@ -78,74 +79,66 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto px-2 py-6 pb-24 md:px-6">
+    <div className="container mx-auto px-2 py-4 pb-24 md:px-6">
+      {/* Barre de recherche en premier */}
+      <motion.section
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="mb-6"
+      >
+        <SearchBar />
+      </motion.section>
+
+      {/* Hero Section optimisé pour tablette paysage */}
       <motion.section
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="relative overflow-hidden rounded-4xl border border-white/10 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-700 p-[1px] shadow-[0_60px_120px_-40px_rgba(15,23,42,0.6)]"
+        transition={{ duration: 0.6, delay: 0.1 }}
+        className="relative overflow-hidden rounded-3xl border border-cyan-500/20 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 p-[1px] shadow-[0_20px_60px_-20px_rgba(6,182,212,0.3)]"
       >
-        <div className="relative rounded-[calc(2rem-1px)] bg-slate-950/70 px-8 py-14 backdrop-blur-xl md:px-12">
-          <div className="absolute inset-y-0 right-0 hidden w-1/3 translate-x-8 overflow-hidden md:block">
-            <div className="absolute -top-20 right-4 h-72 w-72 rounded-full bg-cyan-500/40 blur-3xl" />
-            <div className="absolute bottom-10 right-10 h-48 w-48 rounded-full bg-blue-400/30 blur-3xl" />
+        <div className="relative rounded-[calc(1.5rem-1px)] bg-slate-950/80 px-6 py-6 backdrop-blur-xl md:px-10 md:py-8">
+          <div className="absolute inset-y-0 right-0 hidden w-1/3 translate-x-8 overflow-hidden lg:block">
+            <div className="absolute -top-10 right-4 h-48 w-48 rounded-full bg-cyan-500/30 blur-3xl" />
+            <div className="absolute bottom-5 right-10 h-32 w-32 rounded-full bg-blue-400/20 blur-3xl" />
           </div>
-          <div className="relative z-10 max-w-3xl text-white">
-            <p className="text-xs uppercase tracking-[0.45em] text-white/50">XPENG MEDIA HUB</p>
-            <h1 className="mt-4 text-4xl font-semibold leading-tight md:text-5xl">
+          <div className="relative z-10 max-w-4xl text-white">
+            <div className="flex items-center gap-3">
+              <div className="h-1 w-12 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500" />
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-cyan-400">XPENG MEDIA HUB</p>
+            </div>
+            <h1 className="mt-3 text-3xl font-bold leading-tight md:text-4xl lg:text-5xl">
               Une cabine immersive, vos plateformes favorites
             </h1>
-            <p className="mt-4 text-base text-white/70 md:text-lg">
-              Sélectionnez et organisez les services vidéo, musique, jeux et recharge pensés pour Xmart OS. Interface optimisée pour les véhicules XPENG récents, avec profils multi-pays et mode sombre natif.
+            <p className="mt-3 text-sm text-white/70 md:text-base lg:max-w-2xl">
+              Interface optimisée pour Xmart OS avec services vidéo, musique, jeux et recharge.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-2">
               <Link
                 to="/videos"
-                className="inline-flex items-center gap-2 rounded-full bg-white/90 px-5 py-2 text-sm font-semibold text-slate-900 transition hover:bg-white"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-cyan-500/30 transition hover:shadow-cyan-500/50"
               >
                 <PlayIcon className="h-4 w-4" />
-                Bibliothèque vidéo XPENG
+                Vidéos
               </Link>
               <Link
                 to="/music"
-                className="inline-flex items-center gap-2 rounded-full border border-white/40 px-5 py-2 text-sm font-semibold text-white/90 transition hover:bg-white/10"
+                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 px-4 py-2 text-sm font-semibold text-white/90 transition hover:bg-cyan-500/10"
               >
                 <MusicalNoteIcon className="h-4 w-4" />
-                Sound design & playlists
+                Musique
               </Link>
-            </div>
-
-            <div className="mt-10 grid gap-4 text-sm text-white/80 sm:grid-cols-2">
-              {[
-                { icon: <PlayIcon className="h-5 w-5" />, label: 'Vidéos immersives', description: 'Compatibles 4K, Dolby Vision et streaming adaptatif.' },
-                { icon: <MusicalNoteIcon className="h-5 w-5" />, label: 'Audio spatial', description: 'Synchronisé avec XPENG Sound et l’éclairage d’ambiance.' },
-                { icon: <PuzzlePieceIcon className="h-5 w-5" />, label: 'Jeux embarqués', description: 'Optimisés pour les pauses recharge et manettes Bluetooth.' },
-                { icon: <BoltIcon className="h-5 w-5" />, label: 'Recharge intelligente', description: 'Planification des superchargers XPENG et réseaux partenaires.' },
-              ].map((item) => (
-                <div key={item.label} className="flex items-start gap-3 rounded-3xl bg-white/5 p-4 backdrop-blur-sm">
-                  <span className="mt-1 inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-white/10 text-white">
-                    {item.icon}
-                  </span>
-                  <div>
-                    <p className="font-semibold text-white">{item.label}</p>
-                    <p className="text-xs text-white/70">{item.description}</p>
-                  </div>
-                </div>
-              ))}
+              <Link
+                to="/games"
+                className="inline-flex items-center gap-2 rounded-full border border-cyan-500/40 px-4 py-2 text-sm font-semibold text-white/90 transition hover:bg-cyan-500/10"
+              >
+                <PuzzlePieceIcon className="h-4 w-4" />
+                Jeux
+              </Link>
             </div>
           </div>
         </div>
-      </motion.section>
-
-      {/* Barre de recherche */}
-      <motion.section
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="mt-12"
-      >
-        <SearchBar />
       </motion.section>
 
       {/* Bouton d'édition */}
@@ -187,30 +180,77 @@ export const HomePage: React.FC = () => {
         </motion.div>
       )}
 
-      {/* Plateformes par catégories */}
+      {/* Indicateur de scroll XPENG */}
+      <ScrollIndicator />
+
+      {/* Services principaux optimisés tablette */}
       <motion.section
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
+        className="mt-8"
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-blue-500 shadow-lg shadow-cyan-500/30">
+              <PlayIcon className="h-6 w-6 text-white" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-slate-900 dark:text-white md:text-2xl">
+                Services populaires
+              </h2>
+              <p className="text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                Accès rapide aux plateformes principales
+              </p>
+            </div>
+          </div>
+          <Link 
+            to="/videos" 
+            className="rounded-full bg-cyan-500/10 px-4 py-2 text-xs font-semibold text-cyan-600 transition hover:bg-cyan-500/20 dark:text-cyan-400 md:text-sm"
+          >
+            Voir tout
+          </Link>
+        </div>
+        
+        {/* Grille compacte pour tablette - affiche 8 services */}
+        <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
+          {getVisiblePlatforms(videoCategories.flatMap(c => c.platforms)).slice(0, 8).map((platform) => (
+            <EditablePlatformCard
+              key={platform.id}
+              platform={platform}
+              isEditable={isEditMode}
+              onRemove={handleRemovePlatform}
+            />
+          ))}
+        </div>
+      </motion.section>
+
+      {/* Plateformes par catégories */}
+      <motion.section
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.3 }}
         className="mt-12 space-y-10"
       >
         {/* Vidéos */}
         <div>
           <div className="mb-4 flex items-center gap-3">
-            <PlayIcon className="h-8 w-8 text-cyan-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30">
+              <PlayIcon className="h-6 w-6 text-cyan-500" />
+            </div>
             <div>
-              <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white md:text-2xl">
                 Vidéos & Streaming
               </h2>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                {videoCategories.flatMap(c => c.platforms).length} services disponibles
+              <p className="text-xs text-slate-600 dark:text-slate-400 md:text-sm">
+                {videoCategories.flatMap(c => c.platforms).length} services
               </p>
             </div>
-            <Link to="/videos" className="ml-auto text-sm text-cyan-600 hover:text-cyan-700 dark:text-cyan-400">
+            <Link to="/videos" className="ml-auto text-xs font-medium text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 md:text-sm">
               Voir tout →
             </Link>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+          <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8">
             {getVisiblePlatforms(videoCategories.flatMap(c => c.platforms)).map((platform) => (
               <EditablePlatformCard
                 key={platform.id}
