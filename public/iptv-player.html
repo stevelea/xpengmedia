@@ -367,6 +367,9 @@
                 <div class="form-group">
                     <label for="m3uUrl">URL de la playlist M3U :</label>
                     <input type="url" id="m3uUrl" placeholder="https://example.com/playlist.m3u8">
+                    <small style="display: block; margin-top: 4px; color: #94a3b8; font-size: 11px;">
+                        ✨ Correction automatique des erreurs de copier-coller (espaces, doubles http, etc.)
+                    </small>
                 </div>
             </div>
             
@@ -374,6 +377,9 @@
                 <div class="form-group">
                     <label for="xtreamUrl">URL du serveur :</label>
                     <input type="url" id="xtreamUrl" placeholder="http://server.com:port">
+                    <small style="display: block; margin-top: 4px; color: #94a3b8; font-size: 11px;">
+                        ✨ Correction automatique des erreurs (espaces, doubles http, httsp, etc.)
+                    </small>
                 </div>
                 <div class="form-group">
                     <label for="xtreamUsername">Nom d'utilisateur :</label>
@@ -644,6 +650,109 @@
             document.getElementById('xtreamFields').classList.toggle('hidden', type !== 'xtream');
         }
         
+        // Fonction intelligente de nettoyage des URLs (erreurs copier-coller Android)
+        function smartCleanUrl(url) {
+            if (!url) return '';
+            
+            debugLog(`🧹 Nettoyage URL: "${url}"`, 'info');
+            
+            // 1. Trim espaces et retours à la ligne
+            let cleaned = url.trim().replace(/[\n\r\t]/g, '');
+            
+            // 2. Supprimer espaces internes
+            cleaned = cleaned.replace(/\s+/g, '');
+            
+            // 3. Corriger doubles protocoles (httpshttp:// ou httphttp://)
+            cleaned = cleaned.replace(/^https?https?:\/\//i, 'http://');
+            cleaned = cleaned.replace(/^https?http:\/\//i, 'http://');
+            cleaned = cleaned.replace(/^https?https:\/\//i, 'https://');
+            
+            // 4. Corriger fautes de frappe courantes
+            cleaned = cleaned.replace(/^httsp:\/\//i, 'https://');  // httsp
+            cleaned = cleaned.replace(/^htttp:\/\//i, 'http://');   // htttp
+            cleaned = cleaned.replace(/^htp:\/\//i, 'http://');     // htp
+            cleaned = cleaned.replace(/^htps:\/\//i, 'https://');   // htps
+            cleaned = cleaned.replace(/^http:\/\/\//i, 'http://');  // triple slash
+            cleaned = cleaned.replace(/^https:\/\/\//i, 'https://'); // triple slash
+            
+            // 5. Supprimer slash en trop à la fin
+            while (cleaned.endsWith('//')) {
+                cleaned = cleaned.slice(0, -1);
+            }
+            
+            // 6. Ajouter http:// si manquant (mais contient un domaine)
+            if (!cleaned.startsWith('http://') && !cleaned.startsWith('https://')) {
+                if (cleaned.includes('.') || cleaned.includes(':')) {
+                    debugLog('⚠️ Protocole manquant, ajout de http://', 'warning');
+                    cleaned = 'http://' + cleaned;
+                }
+            }
+            
+            if (cleaned !== url) {
+                debugLog(`✅ URL nettoyée: "${cleaned}"`, 'success');
+            } else {
+                debugLog('✅ URL déjà propre', 'success');
+            }
+            
+            return cleaned;
+        }
+        
+        // Fonction pour tester URL avec fallback HTTP/HTTPS intelligent
+        async function smartTestUrl(url) {
+            const originalUrl = url;
+            
+            // Si HTTPS, tester d'abord HTTPS puis fallback HTTP
+            if (url.startsWith('https://')) {
+                debugLog('🔒 Test avec HTTPS...', 'info');
+                try {
+                    const response = await fetch(url, { method: 'HEAD', timeout: 3000 });
+                    if (response.ok) {
+                        debugLog('✅ HTTPS fonctionne', 'success');
+                        return url;
+                    }
+                } catch (e) {
+                    debugLog('⚠️ HTTPS échoué, tentative HTTP...', 'warning');
+                    const httpUrl = url.replace('https://', 'http://');
+                    try {
+                        const response = await fetch(httpUrl, { method: 'HEAD', timeout: 3000 });
+                        if (response.ok) {
+                            debugLog('✅ HTTP fonctionne (fallback)', 'success');
+                            return httpUrl;
+                        }
+                    } catch (e2) {
+                        debugLog('❌ HTTP aussi échoué', 'error');
+                    }
+                }
+            }
+            // Si HTTP, tester d'abord HTTP puis essayer HTTPS
+            else if (url.startsWith('http://')) {
+                debugLog('🔓 Test avec HTTP...', 'info');
+                try {
+                    const response = await fetch(url, { method: 'HEAD', timeout: 3000 });
+                    if (response.ok) {
+                        debugLog('✅ HTTP fonctionne', 'success');
+                        return url;
+                    }
+                } catch (e) {
+                    debugLog('⚠️ HTTP échoué, tentative HTTPS...', 'warning');
+                    const httpsUrl = url.replace('http://', 'https://');
+                    try {
+                        const response = await fetch(httpsUrl, { method: 'HEAD', timeout: 3000 });
+                        if (response.ok) {
+                            debugLog('✅ HTTPS fonctionne (upgrade)', 'success');
+                            return httpsUrl;
+                        }
+                    } catch (e2) {
+                        debugLog('❌ HTTPS aussi échoué', 'error');
+                    }
+                }
+            }
+            
+            // Retourner URL originale si aucun test ne marche
+            debugLog('⚠️ Aucun test réussi, utilisation URL originale', 'warning');
+            return originalUrl;
+        }
+        
         function saveAndConnect() {
             debugLog('🚀 Démarrage de la connexion...', 'info');
             
@@ -653,18 +762,22 @@
             let config = { type };
             
             if (type === 'm3u') {
-                config.url = document.getElementById('m3uUrl').value.trim();
+                const rawUrl = document.getElementById('m3uUrl').value;
                 debugLog('⚙️ Validation des données M3U...', 'info');
                 
-                if (!config.url) {
+                if (!rawUrl || !rawUrl.trim()) {
                     debugLog('❌ ERREUR: URL M3U vide', 'error');
                     showStatus('❌ Veuillez entrer une URL M3U', 'error');
                     return;
                 }
                 
+                // Nettoyage intelligent de l'URL
+                config.url = smartCleanUrl(rawUrl);
+                
                 if (!config.url.startsWith('http://') && !config.url.startsWith('https://')) {
-                    debugLog('⚠️ ATTENTION: L\'URL ne commence pas par http:// ou https://', 'warning');
-                    debugLog(`URL fournie: ${config.url}`, 'warning');
+                    debugLog('❌ ERREUR: URL invalide après nettoyage', 'error');
+                    showStatus('❌ URL M3U invalide', 'error');
+                    return;
                 }
                 
                 if (!config.url.includes('.m3u') && !config.url.includes('.m3u8')) {
@@ -674,16 +787,16 @@
                 debugLog(`✅ URL M3U valide: ${config.url}`, 'success');
                 
             } else {
-                config.url = document.getElementById('xtreamUrl').value.trim();
-                config.username = document.getElementById('xtreamUsername').value.trim();
-                config.password = document.getElementById('xtreamPassword').value.trim();
+                const rawUrl = document.getElementById('xtreamUrl').value;
+                const rawUsername = document.getElementById('xtreamUsername').value;
+                const rawPassword = document.getElementById('xtreamPassword').value;
                 
                 debugLog('⚙️ Validation des données Xtream...', 'info');
                 
                 const missing = [];
-                if (!config.url) missing.push('URL serveur');
-                if (!config.username) missing.push('Nom d\'utilisateur');
-                if (!config.password) missing.push('Mot de passe');
+                if (!rawUrl || !rawUrl.trim()) missing.push('URL serveur');
+                if (!rawUsername || !rawUsername.trim()) missing.push('Nom d\'utilisateur');
+                if (!rawPassword || !rawPassword.trim()) missing.push('Mot de passe');
                 
                 if (missing.length > 0) {
                     debugLog(`❌ ERREUR: Champs manquants: ${missing.join(', ')}`, 'error');
@@ -691,10 +804,14 @@
                     return;
                 }
                 
+                // Nettoyage intelligent de l'URL
+                config.url = smartCleanUrl(rawUrl);
+                config.username = rawUsername.trim();
+                config.password = rawPassword.trim();
+                
                 if (!config.url.startsWith('http://') && !config.url.startsWith('https://')) {
-                    debugLog('❌ ERREUR: L\'URL serveur doit commencer par http:// ou https://', 'error');
-                    debugLog(`URL fournie: ${config.url}`, 'error');
-                    showStatus('❌ URL serveur invalide (doit commencer par http:// ou https://)', 'error');
+                    debugLog('❌ ERREUR: URL serveur invalide après nettoyage', 'error');
+                    showStatus('❌ URL serveur invalide', 'error');
                     return;
                 }
                 
