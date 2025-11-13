@@ -312,11 +312,16 @@ export const HomePage: React.FC = () => {
           <div key={category.id}>
             <div className="mb-1.5 overflow-hidden rounded-lg border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-2 shadow-sm backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6 md:shadow-lg">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 md:gap-3">
-                  <div className={`h-0.5 w-4 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:h-1 md:w-12`} />
-                  <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-sm font-bold text-transparent md:text-2xl lg:text-3xl`}>
-                    {category.title}
-                  </h2>
+                <div className="flex-1">
+                  <div className="flex items-center gap-1.5 md:gap-3">
+                    <div className={`h-0.5 w-4 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:h-1 md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-xs font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-0.5 ml-5 text-[9px] text-slate-500 dark:text-slate-400 md:ml-0 md:mt-1 md:text-sm line-clamp-1">
+                    {category.subtitle}
+                  </p>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 md:text-sm">
                   {getVisiblePlatforms(category.platforms).length}
@@ -345,11 +350,16 @@ export const HomePage: React.FC = () => {
           <div key={category.id}>
             <div className="mb-1.5 overflow-hidden rounded-lg border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-2 shadow-sm backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6 md:shadow-lg">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 md:gap-3">
-                  <div className={`h-0.5 w-4 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:h-1 md:w-12`} />
-                  <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-sm font-bold text-transparent md:text-2xl lg:text-3xl`}>
-                    {category.title}
-                  </h2>
+                <div className="flex-1">
+                  <div className="flex items-center gap-1.5 md:gap-3">
+                    <div className={`h-0.5 w-4 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:h-1 md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-xs font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-0.5 ml-5 text-[9px] text-slate-500 dark:text-slate-400 md:ml-0 md:mt-1 md:text-sm line-clamp-1">
+                    {category.subtitle}
+                  </p>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 md:text-sm">
                   {getVisiblePlatforms(category.platforms).length}
@@ -378,11 +388,16 @@ export const HomePage: React.FC = () => {
           <div key={category.id}>
             <div className="mb-1.5 overflow-hidden rounded-lg border border-slate-200/70 bg-gradient-to-br from-white/90 to-slate-50/80 p-2 shadow-sm backdrop-blur-xl dark:border-slate-800/70 dark:from-slate-900/70 dark:to-slate-950/50 md:mb-4 md:rounded-3xl md:p-6 md:shadow-lg">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 md:gap-3">
-                  <div className={`h-0.5 w-4 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:h-1 md:w-12`} />
-                  <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-sm font-bold text-transparent md:text-2xl lg:text-3xl`}>
-                    {category.title}
-                  </h2>
+                <div className="flex-1">
+                  <div className="flex items-center gap-1.5 md:gap-3">
+                    <div className={`h-0.5 w-4 rounded-full bg-gradient-to-r ${category.colorFrom} ${category.colorTo} md:h-1 md:w-12`} />
+                    <h2 className={`bg-gradient-to-r ${category.colorFrom} ${category.colorTo} bg-clip-text text-xs font-bold text-transparent md:text-2xl lg:text-3xl`}>
+                      {category.title}
+                    </h2>
+                  </div>
+                  <p className="mt-0.5 ml-5 text-[9px] text-slate-500 dark:text-slate-400 md:ml-0 md:mt-1 md:text-sm line-clamp-1">
+                    {category.subtitle}
+                  </p>
                 </div>
                 <div className="text-[10px] text-slate-500 dark:text-slate-400 md:text-sm">
                   {getVisiblePlatforms(category.platforms).length}
