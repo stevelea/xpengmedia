@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FavoritesGrid } from '../components/favorites/FavoritesGrid';
 import { AddFavoriteModal } from '../components/favorites/AddFavoriteModal';
@@ -21,7 +21,7 @@ import { PlatformIcon } from '../components/icons/PlatformIcon';
 import { filterPlatformsByRegion } from '../utils/regionFilter';
 
 export const HomePage: React.FC = () => {
-  const { categories } = useFavorites();
+  const { categories, getFavoritesByCategory } = useFavorites();
   const { locale, t } = useLocale();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isCustomUrlModalOpen, setIsCustomUrlModalOpen] = useState(false);
@@ -31,6 +31,12 @@ export const HomePage: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [hiddenPlatforms, setHiddenPlatforms] = useState<Set<string>>(new Set());
   const [customServices, setCustomServices] = useState<PlatformLink[]>([]);
+
+  // Catégories de favoris réellement utilisées (au moins un favori visible pour le pays courant)
+  const favoriteCategoriesWithItems = useMemo(
+    () => categories.filter((category) => getFavoritesByCategory(category).length > 0),
+    [categories, getFavoritesByCategory]
+  );
 
   // Sélection des plateformes populaires à afficher par défaut
   const allPlatformsRaw: PlatformLink[] = [
@@ -626,7 +632,7 @@ export const HomePage: React.FC = () => {
         className="space-y-12"
       >
         <AnimatePresence>
-          {categories.map((category, index) => (
+          {favoriteCategoriesWithItems.map((category, index) => (
             <motion.div
               key={category}
               initial={{ opacity: 0, y: 20 }}

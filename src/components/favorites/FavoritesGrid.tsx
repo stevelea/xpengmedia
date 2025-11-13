@@ -18,7 +18,7 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({ category, onAddCli
 
   return (
     <div className="mb-8">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-3 md:mb-4">
         <h3 className="text-xl font-semibold dark:text-white">{category}</h3>
         {onAddClick && (
           <button
@@ -31,7 +31,7 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({ category, onAddCli
         )}
       </div>
       
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-5 md:gap-4 lg:grid-cols-6">
         {categoryFavorites.map((fav) => (
           <motion.div
             key={fav.id}
@@ -43,10 +43,12 @@ export const FavoritesGrid: React.FC<FavoritesGridProps> = ({ category, onAddCli
               href={fav.url.startsWith('http') ? fav.url : `https://${fav.url}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="block p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center h-full flex flex-col items-center justify-center"
+              className="block p-2 md:p-3 bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-lg transition-shadow text-center h-full flex flex-col items-center justify-center"
             >
-              <div className="text-3xl mb-2">{fav.icon}</div>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-200">{fav.name}</span>
+              <div className="text-2xl md:text-3xl mb-1 md:mb-2">{fav.icon}</div>
+              <span className="text-[11px] md:text-sm font-medium text-gray-700 dark:text-gray-200 line-clamp-2">
+                {fav.name}
+              </span>
             </a>
             <button
               onClick={(e) => {
