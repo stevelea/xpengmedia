@@ -2,6 +2,9 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import type { PlatformCategory, PlatformLink } from '../../data/platforms';
 import { ArrowTopRightOnSquareIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { PlatformIcon } from '../icons/PlatformIcon';
+import { useLocale } from '../../context/LocaleContext';
+import { filterPlatformsByRegion } from '../../utils/regionFilter';
 
 interface PlatformCategorySectionProps {
   category: PlatformCategory;
@@ -27,12 +30,14 @@ const PlatformCard: React.FC<{ platform: PlatformLink }> = ({ platform }) => {
       className="group relative rounded-3xl border border-white/10 bg-white/10 p-6 backdrop-blur-xl shadow-[0_30px_60px_-20px_rgba(26,106,224,0.35)] dark:bg-slate-900/50"
     >
       <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="text-3xl mb-3 drop-shadow-sm" aria-hidden>{platform.icon}</div>
-          <h4 className="text-xl font-semibold text-white drop-shadow-sm">
+        <div className="flex-1 min-w-0">
+          <div className="mb-3 drop-shadow-sm" aria-hidden>
+            <PlatformIcon icon={platform.icon} name={platform.name} size="md" />
+          </div>
+          <h4 className="text-xl font-semibold text-white drop-shadow-sm truncate">
             {platform.name}
           </h4>
-          <p className="mt-2 text-sm text-slate-100/80 leading-relaxed">
+          <p className="mt-2 text-sm text-slate-100/80 leading-relaxed line-clamp-3">
             {platform.description}
           </p>
         </div>
@@ -76,6 +81,13 @@ const PlatformCard: React.FC<{ platform: PlatformLink }> = ({ platform }) => {
 };
 
 export const PlatformCategorySection: React.FC<PlatformCategorySectionProps> = ({ category, index = 0 }) => {
+  const { locale } = useLocale();
+  const visiblePlatforms = filterPlatformsByRegion(category.platforms, locale.region);
+
+  if (visiblePlatforms.length === 0) {
+    return null;
+  }
+
   return (
     <section className="relative overflow-hidden rounded-4xl border border-slate-100/10 bg-gradient-to-br p-[1px] shadow-[0_40px_80px_-24px_rgba(15,23,42,0.35)]">
       <div className={`relative rounded-[calc(2rem-1px)] bg-gradient-to-br ${category.colorFrom} ${category.colorTo} p-8 md:p-10`}> 
@@ -100,7 +112,7 @@ export const PlatformCategorySection: React.FC<PlatformCategorySectionProps> = (
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          {category.platforms.map((platform) => (
+          {visiblePlatforms.map((platform) => (
             <PlatformCard key={platform.id} platform={platform} />
           ))}
         </div>
