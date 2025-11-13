@@ -2,7 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>XPENG IPTV Player - Web App</title>
     <style>
         * {
@@ -345,7 +348,8 @@
     <div class="container">
         <div class="header">
             <h1>🎬 XPENG IPTV Player</h1>
-            <p>Web App avec sauvegarde automatique</p>
+            <p>Web App optimisée pour navigateur XPENG</p>
+            <p style="font-size: 12px; margin-top: 8px; color: #94a3b8;">✅ Support HLS/M3U8 • Hardware Decode • Twine4Car Compatible</p>
         </div>
         
         <div id="setupSection" class="setup-form">
@@ -422,7 +426,16 @@
             </div>
             
             <div id="videoContainer" class="video-player hidden">
-                <video id="videoPlayer" controls autoplay></video>
+                <video id="videoPlayer" 
+                       controls 
+                       autoplay 
+                       playsinline 
+                       preload="metadata"
+                       webkit-playsinline
+                       x-webkit-airplay="allow"
+                       style="width: 100%; height: 100%; object-fit: contain;">
+                    Votre navigateur ne supporte pas la vidéo HTML5.
+                </video>
             </div>
             
             <!-- Section Live TV -->
@@ -1265,28 +1278,123 @@
             playing.classList.remove('hidden');
             playingName.textContent = channel.name;
             
+            debugLog(`🎬 Lecture de: ${channel.name}`, 'info');
+            debugLog(`🔗 URL: ${channel.url.substring(0, 80)}...`, 'info');
+            
             // Arrêter HLS précédent
             if (hls) {
+                debugLog('🛑 Arrêt du stream précédent', 'info');
                 hls.destroy();
+                hls = null;
             }
             
-            // Détecter si c'est HLS
+            // Réinitialiser le player
+            video.pause();
+            video.removeAttribute('src');
+            video.load();
+            
+            // Détecter si c'est HLS (.m3u8)
             if (channel.url.includes('.m3u8')) {
-                if (Hls.isSupported()) {
-                    hls = new Hls();
+                debugLog('📡 Format détecté: HLS (M3U8)', 'info');
+                
+                // Vérifier support natif HLS (Safari, certains navigateurs Android)
+                if (video.canPlayType('application/vnd.apple.mpegurl')) {
+                    debugLog('✅ Support HLS natif du navigateur', 'success');
+                    video.src = channel.url;
+                    video.play().catch(e => {
+                        debugLog(`❌ Erreur lecture native: ${e.message}`, 'error');
+                    });
+                }
+                // Sinon utiliser HLS.js (Chrome, Firefox, etc.)
+                else if (Hls.isSupported()) {
+                    debugLog('✅ Utilisation de HLS.js', 'success');
+                    
+                    // Configuration optimisée pour Android/XPENG (hardware decode)
+                    const hlsConfig = {
+                        enableWorker: true,
+                        lowLatencyMode: false,
+                        backBufferLength: 90,
+                        maxBufferLength: 30,
+                        maxMaxBufferLength: 60,
+                        maxBufferSize: 60 * 1000 * 1000,
+                        maxBufferHole: 0.5,
+                        highBufferWatchdogPeriod: 2,
+                        nudgeOffset: 0.1,
+                        nudgeMaxRetry: 3,
+                        maxFragLookUpTolerance: 0.25,
+                        liveSyncDurationCount: 3,
+                        liveMaxLatencyDurationCount: 10,
+                        liveDurationInfinity: false,
+                        preferManagedMediaSource: false,
+                        // Forcer le décodage hardware si possible
+                        abrEwmaDefaultEstimate: 500000
+                    };
+                    
+                    hls = new Hls(hlsConfig);
+                    
+                    hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+                        debugLog('📺 HLS attaché au player', 'success');
+                    });
+                    
+                    hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+                        debugLog(`✅ Manifest parsé: ${data.levels.length} qualités disponibles`, 'success');
+                        video.play().catch(e => {
+                            debugLog(`❌ Erreur autoplay: ${e.message}`, 'error');
+                        });
+                    });
+                    
+                    hls.on(Hls.Events.ERROR, (event, data) => {
+                        if (data.fatal) {
+                            debugLog(`❌ Erreur HLS fatale: ${data.type} - ${data.details}`, 'error');
+                            switch (data.type) {
+                                case Hls.ErrorTypes.NETWORK_ERROR:
+                                    debugLog('🔄 Tentative de récupération réseau...', 'warning');
+                                    hls.startLoad();
+                                    break;
+                                case Hls.ErrorTypes.MEDIA_ERROR:
+                                    debugLog('🔄 Tentative de récupération média...', 'warning');
+                                    hls.recoverMediaError();
+                                    break;
+                                default:
+                                    debugLog('💔 Impossible de récupérer, destruction HLS', 'error');
+                                    hls.destroy();
+                                    break;
+                            }
+                        } else {
+                            debugLog(`⚠️ Erreur HLS non-fatale: ${data.details}`, 'warning');
+                        }
+                    });
+                    
                     hls.loadSource(channel.url);
                     hls.attachMedia(video);
-                } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                    video.src = channel.url;
+                } else {
+                    debugLog('❌ HLS non supporté par ce navigateur', 'error');
+                    showStatus('❌ Format HLS non supporté par votre navigateur', 'error');
                 }
-            } else {
+            } 
+            // Formats directs (MP4, WebM, etc.)
+            else {
+                debugLog('📹 Format détecté: Vidéo directe (MP4/WebM)', 'info');
                 video.src = channel.url;
+                video.play().catch(e => {
+                    debugLog(`❌ Erreur lecture: ${e.message}`, 'error');
+                    showStatus('❌ Impossible de lire cette vidéo', 'error');
+                });
             }
             
-            video.play();
+            // Événements vidéo
+            video.addEventListener('loadstart', () => debugLog('⏳ Chargement...', 'info'), { once: true });
+            video.addEventListener('canplay', () => debugLog('✅ Vidéo prête', 'success'), { once: true });
+            video.addEventListener('playing', () => debugLog('▶️ Lecture en cours', 'success'), { once: true });
+            video.addEventListener('waiting', () => debugLog('⏸️ Buffering...', 'warning'), { once: true });
+            video.addEventListener('error', (e) => {
+                debugLog(`❌ Erreur vidéo: ${e.target.error?.message || 'Unknown'}`, 'error');
+            }, { once: true });
             
             // Scroll vers le player
-            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => {
+                container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
         }
         
         function showPlayer() {
