@@ -30,7 +30,10 @@ const regionToAvailabilityMap: Record<Region, string[]> = {
   australia: ['global', 'australia', 'anglophone'],
 
   // Asie
-  china: ['global', 'asia', 'china'],
+  // Chine continentale : on NE prend PAS 'global' pour éviter les services bloqués,
+  // uniquement les services marqués explicitement 'asia' ou 'china'.
+  china: ['asia', 'china'],
+  // Autres régions asiatiques gardent 'global' + 'asia'.
   singapore: ['global', 'asia', 'anglophone'],
 
   // Moyen-Orient

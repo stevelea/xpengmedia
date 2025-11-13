@@ -1638,7 +1638,7 @@ export const otherServicesCategories: PlatformCategory[] = [
         description: 'Player IPTV complet (M3U & Xtream) optimisé pour navigateur XPENG.',
         url: 'https://dlnraja.github.io/xpengmedia/iptv-player.html',
         icon: 'https://cdn-icons-png.flaticon.com/512/3845/3845807.png',
-        availability: ['global'],
+        availability: ['global', 'asia', 'china'],
         tags: ['XPENG', 'IPTV', 'Interne'],
       },
       {
@@ -1647,7 +1647,7 @@ export const otherServicesCategories: PlatformCategory[] = [
         description: 'Calculatrice lisible et tactile pour l’écran embarqué.',
         url: 'https://dlnraja.github.io/xpengmedia/calculator.html',
         icon: 'https://cdn-icons-png.flaticon.com/512/671/671157.png',
-        availability: ['global'],
+        availability: ['global', 'asia', 'china'],
         tags: ['XPENG', 'Outil', 'Interne'],
       },
     ],
@@ -1846,7 +1846,7 @@ export const otherServicesCategories: PlatformCategory[] = [
         description: 'Manuel utilisateur officiel du G3i.',
         url: 'https://www.xpeng.com/support/manuals/g3i',
         icon: 'https://cdn-icons-png.flaticon.com/512/2702/2702154.png',
-        availability: ['global'],
+        availability: ['global', 'asia', 'china'],
         tags: ['Manuel', 'G3i'],
       },
       {
@@ -1855,7 +1855,7 @@ export const otherServicesCategories: PlatformCategory[] = [
         description: 'Manuel utilisateur officiel du P5.',
         url: 'https://www.xpeng.com/support/manuals/p5',
         icon: 'https://logo.clearbit.com/xpeng.com',
-        availability: ['global'],
+        availability: ['global', 'asia', 'china'],
         tags: ['Manuel', 'P5'],
       },
       {
