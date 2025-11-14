@@ -35,7 +35,11 @@ export const PlatformIcon: React.FC<PlatformIconProps> = ({
   };
 
   // Détecter si c'est une URL (logo) ou un emoji
-  const isUrl = icon.startsWith('http') || icon.startsWith('/') || icon.startsWith('data:');
+  const isUrl =
+    icon.startsWith('http') ||
+    icon.startsWith('/') ||
+    icon.startsWith('data:') ||
+    icon.startsWith('icons/');
 
   return (
     <div
