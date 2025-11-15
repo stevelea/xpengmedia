@@ -298,6 +298,35 @@
             border-color: #3b82f6;
         }
         
+        .channel-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-style: dashed;
+        }
+        
+        .channel-card.disabled:hover {
+            background: rgba(15, 23, 42, 0.9);
+            transform: none;
+            border-color: rgba(148, 163, 184, 0.35);
+        }
+        
+        .channel-compat {
+            margin-top: 6px;
+            font-size: 11px;
+        }
+        
+        .channel-compat-ok {
+            color: #4ade80;
+        }
+        
+        .channel-compat-warning {
+            color: #facc15;
+        }
+        
+        .channel-compat-bad {
+            color: #fca5a5;
+        }
+        
         .channel-card h3 {
             font-size: 18px;
             margin-bottom: 6px;
@@ -974,6 +1003,103 @@
             }
         }
         
+        let playbackCapabilities = null;
+
+        function getPlaybackCapabilities() {
+            if (playbackCapabilities) return playbackCapabilities;
+
+            const testVideo = document.createElement('video');
+            const canPlayType = testVideo && typeof testVideo.canPlayType === 'function'
+                ? testVideo.canPlayType.bind(testVideo)
+                : () => '';
+
+            playbackCapabilities = {
+                hlsNative: !!canPlayType('application/vnd.apple.mpegurl'),
+                mp4: !!(canPlayType('video/mp4') || canPlayType('video/mp4; codecs="avc1.42E01E, mp4a.40.2"')),
+                webm: !!canPlayType('video/webm'),
+                hlsJs: typeof Hls !== 'undefined' && typeof Hls.isSupported === 'function' && Hls.isSupported()
+            };
+
+            debugLog(
+                `🧪 Capacités de lecture détectées: HLS natif=${playbackCapabilities.hlsNative ? 'oui' : 'non'}, ` +
+                `Hls.js=${playbackCapabilities.hlsJs ? 'oui' : 'non'}, MP4=${playbackCapabilities.mp4 ? 'oui' : 'non'}, ` +
+                `WebM=${playbackCapabilities.webm ? 'oui' : 'non'}`,
+                'info'
+            );
+
+            return playbackCapabilities;
+        }
+
+        function evaluateChannelCompatibility(channel) {
+            const caps = getPlaybackCapabilities();
+            const urlRaw = channel && channel.url ? String(channel.url) : '';
+            const url = urlRaw.toLowerCase();
+
+            if (!url) {
+                return {
+                    supported: false,
+                    warning: false,
+                    format: 'inconnu',
+                    reason: 'URL manquante'
+                };
+            }
+
+            let format = 'inconnu';
+            let supported = true;
+            let warning = false;
+            let reason = '';
+
+            const isHls = url.includes('.m3u8');
+            const isMp4 = url.includes('.mp4');
+            const isWebm = url.includes('.webm');
+            const isRtmp = url.startsWith('rtmp://');
+            const isRtsp = url.startsWith('rtsp://');
+
+            if (isHls) {
+                format = 'HLS (.m3u8)';
+                if (!caps.hlsNative && !caps.hlsJs) {
+                    supported = false;
+                    reason = 'HLS non supporté par ce navigateur (ni natif, ni via Hls.js).';
+                }
+            } else if (isMp4) {
+                format = 'MP4';
+                if (!caps.mp4) {
+                    supported = false;
+                    reason = 'Le format MP4 n\'est pas supporté par ce navigateur.';
+                }
+            } else if (isWebm) {
+                format = 'WebM';
+                if (!caps.webm) {
+                    supported = false;
+                    reason = 'Le format WebM n\'est pas supporté par ce navigateur.';
+                }
+            } else if (isRtmp) {
+                format = 'RTMP';
+                supported = false;
+                reason = 'Le protocole RTMP n\'est pas supporté par les navigateurs HTML5.';
+            } else if (isRtsp) {
+                format = 'RTSP';
+                supported = false;
+                reason = 'Le protocole RTSP n\'est pas supporté par les navigateurs HTML5.';
+            } else {
+                format = 'inconnu';
+                warning = true;
+                reason = 'Format inconnu, compatibilité non garantie.';
+            }
+
+            const channelName = channel && channel.name ? channel.name : 'Sans nom';
+
+            if (!supported) {
+                debugLog(`⚠️ Chaîne probablement non compatible: ${channelName} — ${reason}`, 'warning');
+            } else if (warning) {
+                debugLog(`ℹ️ Chaîne au format inconnu: ${channelName} — compatibilité non garantie.`, 'info');
+            } else {
+                debugLog(`✅ Chaîne marquée compatible (${format}): ${channelName}`, 'success');
+            }
+
+            return { supported, warning, format, reason };
+        }
+        
         function updateFormFields() {
             const type = document.getElementById('connectionType').value;
             document.getElementById('m3uFields').classList.toggle('hidden', type !== 'm3u');
@@ -1604,7 +1730,13 @@
             
             channels.forEach((channel, index) => {
                 const card = document.createElement('div');
-                card.className = 'channel-card';
+                const compat = evaluateChannelCompatibility(channel);
+
+                let cardClasses = 'channel-card';
+                if (!compat.supported) {
+                    cardClasses += ' disabled';
+                }
+                card.className = cardClasses;
 
                 // Normaliser l'objet pour l'historique/favoris
                 const item = {
@@ -1620,12 +1752,27 @@
                 const isFav = favorites.some(f => f.url === item.url);
                 const safeItem = JSON.stringify(item).replace(/"/g, '&quot;');
 
+                let compatClass = 'channel-compat';
+                let compatText = '';
+
+                if (!compat.supported) {
+                    compatClass += ' channel-compat-bad';
+                    compatText = `⚠️ Non compatible sur ce navigateur: ${compat.reason}`;
+                } else if (compat.warning) {
+                    compatClass += ' channel-compat-warning';
+                    compatText = `⚠️ Compatibilité non garantie (${compat.reason})`;
+                } else {
+                    compatClass += ' channel-compat-ok';
+                    compatText = `✅ Compatible ${compat.format !== 'inconnu' ? compat.format : ''}`.trim();
+                }
+
                 card.innerHTML = `
                     <button class="favorite-btn ${isFav ? 'active' : ''}" onclick="event.stopPropagation(); toggleFavorite(${safeItem})">
                         ${isFav ? '❤️' : '🤍'}
                     </button>
                     <h3>📺 ${channel.name}</h3>
                     ${channel.category ? `<p>${channel.category}</p>` : ''}
+                    <p class="${compatClass}">${compatText}</p>
                 `;
 
                 card.onclick = () => {
