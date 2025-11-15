@@ -41,7 +41,7 @@ const ChargingPage: React.FC = () => {
       <div className="space-y-10">
         {chargingCategories.map((category, index) => (
           <div key={category.id} id={category.id}>
-            <PlatformCategorySection category={category} index={index} />
+            <PlatformCategorySection category={category} index={index} maxPlatforms={12} />
           </div>
         ))}
       </div>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>XPENG Media Guide</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: #e5e7eb;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+    }
+    .shell {
+      width: 100%;
+      max-width: 960px;
+      background: linear-gradient(145deg, rgba(15,23,42,0.97), rgba(15,23,42,0.92));
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.4);
+      box-shadow: 0 24px 70px rgba(15,23,42,0.9);
+      padding: 20px 18px 22px;
+      backdrop-filter: blur(14px);
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #38bdf8;
+    }
+    .subtitle {
+      margin-top: 2px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #cbd5f5;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.35), transparent 55%);
+      white-space: nowrap;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .card {
+      border-radius: 18px;
+      border: 1px solid rgba(51,65,85,0.9);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.9), rgba(15,23,42,0.96));
+      padding: 12px 13px;
+      box-shadow: 0 16px 32px rgba(15,23,42,0.9);
+    }
+    .card h2 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: #e5e7eb;
+    }
+    .card p {
+      font-size: 12px;
+      line-height: 1.4;
+      color: #9ca3af;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.55);
+      color: #cbd5f5;
+    }
+    .section-title {
+      margin-top: 18px;
+      margin-bottom: 6px;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #64748b;
+    }
+    .footer-hint {
+      margin-top: 14px;
+      font-size: 10px;
+      text-align: right;
+      color: #6b7280;
+    }
+    a {
+      color: #38bdf8;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="header">
+      <div>
+        <div class="title">XPENG MEDIA GUIDE</div>
+        <p class="subtitle">Guide simple pour retrouver vos services vidéo, TV et IPTV dans l'habitacle.</p>
+      </div>
+      <div class="pill">≡ Pensé pour écran XPENG</div>
+    </header>
+
+    <p class="section-title">1. TV & VOD</p>
+    <section class="grid">
+      <article class="card">
+        <h2>Plateformes principales</h2>
+        <p>Retrouvez Netflix, Prime Video, Disney+, YouTube, Canal+ et consorts via la page <strong>Vidéos</strong> de XPENG Media Hub.</p>
+        <div class="tag-row">
+          <span class="tag">/videos</span>
+          <span class="tag">Streaming & VOD</span>
+        </div>
+      </article>
+      <article class="card">
+        <h2>TV des opérateurs</h2>
+        <p>Les services OQEE, TV d'Orange, Free, SFR, Bouygues, etc. sont regroupés dans les sections <strong>TV gratuite & Live</strong> et <strong>Sélection Europe</strong>.</p>
+        <div class="tag-row">
+          <span class="tag">TV Live</span>
+          <span class="tag">Opérateurs</span>
+        </div>
+      </article>
+      <article class="card">
+        <h2>IPTV & playlists M3U</h2>
+        <p>Utilisez le <strong>XPENG IPTV Player</strong> pour vos liens M3U / Xtream Codes, avec mémorisation et favoris.</p>
+        <div class="tag-row">
+          <span class="tag">IPTV</span>
+          <span class="tag">M3U / Xtream</span>
+        </div>
+      </article>
+    </section>
+
+    <p class="section-title">2. Conseils d'usage</p>
+    <section class="grid">
+      <article class="card">
+        <h2>En sécurité</h2>
+        <p>Configurez vos comptes vidéo et liens IPTV à l'arrêt. Évitez toute saisie complexe en conduite.</p>
+      </article>
+      <article class="card">
+        <h2>Qualité réseau</h2>
+        <p>Pour limiter les coupures, privilégiez les zones 4G/5G stables, le Wi‑Fi statique, et des flux ≤ 1080p.</p>
+      </article>
+      <article class="card">
+        <h2>Raccourcis utiles</h2>
+        <p>Ajoutez vos services préférés en favoris depuis la page d'accueil afin de réduire les manipulations.</p>
+      </article>
+    </section>
+
+    <p class="section-title">3. Où cliquer ?</p>
+    <section class="grid">
+      <article class="card">
+        <h2>XPENG Media Hub</h2>
+        <p>Depuis le navigateur, ouvrez la page principale (par ex. <code>xpengmedia</code>) pour accéder aux catégories <strong>Vidéos</strong>, <strong>Musique</strong>, <strong>Jeux</strong>, etc.</p>
+      </article>
+      <article class="card">
+        <h2>IPTV Player</h2>
+        <p>Le lien <strong>XPENG IPTV Player</strong> apparaît dans les sections vidéo et dans les apps internes XPENG.</p>
+      </article>
+      <article class="card">
+        <h2>Services opérateurs</h2>
+        <p>Les services type OQEE, TV d'Orange, Freebox TV sont accessibles dans les catégories TV & VOD, filtrées par région.</p>
+      </article>
+    </section>
+
+    <p class="footer-hint">⚠️ Ne pas consulter ce guide en conduisant. Réservé aux arrêts / stationnement.</p>
+  </main>
+</body>
+</html>

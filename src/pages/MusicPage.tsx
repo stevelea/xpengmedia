@@ -41,7 +41,7 @@ const MusicPage: React.FC = () => {
       <div className="space-y-10">
         {musicCategories.map((category, index) => (
           <div key={category.id} id={category.id}>
-            <PlatformCategorySection category={category} index={index} />
+            <PlatformCategorySection category={category} index={index} maxPlatforms={12} />
           </div>
         ))}
       </div>

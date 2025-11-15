@@ -4,6 +4,8 @@ import { FiStar, FiClock, FiTrendingUp, FiFilter, FiX, FiSearch, FiGrid, FiList,
 import { useEnhancedFavorites } from '../../context/EnhancedFavoritesContext';
 import FavoriteForm from './FavoriteForm';
 import { Dialog, DialogBackdrop } from '@headlessui/react';
+import type { FavoriteItem } from '../../types/favorites';
+import { useLocale } from '../../context/LocaleContext';
 
 type ViewMode = 'grid' | 'list';
 type SortOption = 'alphabetical' | 'recent' | 'popular' | 'category';
@@ -19,6 +21,8 @@ const EnhancedFavoritesGrid: React.FC = () => {
     togglePin
   } = useEnhancedFavorites();
 
+  const { t } = useLocale();
+
   // États
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('');
@@ -27,7 +31,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
   const [sortBy, setSortBy] = useState<SortOption>('alphabetical');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingFavorite, setEditingFavorite] = useState<any>(null);
+  const [editingFavorite, setEditingFavorite] = useState<FavoriteItem | undefined>(undefined);
 
   // Extraire tous les tags uniques
   const allTags = useMemo(() => {
@@ -95,7 +99,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
   };
 
   // Gérer l'édition d'un favori
-  const handleEdit = (favorite: any) => {
+  const handleEdit = (favorite: FavoriteItem) => {
     setEditingFavorite(favorite);
     setIsFormOpen(true);
   };
@@ -122,18 +126,18 @@ const EnhancedFavoritesGrid: React.FC = () => {
     <div className="space-y-8">
       {/* En-tête avec barre de recherche et actions */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Mes Favoris</h1>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{t('myFavorites')}</h1>
         
         <div className="flex items-center space-x-2">
           {/* Bouton d'ajout */}
           <button
             onClick={() => {
-              setEditingFavorite(null);
+              setEditingFavorite(undefined);
               setIsFormOpen(true);
             }}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
           >
-            + Ajouter un favori
+            + {t('addFavorite')}
           </button>
           
           {/* Bouton de changement de vue */}
@@ -141,14 +145,14 @@ const EnhancedFavoritesGrid: React.FC = () => {
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-l-md ${viewMode === 'grid' ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-              title="Vue en grille"
+              title={t('viewGrid')}
             >
               <FiGrid className={`w-5 h-5 ${viewMode === 'grid' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`} />
             </button>
             <button
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-r-md ${viewMode === 'list' ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-50 dark:hover:bg-gray-700'}`}
-              title="Vue en liste"
+              title={t('viewList')}
             >
               <FiList className={`w-5 h-5 ${viewMode === 'list' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`} />
             </button>
@@ -158,7 +162,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
           <button
             onClick={() => setIsFilterOpen(true)}
             className={`p-2 rounded-md border ${hasActiveFilters ? 'bg-blue-50 border-blue-200 dark:bg-blue-900/30 dark:border-blue-800' : 'border-gray-300 dark:border-gray-600'} hover:bg-gray-50 dark:hover:bg-gray-700`}
-            title="Filtrer les favoris"
+            title={t('favoritesFilterTitle')}
           >
             <FiFilter className={`w-5 h-5 ${hasActiveFilters ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400'}`} />
           </button>
@@ -175,7 +179,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-          placeholder="Rechercher des favoris..."
+          placeholder={t('favoritesSearchPlaceholder')}
         />
         {searchQuery && (
           <button
@@ -190,7 +194,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
       {/* Filtres actifs */}
       {(selectedCategory || selectedTags.length > 0) && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-sm text-gray-500 dark:text-gray-400">Filtres :</span>
+          <span className="text-sm text-gray-500 dark:text-gray-400">{t('favoritesFiltersLabel')}</span>
           
           {selectedCategory && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
@@ -220,7 +224,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
             onClick={resetFilters}
             className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
           >
-            Tout effacer
+            {t('favoritesClearFilters')}
           </button>
         </div>
       )}
@@ -230,7 +234,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center">
             <FiStar className="h-5 w-5 text-yellow-500 mr-2" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Favoris épinglés</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('favoritesPinnedTitle')}</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {pinnedFavorites.map((fav) => (
@@ -252,7 +256,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
         <div className="space-y-4">
           <div className="flex items-center">
             <FiClock className="h-5 w-5 text-blue-500 mr-2" />
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Récemment consultés</h2>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{t('favoritesRecentTitle')}</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {recentFavorites.map((fav) => (
@@ -273,12 +277,12 @@ const EnhancedFavoritesGrid: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {selectedCategory ? selectedCategory : 'Tous les favoris'}
+            {selectedCategory ? selectedCategory : t('favoritesAllTitle')}
           </h2>
           
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              {filteredFavorites.length} {filteredFavorites.length > 1 ? 'favoris' : 'favori'}
+              {filteredFavorites.length} {t('favoritesLabel')}
             </span>
             
             <select
@@ -286,10 +290,10 @@ const EnhancedFavoritesGrid: React.FC = () => {
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               className="text-sm border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
             >
-              <option value="alphabetical">A-Z</option>
-              <option value="recent">Récents</option>
-              <option value="popular">Populaires</option>
-              <option value="category">Par catégorie</option>
+              <option value="alphabetical">{t('favoritesSortAlphabetical')}</option>
+              <option value="recent">{t('favoritesSortRecent')}</option>
+              <option value="popular">{t('favoritesSortPopular')}</option>
+              <option value="category">{t('favoritesSortCategory')}</option>
             </select>
           </div>
         </div>
@@ -325,9 +329,9 @@ const EnhancedFavoritesGrid: React.FC = () => {
         ) : (
           <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-lg shadow">
             <FiSearch className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">Aucun favori trouvé</h3>
+            <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-white">{t('favoritesEmptyTitle')}</h3>
             <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-              Essayez de modifier vos filtres de recherche ou ajoutez un nouveau favori.
+              {t('favoritesEmptyDescription')}
             </p>
             <div className="mt-6">
               <button
@@ -336,13 +340,13 @@ const EnhancedFavoritesGrid: React.FC = () => {
                   setSearchQuery('');
                   setSelectedCategory('');
                   setSelectedTags([]);
-                  setEditingFavorite(null);
+                  setEditingFavorite(undefined);
                   setIsFormOpen(true);
                 }}
                 className="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 <FiPlus className="-ml-1 mr-2 h-5 w-5" />
-                Ajouter un favori
+                {t('addFavorite')}
               </button>
             </div>
           </div>
@@ -366,7 +370,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
             <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
               <div className="flex items-center justify-between mb-4">
                 <Dialog.Title as="h3" className="text-lg font-medium text-gray-900 dark:text-white">
-                  Filtrer les favoris
+                  {t('favoritesFilterTitle')}
                 </Dialog.Title>
                 <button
                   type="button"
@@ -381,7 +385,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
                 {/* Filtre par catégorie */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Catégorie
+                    {t('favoritesFilterCategory')}
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     <button
@@ -393,7 +397,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
                           : 'bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600'
                       }`}
                     >
-                      Toutes
+                      {t('favoritesFilterAllCategories')}
                     </button>
                     {categories.slice(0, 5).map((cat) => (
                       <button
@@ -416,7 +420,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
                 {allTags.length > 0 && (
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Tags
+                      {t('favoritesFilterTags')}
                     </label>
                     <div className="flex flex-wrap gap-2">
                       {allTags.slice(0, 10).map((tag) => (
@@ -440,14 +444,14 @@ const EnhancedFavoritesGrid: React.FC = () => {
                 {/* Options de tri */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Trier par
+                    {t('favoritesSortBy')}
                   </label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
-                      { value: 'alphabetical', label: 'A-Z' },
-                      { value: 'recent', label: 'Récents', icon: <FiClock className="mr-1" /> },
-                      { value: 'popular', label: 'Populaires', icon: <FiTrendingUp className="mr-1" /> },
-                      { value: 'category', label: 'Catégorie' },
+                      { value: 'alphabetical', label: t('favoritesSortAlphabetical') },
+                      { value: 'recent', label: t('favoritesSortRecent'), icon: <FiClock className="mr-1" /> },
+                      { value: 'popular', label: t('favoritesSortPopular'), icon: <FiTrendingUp className="mr-1" /> },
+                      { value: 'category', label: t('favoritesSortCategory') },
                     ].map((option) => (
                       <button
                         key={option.value}
@@ -474,7 +478,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
                 onClick={() => setIsFilterOpen(false)}
                 className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
               >
-                Appliquer les filtres
+                {t('favoritesFilterApply')}
               </button>
               <button
                 type="button"
@@ -484,7 +488,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
                 }}
                 className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-white dark:bg-gray-700 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
               >
-                Réinitialiser
+                {t('favoritesFilterReset')}
               </button>
             </div>
           </div>
@@ -496,7 +500,7 @@ const EnhancedFavoritesGrid: React.FC = () => {
         isOpen={isFormOpen} 
         onClose={() => {
           setIsFormOpen(false);
-          setEditingFavorite(null);
+          setEditingFavorite(undefined);
         }}
         initialData={editingFavorite}
       />
@@ -506,13 +510,14 @@ const EnhancedFavoritesGrid: React.FC = () => {
 
 // Composant de carte de favori
 const FavoriteCard: React.FC<{
-  favorite: any;
+  favorite: FavoriteItem;
   viewMode: 'grid' | 'list';
-  onEdit: (favorite: any) => void;
+  onEdit: (favorite: FavoriteItem) => void;
   onRemove: (id: string) => void;
   onTogglePin: (id: string) => void;
 }> = ({ favorite, viewMode, onEdit, onRemove, onTogglePin }) => {
   const [isHovered, setIsHovered] = useState(false);
+  const { t } = useLocale();
   
   if (viewMode === 'grid') {
     return (
@@ -554,7 +559,7 @@ const FavoriteCard: React.FC<{
               onTogglePin(favorite.id);
             }}
             className="p-1 rounded-full bg-white dark:bg-gray-700 shadow-md text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/30"
-            title={favorite.isPinned ? 'Désépingler' : 'Épingler'}
+            title={favorite.isPinned ? t('favoritesUnpin') : t('favoritesPin')}
           >
             <FiStar className={`h-4 w-4 ${favorite.isPinned ? 'fill-current' : ''}`} />
           </button>
@@ -565,7 +570,7 @@ const FavoriteCard: React.FC<{
               onEdit(favorite);
             }}
             className="p-1 rounded-full bg-white dark:bg-gray-700 shadow-md text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30"
-            title="Modifier"
+            title={t('edit')}
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -575,12 +580,12 @@ const FavoriteCard: React.FC<{
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              if (window.confirm('Êtes-vous sûr de vouloir supprimer ce favori ?')) {
+              if (window.confirm(t('confirmDeleteFavorite'))) {
                 onRemove(favorite.id);
               }
             }}
             className="p-1 rounded-full bg-white dark:bg-gray-700 shadow-md text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30"
-            title="Supprimer"
+            title={t('delete')}
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -665,7 +670,7 @@ const FavoriteCard: React.FC<{
             onTogglePin(favorite.id);
           }}
           className="p-1.5 rounded-full text-gray-400 hover:text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/30"
-          title={favorite.isPinned ? 'Désépingler' : 'Épingler'}
+          title={favorite.isPinned ? t('favoritesUnpin') : t('favoritesPin')}
         >
           <FiStar className={`h-4 w-4 ${favorite.isPinned ? 'fill-current text-yellow-500' : ''}`} />
         </button>
@@ -676,7 +681,7 @@ const FavoriteCard: React.FC<{
             onEdit(favorite);
           }}
           className="p-1.5 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30"
-          title="Modifier"
+          title={t('edit')}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -686,12 +691,12 @@ const FavoriteCard: React.FC<{
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (window.confirm('Êtes-vous sûr de vouloir supprimer ce favori ?')) {
+            if (window.confirm(t('confirmDeleteFavorite'))) {
               onRemove(favorite.id);
             }
           }}
           className="p-1.5 rounded-full text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30"
-          title="Supprimer"
+          title={t('delete')}
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

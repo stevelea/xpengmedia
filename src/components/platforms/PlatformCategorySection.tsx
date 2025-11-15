@@ -9,6 +9,7 @@ import { filterPlatformsByRegion } from '../../utils/regionFilter';
 interface PlatformCategorySectionProps {
   category: PlatformCategory;
   index?: number;
+  maxPlatforms?: number;
 }
 
 const availabilityLabel: Record<string, string> = {
@@ -80,9 +81,11 @@ const PlatformCard: React.FC<{ platform: PlatformLink }> = ({ platform }) => {
   );
 };
 
-export const PlatformCategorySection: React.FC<PlatformCategorySectionProps> = ({ category, index = 0 }) => {
+export const PlatformCategorySection: React.FC<PlatformCategorySectionProps> = ({ category, index = 0, maxPlatforms }) => {
   const { locale } = useLocale();
   const visiblePlatforms = filterPlatformsByRegion(category.platforms, locale.region);
+
+   const limitedPlatforms = maxPlatforms ? visiblePlatforms.slice(0, maxPlatforms) : visiblePlatforms;
 
   if (visiblePlatforms.length === 0) {
     return null;
@@ -121,7 +124,7 @@ export const PlatformCategorySection: React.FC<PlatformCategorySectionProps> = (
         </div>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-2">
-          {visiblePlatforms.map((platform) => (
+          {limitedPlatforms.map((platform) => (
             <PlatformCard key={platform.id} platform={platform} />
           ))}
         </div>

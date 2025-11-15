@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useFavorites } from '../../context/FavoritesContext';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import { useLocale } from '../../context/LocaleContext';
 
 type AddFavoriteModalProps = {
   isOpen: boolean;
@@ -14,6 +15,7 @@ export const AddFavoriteModal: React.FC<AddFavoriteModalProps> = ({
   defaultCategory = '',
 }) => {
   const { addFavorite, categories } = useFavorites();
+  const { t } = useLocale();
   const [formData, setFormData] = useState({
     name: '',
     url: '',
@@ -55,13 +57,13 @@ export const AddFavoriteModal: React.FC<AddFavoriteModalProps> = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-          aria-label="Fermer"
+          aria-label={t('close')}
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
         
         <div className="p-6">
-          <h3 className="text-xl font-semibold mb-4 dark:text-white">Ajouter un favori</h3>
+          <h3 className="text-xl font-semibold mb-4 dark:text-white">{t('addFavoriteModalTitle')}</h3>
           
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -133,13 +135,13 @@ export const AddFavoriteModal: React.FC<AddFavoriteModalProps> = ({
                 onClick={onClose}
                 className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
-                Annuler
+                {t('cancel')}
               </button>
               <button
                 type="submit"
                 className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
               >
-                Ajouter
+                {t('addFavorite')}
               </button>
             </div>
           </form>

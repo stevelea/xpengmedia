@@ -195,12 +195,12 @@ export const HomePage: React.FC = () => {
           {isEditMode ? (
             <>
               <CheckIcon className="h-5 w-5" />
-              <span>Terminer</span>
+              <span>{t('editDone')}</span>
             </>
           ) : (
             <>
               <PencilIcon className="h-5 w-5" />
-              <span>Personnaliser</span>
+              <span>{t('editCustomize')}</span>
             </>
           )}
         </button>
@@ -212,7 +212,7 @@ export const HomePage: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           className="mt-4 rounded-2xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-center text-sm text-yellow-700 dark:text-yellow-300"
         >
-          <span className="font-semibold">Mode édition activé</span> - Appuyez longuement sur une icône pour la masquer
+          <span className="font-semibold">{t('editModeActive')}</span> - {t('editModeHint')}
         </motion.div>
       )}
 
@@ -330,7 +330,7 @@ export const HomePage: React.FC = () => {
                     {getVisiblePlatforms(category.platforms).length}
                   </div>
                   <div className="text-[10px] text-slate-500 dark:text-slate-400 md:hidden">
-                    apps
+                    {t('appsLabel')}
                   </div>
                 </div>
               </div>
@@ -538,11 +538,11 @@ export const HomePage: React.FC = () => {
               <div className="flex items-center gap-2 md:gap-3">
                 <div className="h-1 w-6 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 md:h-1 md:w-12" />
                 <h2 className="bg-gradient-to-r from-blue-500 to-purple-500 bg-clip-text text-sm font-bold text-transparent md:text-2xl lg:text-3xl">
-                  Toutes les Apps
+                  {t('allApps')}
                 </h2>
               </div>
               <p className="mt-1 ml-8 text-[11px] leading-tight text-slate-600 dark:text-slate-400 md:ml-0 md:mt-1 md:text-sm line-clamp-1">
-                L'intégralité de vos applications
+                {t('allAppsSubtitle')}
               </p>
             </div>
             <div className="flex flex-col items-end">
@@ -550,7 +550,7 @@ export const HomePage: React.FC = () => {
                 {visiblePlatforms.length}
               </div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 md:hidden">
-                apps
+                {t('appsLabel')}
               </div>
             </div>
           </div>
@@ -580,7 +580,7 @@ export const HomePage: React.FC = () => {
           setIsAddModalOpen(true);
         }}
         className="fixed bottom-6 right-6 z-10 flex items-center justify-center w-14 h-14 bg-primary-600 text-white rounded-full shadow-lg hover:bg-primary-700 transition-colors md:hidden"
-        aria-label="Ajouter un favori"
+        aria-label={t('addFavorite')}
       >
         <PlusIcon className="h-6 w-6" />
       </motion.button>
@@ -594,7 +594,7 @@ export const HomePage: React.FC = () => {
             exit={{ opacity: 0, scale: 0 }}
             onClick={scrollToTop}
             className="fixed bottom-6 left-6 z-10 flex items-center justify-center w-12 h-12 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-white rounded-full shadow-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-            aria-label="Retour en haut"
+            aria-label={t('backToTop')}
           >
             <ArrowUpIcon className="h-5 w-5" />
           </motion.button>
@@ -616,7 +616,7 @@ export const HomePage: React.FC = () => {
           className="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
         >
           <PlusIcon className="h-5 w-5 mr-2" />
-          Ajouter un favori
+          {t('addFavorite')}
         </button>
       </motion.div>
 

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '../../context/LocaleContext';
+import type { Region } from '../../context/LocaleContext';
 import { ChevronDownIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 export const LocaleSelector: React.FC = () => {
@@ -11,7 +12,15 @@ export const LocaleSelector: React.FC = () => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const currentRegion = availableRegions.find(r => r.code === locale.region) || availableRegions[0] || { code: 'global' as any, name: 'Global', flag: '🌍', language: 'en' };
+  const defaultRegion: { code: Region; name: string; flag: string; language: string } = {
+    code: 'global',
+    name: 'Global',
+    flag: '🌍',
+    language: 'en',
+  };
+
+  const currentRegion =
+    availableRegions.find((r) => r.code === locale.region) || availableRegions[0] || defaultRegion;
 
   // Calculer la position du bouton
   useEffect(() => {
@@ -45,10 +54,10 @@ export const LocaleSelector: React.FC = () => {
     };
   }, [isOpen]);
 
-  const handleSelect = (regionCode: string, language: string) => {
+  const handleSelect = (regionCode: Region, language: string) => {
     console.log('🚩 LocaleSelector: Changing to', { region: regionCode, language });
     console.log('📍 Locale actuel dans selector:', locale);
-    const newLocale = { region: regionCode as any, language };
+    const newLocale = { region: regionCode, language };
     console.log('🆕 Nouveau locale créé:', newLocale);
     setLocale(newLocale);
     console.log('✅ setLocale appelé depuis selector');

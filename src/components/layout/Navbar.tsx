@@ -54,7 +54,7 @@ export const Navbar: React.FC = () => {
           <button
             onClick={toggleTheme}
             className="inline-flex h-9 w-9 landscape:h-8 landscape:w-8 items-center justify-center rounded-full border border-white/20 bg-white/70 text-slate-600 transition hover:scale-105 hover:text-slate-800 focus:outline-none dark:border-slate-700 dark:bg-slate-800/70 dark:text-white"
-            aria-label={theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre'}
+            aria-label={theme === 'dark' ? t('toggleLightMode') : t('toggleDarkMode')}
           >
             {theme === 'dark' ? (
               <FiSun className="h-4 w-4 landscape:h-3.5 landscape:w-3.5 text-amber-300" />

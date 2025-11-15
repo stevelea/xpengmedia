@@ -1,9 +1,41 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { videoCategories } from '../data/platforms';
+import { videoCategories, type PlatformCategory, type PlatformLink } from '../data/platforms';
 import { PlatformCategorySection } from '../components/platforms/PlatformCategorySection';
 
 export const VideosPage: React.FC = () => {
+  const dedupePlatforms = (platforms: PlatformLink[]): PlatformLink[] => {
+    const seen = new Set<string>();
+    return platforms.filter((p) => {
+      if (seen.has(p.id)) return false;
+      seen.add(p.id);
+      return true;
+    });
+  };
+
+  const streamingCategory = videoCategories.find((cat) => cat.id === 'streaming-vod');
+  const freeTvCategory = videoCategories.find((cat) => cat.id === 'free-tv');
+  const europeCategory = videoCategories.find((cat) => cat.id === 'europe');
+
+  const mainTvVodCategory: PlatformCategory | null = streamingCategory
+    ? {
+        ...streamingCategory,
+        id: 'main-tv-vod',
+        title: 'TV & VOD principaux',
+        subtitle:
+          'Principales plateformes globales, gratuites et offres opérateurs par navigateur, optimisées pour l\'écran XPENG.',
+        platforms: dedupePlatforms([
+          ...(streamingCategory?.platforms ?? []),
+          ...(freeTvCategory?.platforms ?? []),
+          ...(europeCategory?.platforms ?? []),
+        ]),
+      }
+    : null;
+
+  const otherCategories = videoCategories.filter(
+    (cat) => !['streaming-vod', 'free-tv', 'europe'].includes(cat.id),
+  );
+
   return (
     <div className="space-y-12">
       <header className="relative overflow-hidden rounded-4xl bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-600 p-[1px] shadow-[0_50px_120px_-40px_rgba(15,23,42,0.65)]">
@@ -40,9 +72,23 @@ export const VideosPage: React.FC = () => {
       </header>
 
       <div className="space-y-10">
-        {videoCategories.map((category, index) => (
+        {mainTvVodCategory && (
+          <div id="streaming-vod">
+            <PlatformCategorySection
+              category={mainTvVodCategory}
+              index={0}
+              maxPlatforms={16}
+            />
+          </div>
+        )}
+
+        {otherCategories.map((category, index) => (
           <div key={category.id} id={category.id}>
-            <PlatformCategorySection category={category} index={index} />
+            <PlatformCategorySection
+              category={category}
+              index={index + 1}
+              maxPlatforms={12}
+            />
           </div>
         ))}
       </div>

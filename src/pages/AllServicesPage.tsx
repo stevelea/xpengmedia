@@ -23,16 +23,22 @@ const buildAllPlatforms = (): PlatformLink[] => {
   ];
 };
 
-const VIEW_LABELS: Record<'grid' | 'list' | 'detail', string> = {
-  grid: 'Mosaïque',
-  list: 'Liste',
-  detail: 'Détaillé',
-};
-
 export const AllServicesPage: React.FC = () => {
   const { locale, t } = useLocale();
   const [layout, setLayout] = useState<'grid' | 'list' | 'detail'>('grid');
   const [hiddenPlatforms, setHiddenPlatforms] = useState<Set<string>>(new Set());
+
+  const getViewLabel = (mode: 'grid' | 'list' | 'detail'): string => {
+    switch (mode) {
+      case 'grid':
+        return t('viewGrid');
+      case 'list':
+        return t('viewList');
+      case 'detail':
+      default:
+        return t('viewDetail');
+    }
+  };
 
   const allPlatformsRaw = useMemo(() => buildAllPlatforms(), []);
 
@@ -107,7 +113,7 @@ export const AllServicesPage: React.FC = () => {
               : 'border-slate-300 bg-white/80 text-slate-600 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:bg-slate-800'
           }`}
         >
-          {VIEW_LABELS[mode]}
+          {getViewLabel(mode)}
         </button>
       ))}
     </div>
@@ -129,13 +135,12 @@ export const AllServicesPage: React.FC = () => {
               {t('allServices')}
             </h1>
             <p className="mt-2 text-xs text-white/70 md:mt-3 md:text-sm">
-              Parcourez l'ensemble des plateformes compatibles XPENG dans une vue optimisée pour l'écran
-              embarqué&nbsp;: icons, listes et fiches détaillées.
+              {t('allServicesDescription')}
             </p>
           </div>
           <div className="mt-2 md:mt-0 flex flex-col items-end gap-2 text-right">
             <p className="text-xs text-slate-300/80 md:text-sm">
-              {visiblePlatforms.length} services disponibles pour votre région
+              {visiblePlatforms.length} {t('servicesAvailable')}
             </p>
             {viewControls}
           </div>
@@ -145,7 +150,7 @@ export const AllServicesPage: React.FC = () => {
       <section>
         {visiblePlatforms.length === 0 ? (
           <p className="text-center text-sm text-slate-500 dark:text-slate-400">
-            Aucun service disponible pour cette région.
+            {t('noServicesForRegion')}
           </p>
         ) : layout === 'grid' ? (
           <div className="grid grid-cols-5 gap-1.5 landscape:grid-cols-8 landscape:gap-2 md:grid-cols-6 md:gap-3 lg:grid-cols-8">

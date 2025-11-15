@@ -2,9 +2,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useFavorites } from '../context/FavoritesContext';
 import { XMarkIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLocale } from '../context/LocaleContext';
 
 export const SearchBar: React.FC = () => {
   const { favorites } = useFavorites();
+  const { t } = useLocale();
   const [query, setQuery] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
@@ -44,7 +46,7 @@ export const SearchBar: React.FC = () => {
         <input
           type="text"
           className="block w-full pl-8 landscape:pl-7 pr-8 landscape:pr-7 py-2 landscape:py-1.5 text-sm landscape:text-xs border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-          placeholder="Rechercher un site, une catégorie..."
+          placeholder={t('searchBarPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onFocus={() => setIsFocused(true)}

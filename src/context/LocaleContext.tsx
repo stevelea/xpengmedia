@@ -64,6 +64,55 @@ const translations: Record<string, Record<string, string>> = {
     allServices: 'All services',
     heroTitle: 'An immersive cabin, your favorite platforms',
     heroSubtitle: 'Interface optimized for Xmart OS with video, music, games and charging services.',
+    searchBarPlaceholder: 'Search a site or a category...',
+    searchFavoritesPlaceholder: 'Search a site or a category...',
+    favoritesSearchPlaceholder: 'Search in your favorites...',
+    favoritesPinnedTitle: 'Pinned favorites',
+    favoritesRecentTitle: 'Recently viewed',
+    favoritesAllTitle: 'All favorites',
+    favoritesEmptyTitle: 'No favorites found',
+    favoritesEmptyDescription: 'Try changing your filters or add a new favorite.',
+    addFavorite: 'Add favorite',
+    addFavoriteModalTitle: 'Add a favorite',
+    editFavoriteModalTitle: 'Edit favorite',
+    favoritesFilterTitle: 'Filter favorites',
+    favoritesFilterApply: 'Apply filters',
+    favoritesFilterReset: 'Reset',
+    favoritesFiltersLabel: 'Filters:',
+    favoritesFilterCategory: 'Category',
+    favoritesFilterAllCategories: 'All',
+    favoritesFilterTags: 'Tags',
+    favoritesSortBy: 'Sort by',
+    favoritesSortAlphabetical: 'A-Z',
+    favoritesSortRecent: 'Recent',
+    favoritesSortPopular: 'Popular',
+    favoritesSortCategory: 'By category',
+    favoritesClearFilters: 'Clear all',
+    allServicesDescription:
+      'Browse all XPENG compatible platforms in a view optimized for the in-car screen: icons, lists and detailed cards.',
+    servicesAvailable: 'services available for your region',
+    noServicesForRegion: 'No service available for this region.',
+    viewGrid: 'Grid',
+    viewList: 'List',
+    viewDetail: 'Detailed',
+    toggleLightMode: 'Switch to light mode',
+    toggleDarkMode: 'Switch to dark mode',
+    allApps: 'All apps',
+    allAppsSubtitle: 'All of your applications',
+    editModeActive: 'Edit mode activated',
+    editModeHint: 'Long-press an icon to hide it',
+    appsLabel: 'apps',
+    backToTop: 'Back to top',
+    favoritesLabel: 'favorites',
+    editDone: 'Done',
+    editCustomize: 'Customize',
+    favoritesPin: 'Pin',
+    favoritesUnpin: 'Unpin',
+    edit: 'Edit',
+    delete: 'Delete',
+    confirmDeleteFavorite: 'Are you sure you want to delete this favorite?',
+    cancel: 'Cancel',
+    close: 'Close',
   },
   fr: {
     home: 'Accueil',
@@ -82,6 +131,56 @@ const translations: Record<string, Record<string, string>> = {
     allServices: 'Tous les services',
     heroTitle: 'Une cabine immersive, vos plateformes favorites',
     heroSubtitle: 'Interface optimisée pour Xmart OS avec services vidéo, musique, jeux et recharge.',
+    searchBarPlaceholder: 'Rechercher un site, une catégorie...',
+    searchFavoritesPlaceholder: 'Rechercher un site, une catégorie...',
+    favoritesSearchPlaceholder: 'Rechercher dans vos favoris...',
+    favoritesPinnedTitle: 'Favoris épinglés',
+    favoritesRecentTitle: 'Récemment consultés',
+    favoritesAllTitle: 'Tous les favoris',
+    favoritesEmptyTitle: 'Aucun favori trouvé',
+    favoritesEmptyDescription:
+      'Essayez de modifier vos filtres de recherche ou ajoutez un nouveau favori.',
+    addFavorite: 'Ajouter un favori',
+    addFavoriteModalTitle: 'Ajouter un favori',
+    editFavoriteModalTitle: 'Modifier le favori',
+    favoritesFilterTitle: 'Filtrer les favoris',
+    favoritesFilterApply: 'Appliquer les filtres',
+    favoritesFilterReset: 'Réinitialiser',
+    favoritesFiltersLabel: 'Filtres :',
+    favoritesFilterCategory: 'Catégorie',
+    favoritesFilterAllCategories: 'Toutes',
+    favoritesFilterTags: 'Tags',
+    favoritesSortBy: 'Trier par',
+    favoritesSortAlphabetical: 'A-Z',
+    favoritesSortRecent: 'Récents',
+    favoritesSortPopular: 'Populaires',
+    favoritesSortCategory: 'Par catégorie',
+    favoritesClearFilters: 'Tout effacer',
+    allServicesDescription:
+      'Parcourez l\'ensemble des plateformes compatibles XPENG dans une vue optimisée pour l\'écran embarqué : icônes, listes et fiches détaillées.',
+    servicesAvailable: 'services disponibles pour votre région',
+    noServicesForRegion: 'Aucun service disponible pour cette région.',
+    viewGrid: 'Mosaïque',
+    viewList: 'Liste',
+    viewDetail: 'Détaillé',
+    toggleLightMode: 'Passer en mode clair',
+    toggleDarkMode: 'Passer en mode sombre',
+    allApps: 'Toutes les Apps',
+    allAppsSubtitle: "L'intégralité de vos applications",
+    editModeActive: 'Mode édition activé',
+    editModeHint: 'Appuyez longuement sur une icône pour la masquer',
+    appsLabel: 'apps',
+    backToTop: 'Retour en haut',
+    favoritesLabel: 'favoris',
+    editDone: 'Terminer',
+    editCustomize: 'Personnaliser',
+    favoritesPin: 'Épingler',
+    favoritesUnpin: 'Désépingler',
+    edit: 'Modifier',
+    delete: 'Supprimer',
+    confirmDeleteFavorite: 'Êtes-vous sûr de vouloir supprimer ce favori ?',
+    cancel: 'Annuler',
+    close: 'Fermer',
   },
   de: {
     home: 'Startseite',
@@ -357,14 +456,48 @@ const detectBrowserLocale = (): Locale => {
   return { region: 'france', language: 'fr' };
 };
 
+// Normaliser un locale potentiellement ancien ou incomplet issu du localStorage
+const normalizeLocale = (raw: any): Locale => {
+  // Région valide ou défaut France
+  const regionEntry = regions.find((r) => r.code === raw?.region) || regions.find((r) => r.code === 'france')!;
+  let language: string | undefined;
+
+  // Si la langue sauvegardée existe dans les traductions, on la garde
+  if (raw && typeof raw.language === 'string' && translations[raw.language]) {
+    language = raw.language;
+  }
+
+  // Sinon, on prend la langue recommandée pour la région si possible
+  if (!language && translations[regionEntry.language]) {
+    language = regionEntry.language;
+  }
+
+  // Fallback ultime en anglais si tout le reste échoue
+  if (!language) {
+    language = 'en';
+  }
+
+  const normalized: Locale = {
+    region: regionEntry.code,
+    language,
+  };
+
+  console.log('✅ Locale normalisé depuis localStorage:', normalized);
+  return normalized;
+};
+
 export const LocaleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [locale, setLocaleState] = useState<Locale>(() => {
     // Charger depuis localStorage ou détecter automatiquement
     const saved = localStorage.getItem('xpeng_locale');
     if (saved) {
-      const parsedLocale = JSON.parse(saved);
-      console.log('🔵 Locale chargé depuis localStorage:', parsedLocale);
-      return parsedLocale;
+      try {
+        const parsedLocale = JSON.parse(saved);
+        console.log('🔵 Locale brut chargé depuis localStorage:', parsedLocale);
+        return normalizeLocale(parsedLocale);
+      } catch (e) {
+        console.warn('⚠️ Impossible de parser xpeng_locale, on retombe sur la détection automatique', e);
+      }
     }
     const detectedLocale = detectBrowserLocale();
     console.log('🔍 Locale détecté automatiquement:', detectedLocale);
