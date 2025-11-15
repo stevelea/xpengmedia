@@ -508,7 +508,7 @@
             padding: 4px 0;
         }
 
-        /* Vue détaillée : plus d'espace et titres multi-lignes */
+        /* Vue détaillée : plus d'espace et titres multi-lignes pour les VOD/séries */
         #playerSection[data-layout="detail"] .media-card {
             padding: 12px 14px;
         }
@@ -519,6 +519,33 @@
 
         #playerSection[data-layout="detail"] .media-card .category {
             opacity: 0.9;
+        }
+
+        /* Spécifique aux chaînes TV en mode liste : rangées plus fines, fond uni */
+        #playerSection[data-layout="list"] .channel-card {
+            padding: 12px 16px;
+            border-radius: 12px;
+            background: rgba(15, 23, 42, 0.96);
+        }
+
+        /* Spécifique aux chaînes TV en mode détail : cartes plus grandes, fond dégradé */
+        #playerSection[data-layout="detail"] .channel-card {
+            padding: 16px 18px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.95), rgba(56, 189, 248, 0.9));
+        }
+
+        #playerSection[data-layout="detail"] .channel-card h3 {
+            font-size: 17px;
+        }
+
+        #playerSection[data-layout="detail"] .channel-card p {
+            color: #e2e8f0;
+        }
+
+        #playerSection[data-layout="detail"] .channel-compat {
+            font-size: 12px;
+            white-space: normal;
         }
 
         /* Vue mini-cards : ultra compacte, idéale en conduite (stationnement) */
