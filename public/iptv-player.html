@@ -1583,27 +1583,67 @@
                     
                 } catch (directError) {
                     debugLog(`⚠️ Connexion directe échouée: ${directError.message}`, 'warning');
-                    debugLog(`🔄 ÉTAPE 2/3: Tentative avec proxy CORS...`, 'info');
-                    showStatus('🔄 Étape 2/3: Utilisation du proxy CORS...', 'success');
+                    debugLog(`🔄 ÉTAPE 2/3: Tentative avec proxies CORS...`, 'info');
+                    showStatus('🔄 Étape 2/3: Utilisation de proxies CORS...', 'success');
                     
-                    const proxyUrl = 'https://api.allorigins.win/raw?url=';
-                    const proxiedUrl = proxyUrl + encodeURIComponent(apiUrl);
-                    debugLog(`🌐 Proxy utilisé: api.allorigins.win`, 'info');
+                    // Liste de proxies CORS à tester dans l'ordre
+                    const proxies = [
+                        { name: 'corsproxy.io', url: 'https://corsproxy.io/?' },
+                        { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=' },
+                        { name: 'cors-anywhere (herokuapp)', url: 'https://cors-anywhere.herokuapp.com/' }
+                    ];
                     
-                    try {
-                        response = await fetch(proxiedUrl);
-                        const elapsed = Date.now() - startTime;
-                        debugLog(`⏱️ Réponse proxy reçue en ${elapsed}ms`, 'info');
-                        
-                        const text = await response.text();
-                        debugLog(`📝 Longueur réponse proxy: ${text.length} caractères`, 'info');
-                        
-                        data = JSON.parse(text);
-                        usedProxy = true;
-                        debugLog(`✅ Connexion via proxy réussie`, 'success');
-                    } catch (proxyError) {
-                        debugLog(`❌ ERREUR proxy: ${proxyError.message}`, 'error');
-                        throw new Error(`Proxy aussi échoué: ${proxyError.message}`);
+                    let proxySuccess = false;
+                    let lastProxyError = null;
+                    
+                    for (const proxy of proxies) {
+                        try {
+                            debugLog(`🌐 Test proxy: ${proxy.name}...`, 'info');
+                            const proxiedUrl = proxy.url + encodeURIComponent(apiUrl);
+                            
+                            response = await fetch(proxiedUrl);
+                            const elapsed = Date.now() - startTime;
+                            debugLog(`⏱️ Réponse ${proxy.name} reçue en ${elapsed}ms`, 'info');
+                            
+                            const text = await response.text();
+                            debugLog(`📝 Longueur réponse ${proxy.name}: ${text.length} caractères`, 'info');
+                            
+                            // Vérifier si c'est une erreur du proxy lui-même
+                            if (text.includes('"error"') && text.length < 200) {
+                                debugLog(`⚠️ ${proxy.name} retourne une erreur: ${text.substring(0, 100)}`, 'warning');
+                                lastProxyError = `${proxy.name}: erreur interne`;
+                                continue; // Essayer le proxy suivant
+                            }
+                            
+                            data = JSON.parse(text);
+                            
+                            // Vérifier si la réponse contient une erreur
+                            if (data && data.error && !data.streams && !Array.isArray(data)) {
+                                debugLog(`⚠️ ${proxy.name} retourne une erreur proxy: ${JSON.stringify(data).substring(0, 100)}`, 'warning');
+                                lastProxyError = `${proxy.name}: ${data.error}`;
+                                continue; // Essayer le proxy suivant
+                            }
+                            
+                            usedProxy = true;
+                            proxySuccess = true;
+                            debugLog(`✅ Connexion via ${proxy.name} réussie`, 'success');
+                            break; // Succès, sortir de la boucle
+                            
+                        } catch (proxyError) {
+                            debugLog(`❌ ${proxy.name} échoué: ${proxyError.message}`, 'warning');
+                            lastProxyError = `${proxy.name}: ${proxyError.message}`;
+                            // Continuer avec le proxy suivant
+                        }
+                    }
+                    
+                    if (!proxySuccess) {
+                        debugLog(`❌ Tous les proxies CORS ont échoué`, 'error');
+                        debugLog(`💡 SOLUTION: Le serveur IPTV bloque probablement les proxies publics`, 'info');
+                        debugLog(`💡 OPTIONS:`, 'info');
+                        debugLog(`   1️⃣ Utilise le player directement depuis http:// (pas https://)`, 'info');
+                        debugLog(`   2️⃣ Installe une extension CORS dans ton navigateur`, 'info');
+                        debugLog(`   3️⃣ Demande à ton fournisseur IPTV s'il a une URL avec CORS activé`, 'info');
+                        throw new Error(`Tous les proxies ont échoué. Dernier: ${lastProxyError}. Le serveur IPTV nécessite probablement un accès direct (pas via proxy). Essaie d'ouvrir le player en HTTP au lieu de HTTPS, ou demande à ton fournisseur IPTV une URL compatible avec les navigateurs web.`);
                     }
                 }
                 
