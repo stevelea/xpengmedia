@@ -888,6 +888,10 @@
         let proxyCache = {}; // Format: { 'serverUrl': { proxy: 'name', timestamp: Date.now(), success: true } }
         const PROXY_CACHE_DURATION = 60 * 60 * 1000; // 1 heure
         
+        // 🎬 Cache des proxies pour les flux vidéo (par serveur)
+        let streamProxyCache = {}; // Format: { 'serverUrl': { proxy: 'name', testedWith: 'streamUrl', timestamp: Date.now() } }
+        const STREAM_PROXY_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes
+        
         // ⚡ Lazy loading pour performance
         let isLoading = false;
         
@@ -1682,8 +1686,42 @@
             }
         }
         
-        // 🎬 Sélection intelligente du proxy de streaming
-        function selectStreamProxy() {
+        // 🧪 Tester si un flux est accessible (avec timeout)
+        async function testStreamAccess(streamUrl, proxyUrl = null, timeout = 3000) {
+            try {
+                const testUrl = proxyUrl ? proxyUrl + encodeURIComponent(streamUrl) : streamUrl;
+                debugLog(`🧪 Test d'accessibilité: ${proxyUrl ? 'avec proxy' : 'direct'}...`, 'info');
+                
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), timeout);
+                
+                const response = await fetch(testUrl, {
+                    method: 'HEAD',
+                    signal: controller.signal,
+                    cache: 'no-cache'
+                });
+                
+                clearTimeout(timeoutId);
+                
+                if (response.ok || response.status === 200 || response.type === 'opaque') {
+                    debugLog(`✅ Flux accessible (status: ${response.status})`, 'success');
+                    return true;
+                }
+                
+                debugLog(`⚠️ Flux répond mais status: ${response.status}`, 'warning');
+                return false;
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    debugLog(`⏱️ Timeout (${timeout}ms) dépassé`, 'warning');
+                } else {
+                    debugLog(`❌ Test échoué: ${error.message}`, 'warning');
+                }
+                return false;
+            }
+        }
+        
+        // 🎬 Sélection intelligente du proxy de streaming (avec test de flux)
+        async function selectStreamProxy(streamUrl = null, serverUrl = null) {
             // Initialiser les backends dans l'ordre de priorité
             if (CLOUDFLARE_PROXY && STREAM_PROXIES[0].url === null) {
                 STREAM_PROXIES[0].url = CLOUDFLARE_PROXY + '?url=';
@@ -1698,9 +1736,23 @@
                 debugLog('⚡ Netlify Functions configuré pour les streams', 'success');
             }
             
-            // Si on a déjà un proxy qui fonctionne, le réutiliser
+            // 🧠 Vérifier si on a un proxy en cache pour les flux de ce serveur
+            if (serverUrl && streamProxyCache[serverUrl]) {
+                const cached = streamProxyCache[serverUrl];
+                if ((Date.now() - cached.timestamp) < STREAM_PROXY_CACHE_DURATION) {
+                    const cachedProxy = STREAM_PROXIES.find(p => p.name === cached.proxy && p.url !== null);
+                    if (cachedProxy) {
+                        debugLog(`🧠 Proxy flux en cache trouvé: ${cached.proxy}`, 'success');
+                        debugLog(`⏰ Cache valide encore ${Math.round((STREAM_PROXY_CACHE_DURATION - (Date.now() - cached.timestamp)) / 60000)} minutes`, 'info');
+                        currentStreamProxy = cachedProxy;
+                        return cachedProxy;
+                    }
+                }
+            }
+            
+            // Si on a déjà un proxy qui fonctionne pour les streams, le réutiliser
             if (currentStreamProxy) {
-                debugLog(`🔄 Réutilisation du proxy: ${currentStreamProxy.name}`, 'info');
+                debugLog(`🔄 Réutilisation du proxy streams: ${currentStreamProxy.name}`, 'info');
                 return currentStreamProxy;
             }
             
@@ -1756,42 +1808,80 @@
             return selectStreamProxy();
         }
         
-        // 🔁 Retry lecture avec proxy suivant
-        function retryPlayWithNextProxy(channel) {
+        // 🔁 Retry lecture avec proxy suivant (intelligent et automatique)
+        async function retryPlayWithNextProxy(channel) {
             if (!channel._originalUrl) {
                 debugLog('❌ Impossible de retry: URL originale manquante', 'error');
                 showStatus('❌ Impossible de relancer la lecture', 'error');
                 return;
             }
             
-            const nextProxy = switchToNextStreamProxy();
-            if (!nextProxy || !nextProxy.url) {
-                debugLog('❌ Plus de proxy disponible pour retry', 'error');
-                showStatus('❌ Tous les proxies ont échoué. Essaie une autre chaîne ou réessaie plus tard.', 'error');
-                return;
-            }
+            // Initialiser le compteur de tentatives
+            channel._retryAttempt = (channel._retryAttempt || 0) + 1;
             
-            debugLog(`🔄 Retry avec ${nextProxy.name}...`, 'info');
-            showStatus(`🔄 Nouvelle tentative via ${nextProxy.name}...`, 'warning');
-            
-            // Reconstruire le channel avec le nouveau proxy
-            const retryChannel = {
-                ...channel,
-                url: channel._originalUrl,
-                _retryAttempt: (channel._retryAttempt || 0) + 1
-            };
+            debugLog('═══════════════════════════════════════════', 'warning');
+            debugLog(`🔄 RETRY AUTOMATIQUE N°${channel._retryAttempt}`, 'warning');
+            debugLog('═══════════════════════════════════════════', 'warning');
             
             // Limiter à 3 retries max
-            if (retryChannel._retryAttempt > 3) {
+            if (channel._retryAttempt > 3) {
                 debugLog('❌ Trop de tentatives (3 max)', 'error');
-                showStatus('❌ La chaîne ne fonctionne pas après 3 tentatives. Essaie une autre chaîne.', 'error');
+                showStatus('❌ Le flux ne fonctionne pas après 3 tentatives. Essaie une autre chaîne.', 'error');
                 return;
             }
             
-            // Relancer la lecture
-            setTimeout(() => {
+            // Obtenir tous les proxies disponibles
+            const availableProxies = STREAM_PROXIES.filter(p => p.url !== null).sort((a, b) => a.priority - b.priority);
+            
+            if (availableProxies.length === 0) {
+                debugLog('❌ Aucun proxy disponible pour retry', 'error');
+                showStatus('❌ Aucun proxy disponible. Configure un backend (Vercel/Cloudflare).', 'error');
+                return;
+            }
+            
+            debugLog(`🔄 ${availableProxies.length} proxies disponibles à tester`, 'info');
+            
+            // Trouver quel proxy on vient d'essayer
+            const currentProxyName = channel._currentProxy;
+            let startIndex = 0;
+            
+            if (currentProxyName) {
+                const currentIndex = availableProxies.findIndex(p => p.name === currentProxyName);
+                if (currentIndex !== -1) {
+                    startIndex = currentIndex + 1;
+                    debugLog(`⏭️ On skip ${currentProxyName} qui vient d'échouer`, 'info');
+                }
+            }
+            
+            // Tester les proxies suivants un par un
+            for (let i = startIndex; i < availableProxies.length; i++) {
+                const proxy = availableProxies[i];
+                
+                debugLog(`🧪 Test du proxy: ${proxy.name}...`, 'info');
+                showStatus(`🧪 Test du proxy: ${proxy.name}...`, 'info');
+                
+                // Forcer l'utilisation de ce proxy spécifique
+                currentStreamProxy = proxy;
+                
+                // Reconstruire le channel pour le retry
+                const retryChannel = {
+                    ...channel,
+                    url: channel._originalUrl,
+                    _retryAttempt: channel._retryAttempt,
+                    _forceProxy: proxy.name  // Forcer ce proxy
+                };
+                
+                // Relancer la lecture avec ce proxy
+                await new Promise(resolve => setTimeout(resolve, 500)); // Petite pause
                 playChannel(retryChannel);
-            }, 1000);
+                
+                // On retourne ici car playChannel va gérer l'erreur et rappeler cette fonction si nécessaire
+                return;
+            }
+            
+            // Si on arrive ici, on a tout essayé
+            debugLog('❌ Tous les proxies disponibles ont échoué', 'error');
+            showStatus('❌ Tous les proxies ont échoué. Déploie un backend (Vercel/Cloudflare) pour une fiabilité maximale.', 'error');
         }
         
         async function loadXtream(config) {
@@ -2572,7 +2662,7 @@
             });
         }
         
-        function playChannel(channel) {
+        async function playChannel(channel) {
             const video = document.getElementById('videoPlayer');
             const container = document.getElementById('videoContainer');
             const playing = document.getElementById('currentPlaying');
@@ -2591,45 +2681,103 @@
                 return;
             }
 
+            // TOUJOURS sauvegarder l'URL originale
+            if (!channel._originalUrl) {
+                channel._originalUrl = channel.url;
+                debugLog('💾 URL originale sauvegardée', 'info');
+            }
+            
             let finalStreamUrl = channel.url;
             let needsProxy = false;
+            let useProxy = false;
             
-            // 🎬 Proxifier l'URL de streaming si activé (résout CORS/Mixed Content)
-            if (PROXY_STREAMS && channel.url.startsWith('http://')) {
-                debugLog('🔗 URL originale: ' + channel.url.substring(0, 80) + '...', 'info');
+            // 🧪 Test d'accessibilité intelligent du flux
+            debugLog('═══════════════════════════════════════════', 'info');
+            debugLog('🧪 TEST INTELLIGENT D\'ACCESSIBILITÉ DU FLUX', 'info');
+            debugLog('═══════════════════════════════════════════', 'info');
+            
+            // Détecter mixed content (HTTPS page → HTTP stream)
+            const isMixedContent = window.location && window.location.protocol === 'https:' && channel.url.startsWith('http://');
+            
+            if (isMixedContent) {
+                debugLog('⚠️ Mixed content détecté (HTTPS→HTTP)', 'warning');
+                debugLog('🔒 Le navigateur bloquera probablement la connexion directe', 'warning');
+                needsProxy = true;
+                useProxy = true;
+            } else {
+                // Tester l'accessibilité directe d'abord
+                debugLog('🧪 Test 1/2: Tentative d\'accès DIRECT au flux...', 'info');
+                showStatus('🧪 Test d\'accessibilité du flux...', 'info');
                 
-                // Détecter mixed content
-                if (window.location && window.location.protocol === 'https:') {
-                    debugLog('⚠️ Mixed content détecté (HTTPS→HTTP), activation du proxy de streaming', 'warning');
+                const directAccessible = await testStreamAccess(channel.url);
+                
+                if (directAccessible) {
+                    debugLog('✅ Flux accessible en DIRECT !', 'success');
+                    debugLog('🎯 Pas besoin de proxy', 'success');
+                    finalStreamUrl = channel.url;
+                    useProxy = false;
+                } else {
+                    debugLog('❌ Flux non accessible en direct', 'warning');
+                    debugLog('🔄 Un proxy sera nécessaire', 'warning');
                     needsProxy = true;
-                    
-                    // TOUJOURS sauvegarder l'URL originale pour permettre le retry
-                    if (!channel._originalUrl) {
-                        channel._originalUrl = channel.url;
-                        debugLog('💾 URL originale sauvegardée pour retry automatique', 'info');
-                    }
-                    
-                    // Sélectionner le meilleur proxy disponible
-                    const selectedProxy = selectStreamProxy();
-                    
-                    if (selectedProxy && selectedProxy.url) {
-                        finalStreamUrl = selectedProxy.url + encodeURIComponent(channel.url);
-                        debugLog(`🔄 Proxy sélectionné: ${selectedProxy.name}`, 'success');
-                        debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 100) + '...', 'info');
-                        debugLog(`📊 Proxy encode: ${encodeURIComponent(channel.url).substring(0, 100)}...`, 'info');
-                        showStatus(`🔄 Flux proxifié via ${selectedProxy.name}`, 'success');
-                        channel._currentProxy = selectedProxy.name;
-                        channel._proxyAttempts = (channel._proxyAttempts || 0) + 1;
-                        debugLog(`📈 Tentative proxy n°${channel._proxyAttempts}`, 'info');
+                    useProxy = true;
+                }
+            }
+            
+            // Si proxy nécessaire, sélectionner intelligemment
+            if (PROXY_STREAMS && useProxy) {
+                debugLog('🔄 Activation du proxy de streaming', 'info');
+                
+                // Extraire le serveur de l'URL pour le cache
+                let serverUrl = null;
+                try {
+                    const urlObj = new URL(channel.url);
+                    serverUrl = `${urlObj.protocol}//${urlObj.host}`;
+                } catch (e) {
+                    debugLog('⚠️ Impossible d\'extraire le serveur de l\'URL', 'warning');
+                }
+                
+                // Vérifier si on force un proxy spécifique (retry)
+                let selectedProxy;
+                if (channel._forceProxy) {
+                    selectedProxy = STREAM_PROXIES.find(p => p.name === channel._forceProxy && p.url !== null);
+                    if (selectedProxy) {
+                        debugLog(`🎯 Utilisation du proxy forcé: ${selectedProxy.name}`, 'info');
                     } else {
-                        debugLog('⚠️ Aucun proxy disponible, tentative en direct (risque CORS)', 'warning');
-                        showStatus('⚠️ Tentative directe sans proxy...', 'warning');
-                        // En dernier recours, essayer en direct
-                        finalStreamUrl = channel.url;
+                        debugLog(`⚠️ Proxy forcé ${channel._forceProxy} introuvable, sélection automatique`, 'warning');
+                        selectedProxy = await selectStreamProxy(channel.url, serverUrl);
                     }
+                } else {
+                    // Sélectionner le meilleur proxy disponible (avec cache intelligent)
+                    selectedProxy = await selectStreamProxy(channel.url, serverUrl);
+                }
+                
+                if (selectedProxy && selectedProxy.url) {
+                    finalStreamUrl = selectedProxy.url + encodeURIComponent(channel.url);
+                    debugLog(`🔄 Proxy sélectionné: ${selectedProxy.name}`, 'success');
+                    debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 100) + '...', 'info');
+                    showStatus(`🔄 Flux proxifié via ${selectedProxy.name}`, 'success');
+                    channel._currentProxy = selectedProxy.name;
+                    channel._proxyAttempts = (channel._proxyAttempts || 0) + 1;
+                    channel._serverUrl = serverUrl;
+                    debugLog(`📈 Tentative proxy n°${channel._proxyAttempts}`, 'info');
+                    
+                    // Mémoriser ce proxy pour les flux de ce serveur
+                    if (serverUrl) {
+                        streamProxyCache[serverUrl] = {
+                            proxy: selectedProxy.name,
+                            testedWith: channel.url,
+                            timestamp: Date.now()
+                        };
+                        debugLog(`🧠 Proxy mémorisé pour les flux de ${serverUrl.replace(/https?:\/\//, '')}`, 'success');
+                    }
+                } else {
+                    debugLog('⚠️ Aucun proxy disponible, tentative en direct (risque d\'échec)', 'warning');
+                    showStatus('⚠️ Tentative directe sans proxy...', 'warning');
+                    finalStreamUrl = channel.url;
                 }
             } else {
-                debugLog(`🔗 URL: ${channel.url.substring(0, 80)}...`, 'info');
+                debugLog(`🔗 URL directe: ${channel.url.substring(0, 80)}...`, 'info');
             }
             
             // Détecter un possible blocage "mixed content" (page HTTPS, flux HTTP)
