@@ -857,9 +857,11 @@
         // 🔄 Liste des proxies de streaming (testés automatiquement dans l'ordre)
         const STREAM_PROXIES = [
             { name: 'Cloudflare Worker', url: null, priority: 1 }, // Sera rempli si CLOUDFLARE_PROXY configuré
-            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 2 },
-            { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=', priority: 3 },
-            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 4 }
+            { name: 'cors-anywhere.herokuapp.com', url: 'https://cors-anywhere.herokuapp.com/', priority: 2 },
+            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 3 },
+            { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=', priority: 4 },
+            { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=', priority: 5 },
+            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 6 }
         ];
         
         let currentStreamProxy = null; // Proxy actuellement utilisé pour les streams
@@ -1893,10 +1895,13 @@
                         });
                         debugLog(`⚡ Proxy Cloudflare Worker configuré et sera testé en priorité`, 'info');
                     }
-                    // Proxies publics en fallback
+                    // Proxies publics en fallback (plus de choix pour plus de fiabilité)
                     proxies.push(
+                        { name: 'cors-anywhere.herokuapp.com', url: 'https://cors-anywhere.herokuapp.com/' },
                         { name: 'corsproxy.io', url: 'https://corsproxy.io/?' },
-                        { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=' }
+                        { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=' },
+                        { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=' },
+                        { name: 'cors.eu.org', url: 'https://cors.eu.org/' }
                     );
                     const proxyTimeoutMs = 5000;
                     
