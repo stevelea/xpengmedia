@@ -851,6 +851,10 @@
         // Exemple: 'https://xpengmedia-iptv-proxy.VOTRE-ID.workers.dev'
         const CLOUDFLARE_PROXY = null;
         
+        // 🎬 Proxifier les URLs de streaming (nécessaire si erreur CORS/manifestLoadError)
+        const PROXY_STREAMS = true; // Active le proxy pour les flux vidéo
+        const STREAM_PROXY = 'https://corsproxy.io/?'; // Proxy pour les flux HLS
+        
         // 📊 Pagination pour gros catalogues (évite freeze navigateur)
         const MAX_CHANNELS_PER_PAGE = 100;
         let currentPage = 1;
@@ -861,6 +865,7 @@
         
         // 🔄 Détection automatique du meilleur proxy
         let bestProxy = null;
+        let usedProxyForApi = null; // Mémoriser quel proxy a fonctionné pour l'API
         
         // ⚡ Lazy loading pour performance
         let isLoading = false;
@@ -1826,7 +1831,9 @@
                             
                             usedProxy = true;
                             proxySuccess = true;
+                            usedProxyForApi = proxy.url; // Mémoriser le proxy qui a fonctionné
                             debugLog(`✅ Connexion via ${proxy.name} réussie`, 'success');
+                            debugLog(`💾 Proxy mémorisé pour les streams: ${proxy.name}`, 'info');
                             break; // Succès, sortir de la boucle
                             
                         } catch (proxyError) {
@@ -2383,13 +2390,33 @@
                 return;
             }
 
-            debugLog(`🔗 URL: ${channel.url.substring(0, 80)}...`, 'info');
-
+            let finalStreamUrl = channel.url;
+            
+            // 🎬 Proxifier l'URL de streaming si activé (résout CORS/Mixed Content)
+            if (PROXY_STREAMS && channel.url.startsWith('http://')) {
+                debugLog('🔗 URL originale: ' + channel.url.substring(0, 80) + '...', 'info');
+                
+                // Détecter mixed content
+                if (window.location && window.location.protocol === 'https:') {
+                    debugLog('⚠️ Mixed content détecté (HTTPS→HTTP), activation du proxy de streaming', 'warning');
+                    
+                    // Utiliser le proxy qui a fonctionné pour l'API si disponible
+                    const proxyToUse = usedProxyForApi || STREAM_PROXY;
+                    finalStreamUrl = proxyToUse + encodeURIComponent(channel.url);
+                    
+                    debugLog('🔄 Proxy utilisé: ' + (usedProxyForApi ? 'celui de l\'API' : 'par défaut'), 'info');
+                    debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 80) + '...', 'info');
+                    showStatus('🔄 Flux proxifié pour contourner les restrictions CORS/HTTPS', 'success');
+                }
+            } else {
+                debugLog(`🔗 URL: ${channel.url.substring(0, 80)}...`, 'info');
+            }
+            
             // Détecter un possible blocage "mixed content" (page HTTPS, flux HTTP)
             try {
-                if (window.location && window.location.protocol === 'https:' && channel.url.startsWith('http://')) {
+                if (!PROXY_STREAMS && window.location && window.location.protocol === 'https:' && channel.url.startsWith('http://')) {
                     debugLog('⚠️ Mixed content détecté: page HTTPS mais flux HTTP', 'warning');
-                    showStatus('⚠️ Le flux utilise HTTP alors que la page est chargée en HTTPS. Le navigateur peut bloquer la vidéo. Essayez d\'ouvrir le player en HTTP ou d\'utiliser un serveur Xtream en HTTPS.', 'warning');
+                    showStatus('⚠️ Le flux utilise HTTP alors que la page est chargée en HTTPS. Le navigateur peut bloquer la vidéo. Active PROXY_STREAMS ou utilise HTTPS.', 'warning');
                 }
             } catch (e) {
                 // Ne jamais casser la lecture à cause d'un simple check d'environnement
@@ -2415,7 +2442,7 @@
                 // Vérifier support natif HLS (Safari, certains navigateurs Android)
                 if (video.canPlayType('application/vnd.apple.mpegurl')) {
                     debugLog('✅ Support HLS natif du navigateur', 'success');
-                    video.src = channel.url;
+                    video.src = finalStreamUrl;
                     video.play().catch(e => {
                         debugLog(`❌ Erreur lecture native: ${e.message}`, 'error');
                         showStatus('❌ Impossible de lire ce flux HLS (lecture native). Tentative automatique via HLS.js...', 'error');
@@ -2487,7 +2514,7 @@
                                     }
                                 });
 
-                                hls.loadSource(channel.url);
+                                hls.loadSource(finalStreamUrl);
                                 hls.attachMedia(video);
                             } catch (fallbackError) {
                                 debugLog(`❌ Fallback HLS.js en échec: ${fallbackError.message}`, 'error');
@@ -2560,7 +2587,7 @@
                         }
                     });
                     
-                    hls.loadSource(channel.url);
+                    hls.loadSource(finalStreamUrl);
                     hls.attachMedia(video);
                 } else {
                     debugLog('❌ HLS non supporté ou Hls.js non chargé dans ce navigateur', 'error');
@@ -2570,7 +2597,7 @@
             // Formats directs (MP4, WebM, etc.)
             else {
                 debugLog('📹 Format détecté: Vidéo directe (MP4/WebM)', 'info');
-                video.src = channel.url;
+                video.src = finalStreamUrl;
                 video.play().catch(e => {
                     debugLog(`❌ Erreur lecture: ${e.message}`, 'error');
                     showStatus('❌ Impossible de lire cette vidéo', 'error');
