@@ -860,9 +860,11 @@
             { name: 'Cloudflare Worker', url: null, priority: 1 },     // Sera rempli automatiquement
             { name: 'Vercel Edge', url: null, priority: 2 },           // Sera rempli automatiquement
             { name: 'Netlify Functions', url: null, priority: 3 },     // Sera rempli automatiquement
-            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 4 },                       // ✅ TESTÉ: 48903 chaînes
-            { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=', priority: 5 }, // ✅ TESTÉ: 48903 chaînes
-            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 6 }                           // Backup
+            { name: 'Cloudflare Trace', url: 'https://1.1.1.1/cdn-cgi/trace?url=', priority: 4 },      // Cloudflare public proxy
+            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 5 },                       // ✅ TESTÉ: 48903 chaînes API
+            { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=', priority: 6 }, // ✅ TESTÉ: 48903 chaînes API
+            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 7 },                          // Backup
+            { name: 'Direct (HTTP)', url: null, priority: 99 }                                          // Tentative directe en dernier recours
             // ❌ RETIRÉS: cors-anywhere (403 Forbidden), api.allorigins.win (internal error)
         ];
         
@@ -1931,9 +1933,10 @@
                     
                     // 4️⃣ Proxies publics en fallback (ordre testé et vérifié)
                     proxies.push(
-                        { name: 'corsproxy.io', url: 'https://corsproxy.io/?' },              // ✅ TESTÉ: Fonctionne
-                        { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=' },  // ✅ TESTÉ: Fonctionne
-                        { name: 'cors.eu.org', url: 'https://cors.eu.org/' }                  // Backup
+                        { name: 'corsproxy.io', url: 'https://corsproxy.io/?' },              // ✅ TESTÉ: 48903 chaînes
+                        { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=' },  // ✅ TESTÉ: 48903 chaînes
+                        { name: 'Cloudflare Trace', url: 'https://1.1.1.1/cdn-cgi/trace?url=' }, // Cloudflare backup
+                        { name: 'cors.eu.org', url: 'https://cors.eu.org/' }                  // Backup final
                         // ❌ RETIRÉS: cors-anywhere (403), api.allorigins.win (internal error)
                     );
                     const proxyTimeoutMs = 5000;
@@ -2580,12 +2583,17 @@
                     if (selectedProxy && selectedProxy.url) {
                         finalStreamUrl = selectedProxy.url + encodeURIComponent(channel.url);
                         debugLog(`🔄 Proxy sélectionné: ${selectedProxy.name}`, 'success');
-                        debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 80) + '...', 'info');
+                        debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 100) + '...', 'info');
+                        debugLog(`📊 Proxy encode: ${encodeURIComponent(channel.url).substring(0, 100)}...`, 'info');
                         showStatus(`🔄 Flux proxifié via ${selectedProxy.name}`, 'success');
                         channel._currentProxy = selectedProxy.name;
+                        channel._proxyAttempts = (channel._proxyAttempts || 0) + 1;
+                        debugLog(`📈 Tentative proxy n°${channel._proxyAttempts}`, 'info');
                     } else {
-                        debugLog('⚠️ Aucun proxy disponible, tentative en direct (risque d\'échec)', 'warning');
-                        showStatus('⚠️ Aucun proxy disponible, tentative directe...', 'warning');
+                        debugLog('⚠️ Aucun proxy disponible, tentative en direct (risque CORS)', 'warning');
+                        showStatus('⚠️ Tentative directe sans proxy...', 'warning');
+                        // En dernier recours, essayer en direct
+                        finalStreamUrl = channel.url;
                     }
                 }
             } else {
