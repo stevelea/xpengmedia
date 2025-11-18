@@ -853,7 +853,17 @@
         
         // 🎬 Proxifier les URLs de streaming (nécessaire si erreur CORS/manifestLoadError)
         const PROXY_STREAMS = true; // Active le proxy pour les flux vidéo
-        const STREAM_PROXY = 'https://corsproxy.io/?'; // Proxy pour les flux HLS
+        
+        // 🔄 Liste des proxies de streaming (testés automatiquement dans l'ordre)
+        const STREAM_PROXIES = [
+            { name: 'Cloudflare Worker', url: null, priority: 1 }, // Sera rempli si CLOUDFLARE_PROXY configuré
+            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 2 },
+            { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=', priority: 3 },
+            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 4 }
+        ];
+        
+        let currentStreamProxy = null; // Proxy actuellement utilisé pour les streams
+        let streamProxyRetries = {}; // Compteur d'échecs par proxy
         
         // 📊 Pagination pour gros catalogues (évite freeze navigateur)
         const MAX_CHANNELS_PER_PAGE = 100;
@@ -1661,6 +1671,110 @@
             }
         }
         
+        // 🎬 Sélection intelligente du proxy de streaming
+        function selectStreamProxy() {
+            // Initialiser le Cloudflare Worker si configuré
+            if (CLOUDFLARE_PROXY && STREAM_PROXIES[0].url === null) {
+                STREAM_PROXIES[0].url = CLOUDFLARE_PROXY + '?url=';
+                debugLog('⚡ Cloudflare Worker configuré pour les streams', 'success');
+            }
+            
+            // Si on a déjà un proxy qui fonctionne, le réutiliser
+            if (currentStreamProxy) {
+                debugLog(`🔄 Réutilisation du proxy: ${currentStreamProxy.name}`, 'info');
+                return currentStreamProxy;
+            }
+            
+            // Sinon, utiliser le proxy qui a fonctionné pour l'API
+            if (usedProxyForApi) {
+                const apiProxyMatch = STREAM_PROXIES.find(p => p.url === usedProxyForApi);
+                if (apiProxyMatch) {
+                    currentStreamProxy = apiProxyMatch;
+                    debugLog(`🔄 Utilisation du proxy de l'API: ${apiProxyMatch.name}`, 'success');
+                    return apiProxyMatch;
+                }
+            }
+            
+            // Sinon, prendre le premier proxy disponible par priorité
+            const availableProxies = STREAM_PROXIES.filter(p => p.url !== null).sort((a, b) => a.priority - b.priority);
+            if (availableProxies.length > 0) {
+                currentStreamProxy = availableProxies[0];
+                debugLog(`🎯 Sélection proxy par défaut: ${currentStreamProxy.name}`, 'info');
+                return currentStreamProxy;
+            }
+            
+            debugLog('❌ Aucun proxy de streaming disponible', 'error');
+            return null;
+        }
+        
+        // 🔄 Passer au proxy suivant en cas d'échec
+        function switchToNextStreamProxy() {
+            if (!currentStreamProxy) return selectStreamProxy();
+            
+            // Marquer l'échec du proxy actuel
+            const proxyUrl = currentStreamProxy.url;
+            streamProxyRetries[proxyUrl] = (streamProxyRetries[proxyUrl] || 0) + 1;
+            
+            debugLog(`⚠️ Échec du proxy ${currentStreamProxy.name} (${streamProxyRetries[proxyUrl]} échecs)`, 'warning');
+            
+            // Trouver le proxy suivant
+            const availableProxies = STREAM_PROXIES.filter(p => 
+                p.url !== null && 
+                p.url !== currentStreamProxy.url &&
+                (streamProxyRetries[p.url] || 0) < 3 // Max 3 échecs par proxy
+            ).sort((a, b) => a.priority - b.priority);
+            
+            if (availableProxies.length > 0) {
+                currentStreamProxy = availableProxies[0];
+                debugLog(`🔄 Basculement vers: ${currentStreamProxy.name}`, 'info');
+                return currentStreamProxy;
+            }
+            
+            debugLog('❌ Plus de proxy de streaming disponible', 'error');
+            // Réinitialiser les compteurs d'échecs pour recommencer
+            streamProxyRetries = {};
+            currentStreamProxy = null;
+            return selectStreamProxy();
+        }
+        
+        // 🔁 Retry lecture avec proxy suivant
+        function retryPlayWithNextProxy(channel) {
+            if (!channel._originalUrl) {
+                debugLog('❌ Impossible de retry: URL originale manquante', 'error');
+                showStatus('❌ Impossible de relancer la lecture', 'error');
+                return;
+            }
+            
+            const nextProxy = switchToNextStreamProxy();
+            if (!nextProxy || !nextProxy.url) {
+                debugLog('❌ Plus de proxy disponible pour retry', 'error');
+                showStatus('❌ Tous les proxies ont échoué. Essaie une autre chaîne ou réessaie plus tard.', 'error');
+                return;
+            }
+            
+            debugLog(`🔄 Retry avec ${nextProxy.name}...`, 'info');
+            showStatus(`🔄 Nouvelle tentative via ${nextProxy.name}...`, 'warning');
+            
+            // Reconstruire le channel avec le nouveau proxy
+            const retryChannel = {
+                ...channel,
+                url: channel._originalUrl,
+                _retryAttempt: (channel._retryAttempt || 0) + 1
+            };
+            
+            // Limiter à 3 retries max
+            if (retryChannel._retryAttempt > 3) {
+                debugLog('❌ Trop de tentatives (3 max)', 'error');
+                showStatus('❌ La chaîne ne fonctionne pas après 3 tentatives. Essaie une autre chaîne.', 'error');
+                return;
+            }
+            
+            // Relancer la lecture
+            setTimeout(() => {
+                playChannel(retryChannel);
+            }, 1000);
+        }
+        
         async function loadXtream(config) {
             debugLog('💉 loadXtream() appelé', 'info');
             showStatus('🔄 Connexion au serveur Xtream Codes...', 'success');
@@ -2391,6 +2505,7 @@
             }
 
             let finalStreamUrl = channel.url;
+            let needsProxy = false;
             
             // 🎬 Proxifier l'URL de streaming si activé (résout CORS/Mixed Content)
             if (PROXY_STREAMS && channel.url.startsWith('http://')) {
@@ -2399,14 +2514,24 @@
                 // Détecter mixed content
                 if (window.location && window.location.protocol === 'https:') {
                     debugLog('⚠️ Mixed content détecté (HTTPS→HTTP), activation du proxy de streaming', 'warning');
+                    needsProxy = true;
                     
-                    // Utiliser le proxy qui a fonctionné pour l'API si disponible
-                    const proxyToUse = usedProxyForApi || STREAM_PROXY;
-                    finalStreamUrl = proxyToUse + encodeURIComponent(channel.url);
+                    // Sélectionner le meilleur proxy disponible
+                    const selectedProxy = selectStreamProxy();
                     
-                    debugLog('🔄 Proxy utilisé: ' + (usedProxyForApi ? 'celui de l\'API' : 'par défaut'), 'info');
-                    debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 80) + '...', 'info');
-                    showStatus('🔄 Flux proxifié pour contourner les restrictions CORS/HTTPS', 'success');
+                    if (selectedProxy && selectedProxy.url) {
+                        finalStreamUrl = selectedProxy.url + encodeURIComponent(channel.url);
+                        debugLog(`🔄 Proxy sélectionné: ${selectedProxy.name}`, 'success');
+                        debugLog('🔄 URL proxifiée: ' + finalStreamUrl.substring(0, 80) + '...', 'info');
+                        showStatus(`🔄 Flux proxifié via ${selectedProxy.name}`, 'success');
+                        
+                        // Sauvegarder l'URL originale pour retry avec autre proxy
+                        channel._originalUrl = channel.url;
+                        channel._currentProxy = selectedProxy.name;
+                    } else {
+                        debugLog('⚠️ Aucun proxy disponible, tentative en direct (risque d\'échec)', 'warning');
+                        showStatus('⚠️ Aucun proxy disponible, tentative directe...', 'warning');
+                    }
                 }
             } else {
                 debugLog(`🔗 URL: ${channel.url.substring(0, 80)}...`, 'info');
@@ -2495,6 +2620,15 @@
                                     if (data.fatal) {
                                         debugLog(`❌ Erreur HLS (fallback) fatale: ${data.type} - ${data.details}`, 'error');
                                         showStatus('❌ Erreur HLS fatale après fallback: ' + (data.details || data.type), 'error');
+                                        
+                                        // Si c'est une erreur manifestLoad ou networkError et qu'on utilise un proxy
+                                        if ((data.details === 'manifestLoadError' || data.type === Hls.ErrorTypes.NETWORK_ERROR) && channel._originalUrl) {
+                                            debugLog('🔄 Erreur de chargement détectée, tentative avec proxy suivant...', 'warning');
+                                            hls.destroy();
+                                            retryPlayWithNextProxy(channel);
+                                            return;
+                                        }
+                                        
                                         switch (data.type) {
                                             case Hls.ErrorTypes.NETWORK_ERROR:
                                                 debugLog('🔄 Tentative de récupération réseau (fallback)...', 'warning');
@@ -2568,6 +2702,15 @@
                         if (data.fatal) {
                             debugLog(`❌ Erreur HLS fatale: ${data.type} - ${data.details}`, 'error');
                             showStatus('❌ Erreur HLS fatale: ' + (data.details || data.type), 'error');
+                            
+                            // Si c'est une erreur manifestLoad ou networkError et qu'on utilise un proxy
+                            if ((data.details === 'manifestLoadError' || data.type === Hls.ErrorTypes.NETWORK_ERROR) && channel._originalUrl) {
+                                debugLog('🔄 Erreur de chargement détectée, tentative avec proxy suivant...', 'warning');
+                                hls.destroy();
+                                retryPlayWithNextProxy(channel);
+                                return;
+                            }
+                            
                             switch (data.type) {
                                 case Hls.ErrorTypes.NETWORK_ERROR:
                                     debugLog('🔄 Tentative de récupération réseau...', 'warning');
