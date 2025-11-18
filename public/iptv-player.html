@@ -855,23 +855,23 @@
         // 🎬 Proxifier les URLs de streaming (nécessaire si erreur CORS/manifestLoadError)
         const PROXY_STREAMS = true; // Active le proxy pour les flux vidéo
         
-        // 🔄 Liste des proxies de streaming (testés automatiquement dans l'ordre)
+        // 🔄 Liste des proxies de streaming (testés et vérifiés avec http://line.trx-ott.com)
         const STREAM_PROXIES = [
-            { name: 'Cloudflare Worker', url: null, priority: 1 },  // Sera rempli automatiquement
-            { name: 'Vercel Edge', url: null, priority: 2 },        // Sera rempli automatiquement
-            { name: 'Netlify Functions', url: null, priority: 3 },  // Sera rempli automatiquement
-            { name: 'cors-anywhere.herokuapp.com', url: 'https://cors-anywhere.herokuapp.com/', priority: 4 },
-            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 5 },
-            { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=', priority: 6 },
-            { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=', priority: 7 },
-            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 8 }
+            { name: 'Cloudflare Worker', url: null, priority: 1 },     // Sera rempli automatiquement
+            { name: 'Vercel Edge', url: null, priority: 2 },           // Sera rempli automatiquement
+            { name: 'Netlify Functions', url: null, priority: 3 },     // Sera rempli automatiquement
+            { name: 'corsproxy.io', url: 'https://corsproxy.io/?', priority: 4 },                       // ✅ TESTÉ: 48903 chaînes
+            { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=', priority: 5 }, // ✅ TESTÉ: 48903 chaînes
+            { name: 'cors.eu.org', url: 'https://cors.eu.org/', priority: 6 }                           // Backup
+            // ❌ RETIRÉS: cors-anywhere (403 Forbidden), api.allorigins.win (internal error)
         ];
         
         let currentStreamProxy = null; // Proxy actuellement utilisé pour les streams
         let streamProxyRetries = {}; // Compteur d'échecs par proxy
         
         // 📊 Pagination pour gros catalogues (évite freeze navigateur)
-        const MAX_CHANNELS_PER_PAGE = 100;
+        // Optimisé pour gérer de TRÈS gros catalogues (48k+ chaînes)
+        const MAX_CHANNELS_PER_PAGE = 200; // Augmenté pour réduire le nombre de pages
         let currentPage = 1;
         let totalPages = 1;
         
@@ -1929,13 +1929,12 @@
                         debugLog(`⚡ Netlify Functions configuré (priorité 3)`, 'info');
                     }
                     
-                    // 4️⃣ Proxies publics en fallback (plus de choix pour plus de fiabilité)
+                    // 4️⃣ Proxies publics en fallback (ordre testé et vérifié)
                     proxies.push(
-                        { name: 'cors-anywhere.herokuapp.com', url: 'https://cors-anywhere.herokuapp.com/' },
-                        { name: 'corsproxy.io', url: 'https://corsproxy.io/?' },
-                        { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=' },
-                        { name: 'api.allorigins.win', url: 'https://api.allorigins.win/raw?url=' },
-                        { name: 'cors.eu.org', url: 'https://cors.eu.org/' }
+                        { name: 'corsproxy.io', url: 'https://corsproxy.io/?' },              // ✅ TESTÉ: Fonctionne
+                        { name: 'api.codetabs.com', url: 'https://api.codetabs.com/v1/proxy?quest=' },  // ✅ TESTÉ: Fonctionne
+                        { name: 'cors.eu.org', url: 'https://cors.eu.org/' }                  // Backup
+                        // ❌ RETIRÉS: cors-anywhere (403), api.allorigins.win (internal error)
                     );
                     const proxyTimeoutMs = 5000;
                     
@@ -1967,19 +1966,33 @@
                             debugLog(`📝 Longueur réponse ${proxy.name}: ${text.length} caractères`, 'info');
                             
                             // Vérifier si c'est une erreur du proxy lui-même
-                            if (text.includes('"error"') && text.length < 200) {
-                                debugLog(`⚠️ ${proxy.name} retourne une erreur: ${text.substring(0, 100)}`, 'warning');
-                                lastProxyError = `${proxy.name}: erreur interne`;
+                            if (text.includes('"error"') && text.length < 500) {
+                                debugLog(`⚠️ ${proxy.name} retourne une erreur proxy: ${text.substring(0, 150)}`, 'warning');
+                                lastProxyError = `${proxy.name}: erreur interne du proxy`;
                                 continue; // Essayer le proxy suivant
+                            }
+                            
+                            // Vérifier si la réponse est vide ou invalide
+                            if (text.length < 100) {
+                                debugLog(`⚠️ ${proxy.name} réponse trop courte (${text.length} caractères)`, 'warning');
+                                lastProxyError = `${proxy.name}: réponse vide`;
+                                continue;
                             }
                             
                             data = JSON.parse(text);
                             
-                            // Vérifier si la réponse contient une erreur
-                            if (data && data.error && !data.streams && !Array.isArray(data)) {
-                                debugLog(`⚠️ ${proxy.name} retourne une erreur proxy: ${JSON.stringify(data).substring(0, 100)}`, 'warning');
+                            // Vérifier si la réponse contient une erreur proxy
+                            if (data && data.error && !Array.isArray(data)) {
+                                debugLog(`⚠️ ${proxy.name} retourne une erreur: ${JSON.stringify(data).substring(0, 150)}`, 'warning');
                                 lastProxyError = `${proxy.name}: ${data.error}`;
                                 continue; // Essayer le proxy suivant
+                            }
+                            
+                            // Vérifier que c'est bien un tableau de chaînes
+                            if (!Array.isArray(data) || data.length === 0) {
+                                debugLog(`⚠️ ${proxy.name} format de réponse invalide (pas un tableau ou vide)`, 'warning');
+                                lastProxyError = `${proxy.name}: format invalide`;
+                                continue;
                             }
                             
                             usedProxy = true;
