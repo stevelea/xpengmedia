@@ -114,6 +114,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Find charging stations, plan your routes and optimize your electric trips.',
     findStations: 'Find Stations',
     planRoute: 'Plan Route',
+    chargingMapTitle: 'Charging Stations Near You',
+    chargingMapSubtitle: 'Find EV charging stations based on your current location',
+    locationDetected: 'Location detected',
+    detectingLocation: 'Detecting your location...',
+    locationError: 'Location unavailable',
+    usingDefaultLocation: 'Showing default map. Allow location access for nearby stations.',
+    poweredBy: 'Powered by',
 
     // Common Actions
     viewAll: 'View all',
@@ -131,6 +138,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Loading...',
     error: 'Error',
     success: 'Success',
+
+    // Customization
+    customize: 'Customize',
+    done: 'Done',
+    resetAll: 'Reset All',
+    editModeHint: 'Tap the star to add to favorites, tap X to hide. Changes are saved automatically.',
+    favorites: 'Favorites',
+    favoritesSubtitle: 'Your pinned apps for quick access',
+    hide: 'Hide',
+    addToFavorites: 'Add to favorites',
+    removeFromFavorites: 'Remove from favorites',
 
     // Other Services Page
     otherServicesTitle: 'Community Services & EV Tools',
@@ -291,6 +309,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Trouvez des bornes de recharge, planifiez vos itinéraires et optimisez vos trajets électriques.',
     findStations: 'Trouver des bornes',
     planRoute: 'Planifier un itinéraire',
+    chargingMapTitle: 'Bornes de recharge à proximité',
+    chargingMapSubtitle: 'Trouvez des bornes de recharge selon votre position actuelle',
+    locationDetected: 'Position détectée',
+    detectingLocation: 'Détection de votre position...',
+    locationError: 'Position indisponible',
+    usingDefaultLocation: 'Affichage de la carte par défaut. Autorisez l\'accès à la position pour les bornes à proximité.',
+    poweredBy: 'Propulsé par',
 
     // Common Actions
     viewAll: 'Voir tout',
@@ -308,6 +333,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Chargement...',
     error: 'Erreur',
     success: 'Succès',
+
+    // Customization
+    customize: 'Personnaliser',
+    done: 'Terminé',
+    resetAll: 'Tout réinitialiser',
+    editModeHint: 'Appuyez sur l\'étoile pour ajouter aux favoris, sur X pour masquer. Les modifications sont enregistrées automatiquement.',
+    favorites: 'Favoris',
+    favoritesSubtitle: 'Vos applications épinglées pour un accès rapide',
+    hide: 'Masquer',
+    addToFavorites: 'Ajouter aux favoris',
+    removeFromFavorites: 'Retirer des favoris',
 
     // Other Services Page
     otherServicesTitle: 'Services communautaires & outils EV',
@@ -468,6 +504,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Finden Sie Ladestationen, planen Sie Ihre Routen und optimieren Sie Ihre Elektrofahrten.',
     findStations: 'Stationen finden',
     planRoute: 'Route planen',
+    chargingMapTitle: 'Ladestationen in Ihrer Nähe',
+    chargingMapSubtitle: 'Finden Sie Ladestationen basierend auf Ihrem aktuellen Standort',
+    locationDetected: 'Standort erkannt',
+    detectingLocation: 'Standort wird ermittelt...',
+    locationError: 'Standort nicht verfügbar',
+    usingDefaultLocation: 'Standardkarte wird angezeigt. Erlauben Sie Standortzugriff für nahegelegene Stationen.',
+    poweredBy: 'Bereitgestellt von',
 
     // Common Actions
     viewAll: 'Alle anzeigen',
@@ -485,6 +528,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Laden...',
     error: 'Fehler',
     success: 'Erfolg',
+
+    // Customization
+    customize: 'Anpassen',
+    done: 'Fertig',
+    resetAll: 'Alles zurücksetzen',
+    editModeHint: 'Tippen Sie auf den Stern, um zu Favoriten hinzuzufügen, auf X zum Ausblenden. Änderungen werden automatisch gespeichert.',
+    favorites: 'Favoriten',
+    favoritesSubtitle: 'Ihre angehefteten Apps für schnellen Zugriff',
+    hide: 'Ausblenden',
+    addToFavorites: 'Zu Favoriten hinzufügen',
+    removeFromFavorites: 'Aus Favoriten entfernen',
 
     // Other Services Page
     otherServicesTitle: 'Community-Dienste & EV-Tools',
@@ -645,6 +699,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Encuentra puntos de carga, planifica tus rutas y optimiza tus viajes eléctricos.',
     findStations: 'Encontrar estaciones',
     planRoute: 'Planificar ruta',
+    chargingMapTitle: 'Estaciones de carga cerca de ti',
+    chargingMapSubtitle: 'Encuentra estaciones de carga según tu ubicación actual',
+    locationDetected: 'Ubicación detectada',
+    detectingLocation: 'Detectando tu ubicación...',
+    locationError: 'Ubicación no disponible',
+    usingDefaultLocation: 'Mostrando mapa predeterminado. Permite el acceso a la ubicación para estaciones cercanas.',
+    poweredBy: 'Desarrollado por',
 
     // Common Actions
     viewAll: 'Ver todo',
@@ -662,6 +723,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Cargando...',
     error: 'Error',
     success: 'Éxito',
+
+    // Customization
+    customize: 'Personalizar',
+    done: 'Listo',
+    resetAll: 'Restablecer todo',
+    editModeHint: 'Toca la estrella para agregar a favoritos, toca X para ocultar. Los cambios se guardan automáticamente.',
+    favorites: 'Favoritos',
+    favoritesSubtitle: 'Tus apps fijadas para acceso rápido',
+    hide: 'Ocultar',
+    addToFavorites: 'Agregar a favoritos',
+    removeFromFavorites: 'Quitar de favoritos',
 
     // Other Services Page
     otherServicesTitle: 'Servicios comunitarios y herramientas EV',
@@ -822,6 +894,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Trova stazioni di ricarica, pianifica i tuoi percorsi e ottimizza i tuoi viaggi elettrici.',
     findStations: 'Trova stazioni',
     planRoute: 'Pianifica percorso',
+    chargingMapTitle: 'Stazioni di ricarica vicino a te',
+    chargingMapSubtitle: 'Trova stazioni di ricarica in base alla tua posizione attuale',
+    locationDetected: 'Posizione rilevata',
+    detectingLocation: 'Rilevamento della posizione...',
+    locationError: 'Posizione non disponibile',
+    usingDefaultLocation: 'Visualizzazione della mappa predefinita. Consenti l\'accesso alla posizione per le stazioni vicine.',
+    poweredBy: 'Powered by',
 
     // Common Actions
     viewAll: 'Vedi tutto',
@@ -887,6 +966,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Notizie',
     tagDocumentary: 'Documentario',
+
+    // Customization
+    customize: 'Personalizza',
+    done: 'Fatto',
+    resetAll: 'Ripristina tutto',
+    editModeHint: 'Tocca la stella per aggiungere ai preferiti, tocca X per nascondere. Le modifiche vengono salvate automaticamente.',
+    favorites: 'Preferiti',
+    favoritesSubtitle: 'Le tue app fissate per accesso rapido',
+    hide: 'Nascondi',
+    addToFavorites: 'Aggiungi ai preferiti',
+    removeFromFavorites: 'Rimuovi dai preferiti',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -970,6 +1060,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Vind laadstations, plan uw routes en optimaliseer uw elektrische ritten.',
     findStations: 'Stations vinden',
     planRoute: 'Route plannen',
+    chargingMapTitle: 'Laadstations bij u in de buurt',
+    chargingMapSubtitle: 'Vind laadstations op basis van uw huidige locatie',
+    locationDetected: 'Locatie gedetecteerd',
+    detectingLocation: 'Uw locatie detecteren...',
+    locationError: 'Locatie niet beschikbaar',
+    usingDefaultLocation: 'Standaardkaart wordt weergegeven. Sta locatietoegang toe voor nabijgelegen stations.',
+    poweredBy: 'Mogelijk gemaakt door',
     viewAll: 'Alles bekijken',
     seeMore: 'Meer zien',
     close: 'Sluiten',
@@ -1025,6 +1122,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: 'Bron',
     support: 'Ondersteuning',
     footerDisclaimer: 'Onofficieel platform voor XPENG-bestuurders',
+
+    // Customization
+    customize: 'Aanpassen',
+    done: 'Klaar',
+    resetAll: 'Alles resetten',
+    editModeHint: 'Tik op de ster om toe te voegen aan favorieten, tik op X om te verbergen. Wijzigingen worden automatisch opgeslagen.',
+    favorites: 'Favorieten',
+    favoritesSubtitle: 'Uw vastgezette apps voor snelle toegang',
+    hide: 'Verbergen',
+    addToFavorites: 'Toevoegen aan favorieten',
+    removeFromFavorites: 'Verwijderen uit favorieten',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1108,6 +1216,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Hitta laddstationer, planera dina rutter och optimera dina elresor.',
     findStations: 'Hitta stationer',
     planRoute: 'Planera rutt',
+    chargingMapTitle: 'Laddstationer nära dig',
+    chargingMapSubtitle: 'Hitta laddstationer baserat på din nuvarande plats',
+    locationDetected: 'Plats upptäckt',
+    detectingLocation: 'Upptäcker din plats...',
+    locationError: 'Plats inte tillgänglig',
+    usingDefaultLocation: 'Visar standardkarta. Tillåt platsåtkomst för närliggande stationer.',
+    poweredBy: 'Drivs av',
     viewAll: 'Visa alla',
     seeMore: 'Se mer',
     close: 'Stäng',
@@ -1163,6 +1278,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: 'Källa',
     support: 'Support',
     footerDisclaimer: 'Inofficiell plattform för XPENG-förare',
+
+    // Customization
+    customize: 'Anpassa',
+    done: 'Klar',
+    resetAll: 'Återställ allt',
+    editModeHint: 'Tryck på stjärnan för att lägga till i favoriter, tryck på X för att dölja. Ändringar sparas automatiskt.',
+    favorites: 'Favoriter',
+    favoritesSubtitle: 'Dina fästa appar för snabb åtkomst',
+    hide: 'Dölj',
+    addToFavorites: 'Lägg till i favoriter',
+    removeFromFavorites: 'Ta bort från favoriter',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1246,6 +1372,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Finn ladestasjoner, planlegg rutene dine og optimaliser de elektriske turene.',
     findStations: 'Finn stasjoner',
     planRoute: 'Planlegg rute',
+    chargingMapTitle: 'Ladestasjoner i nærheten',
+    chargingMapSubtitle: 'Finn ladestasjoner basert på din nåværende posisjon',
+    locationDetected: 'Posisjon oppdaget',
+    detectingLocation: 'Oppdager din posisjon...',
+    locationError: 'Posisjon ikke tilgjengelig',
+    usingDefaultLocation: 'Viser standardkart. Tillat posisjonstilgang for nærliggende stasjoner.',
+    poweredBy: 'Drevet av',
     viewAll: 'Vis alle',
     seeMore: 'Se mer',
     close: 'Lukk',
@@ -1301,6 +1434,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: 'Kilde',
     support: 'Støtte',
     footerDisclaimer: 'Uoffisiell plattform for XPENG-sjåfører',
+
+    // Customization
+    customize: 'Tilpass',
+    done: 'Ferdig',
+    resetAll: 'Tilbakestill alt',
+    editModeHint: 'Trykk på stjernen for å legge til i favoritter, trykk på X for å skjule. Endringer lagres automatisk.',
+    favorites: 'Favoritter',
+    favoritesSubtitle: 'Dine festede apper for rask tilgang',
+    hide: 'Skjul',
+    addToFavorites: 'Legg til i favoritter',
+    removeFromFavorites: 'Fjern fra favoritter',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1384,6 +1528,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'Find ladestationer, planlæg dine ruter og optimer dine elektriske ture.',
     findStations: 'Find stationer',
     planRoute: 'Planlæg rute',
+    chargingMapTitle: 'Ladestationer i nærheden',
+    chargingMapSubtitle: 'Find ladestationer baseret på din nuværende placering',
+    locationDetected: 'Placering registreret',
+    detectingLocation: 'Registrerer din placering...',
+    locationError: 'Placering ikke tilgængelig',
+    usingDefaultLocation: 'Viser standardkort. Tillad placeringsadgang for nærliggende stationer.',
+    poweredBy: 'Drevet af',
     viewAll: 'Vis alle',
     seeMore: 'Se mere',
     close: 'Luk',
@@ -1439,6 +1590,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: 'Kilde',
     support: 'Support',
     footerDisclaimer: 'Uofficiel platform for XPENG-chauffører',
+
+    // Customization
+    customize: 'Tilpas',
+    done: 'Færdig',
+    resetAll: 'Nulstil alt',
+    editModeHint: 'Tryk på stjernen for at tilføje til favoritter, tryk på X for at skjule. Ændringer gemmes automatisk.',
+    favorites: 'Favoritter',
+    favoritesSubtitle: 'Dine fastgjorte apps til hurtig adgang',
+    hide: 'Skjul',
+    addToFavorites: 'Tilføj til favoritter',
+    removeFromFavorites: 'Fjern fra favoritter',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1522,6 +1684,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: '寻找充电站，规划路线，优化您的电动出行。',
     findStations: '寻找充电站',
     planRoute: '规划路线',
+    chargingMapTitle: '附近的充电站',
+    chargingMapSubtitle: '根据您的当前位置查找充电站',
+    locationDetected: '已检测到位置',
+    detectingLocation: '正在检测您的位置...',
+    locationError: '位置不可用',
+    usingDefaultLocation: '显示默认地图。允许位置访问以查看附近的充电站。',
+    poweredBy: '技术支持',
     viewAll: '查看全部',
     seeMore: '查看更多',
     close: '关闭',
@@ -1577,6 +1746,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: '源码',
     support: '支持',
     footerDisclaimer: 'XPENG车主非官方平台',
+
+    // Customization
+    customize: '自定义',
+    done: '完成',
+    resetAll: '重置全部',
+    editModeHint: '点击星标添加到收藏夹，点击X隐藏。更改会自动保存。',
+    favorites: '收藏夹',
+    favoritesSubtitle: '您置顶的应用，快速访问',
+    hide: '隐藏',
+    addToFavorites: '添加到收藏夹',
+    removeFromFavorites: '从收藏夹移除',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1660,6 +1840,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'ابحث عن محطات الشحن وخطط لمساراتك وحسّن رحلاتك الكهربائية.',
     findStations: 'البحث عن محطات',
     planRoute: 'تخطيط المسار',
+    chargingMapTitle: 'محطات الشحن القريبة منك',
+    chargingMapSubtitle: 'ابحث عن محطات الشحن بناءً على موقعك الحالي',
+    locationDetected: 'تم اكتشاف الموقع',
+    detectingLocation: 'جارٍ اكتشاف موقعك...',
+    locationError: 'الموقع غير متاح',
+    usingDefaultLocation: 'عرض الخريطة الافتراضية. اسمح بالوصول إلى الموقع للمحطات القريبة.',
+    poweredBy: 'مدعوم من',
     viewAll: 'عرض الكل',
     seeMore: 'المزيد',
     close: 'إغلاق',
@@ -1715,6 +1902,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: 'المصدر',
     support: 'الدعم',
     footerDisclaimer: 'منصة غير رسمية لسائقي XPENG',
+
+    // Customization
+    customize: 'تخصيص',
+    done: 'تم',
+    resetAll: 'إعادة تعيين الكل',
+    editModeHint: 'اضغط على النجمة للإضافة إلى المفضلة، اضغط على X للإخفاء. يتم حفظ التغييرات تلقائياً.',
+    favorites: 'المفضلة',
+    favoritesSubtitle: 'تطبيقاتك المثبتة للوصول السريع',
+    hide: 'إخفاء',
+    addToFavorites: 'إضافة إلى المفضلة',
+    removeFromFavorites: 'إزالة من المفضلة',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1798,6 +1996,13 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     chargingPageSubtitle: 'מצא תחנות טעינה, תכנן את המסלולים שלך ומטב את הנסיעות החשמליות.',
     findStations: 'מצא תחנות',
     planRoute: 'תכנן מסלול',
+    chargingMapTitle: 'תחנות טעינה בקרבתך',
+    chargingMapSubtitle: 'מצא תחנות טעינה על פי המיקום הנוכחי שלך',
+    locationDetected: 'המיקום זוהה',
+    detectingLocation: 'מזהה את המיקום שלך...',
+    locationError: 'המיקום לא זמין',
+    usingDefaultLocation: 'מציג מפה ברירת מחדל. אפשר גישה למיקום לתחנות קרובות.',
+    poweredBy: 'מופעל על ידי',
     viewAll: 'הצג הכל',
     seeMore: 'ראה עוד',
     close: 'סגור',
@@ -1853,6 +2058,17 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     source: 'מקור',
     support: 'תמיכה',
     footerDisclaimer: 'פלטפורמה לא רשמית לנהגי XPENG',
+
+    // Customization
+    customize: 'התאמה אישית',
+    done: 'סיום',
+    resetAll: 'אפס הכל',
+    editModeHint: 'הקש על הכוכב להוספה למועדפים, הקש על X להסתרה. השינויים נשמרים אוטומטית.',
+    favorites: 'מועדפים',
+    favoritesSubtitle: 'האפליקציות המוצמדות שלך לגישה מהירה',
+    hide: 'הסתר',
+    addToFavorites: 'הוסף למועדפים',
+    removeFromFavorites: 'הסר מהמועדפים',
   },
 };
 
