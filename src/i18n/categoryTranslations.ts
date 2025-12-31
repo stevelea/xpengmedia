@@ -657,6 +657,174 @@ export const categoryTranslations: Record<string, Record<SupportedLanguage, Cate
       subtitle: 'הישאר מעודכן עם חדשות מרחבי העולם',
     },
   },
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // XPENG SPECIFIC CATEGORIES
+  // ═══════════════════════════════════════════════════════════════════════════
+  'xpeng-internal-apps': {
+    en: {
+      title: 'Built-in XPENG Apps',
+      subtitle: 'Embedded web applications independent of external stores',
+    },
+    fr: {
+      title: 'Apps XPENG intégrées',
+      subtitle: 'Applications web embarquées qui ne dépendent pas de stores externes',
+    },
+    de: {
+      title: 'Integrierte XPENG Apps',
+      subtitle: 'Eingebettete Web-Apps unabhängig von externen Stores',
+    },
+    es: {
+      title: 'Apps XPENG integradas',
+      subtitle: 'Aplicaciones web integradas independientes de tiendas externas',
+    },
+    it: {
+      title: 'App XPENG integrate',
+      subtitle: 'Applicazioni web integrate indipendenti da store esterni',
+    },
+    nl: {
+      title: 'Ingebouwde XPENG Apps',
+      subtitle: 'Ingebedde webapplicaties onafhankelijk van externe stores',
+    },
+    sv: {
+      title: 'Inbyggda XPENG-appar',
+      subtitle: 'Inbäddade webbappar oberoende av externa butiker',
+    },
+    no: {
+      title: 'Innebygde XPENG-apper',
+      subtitle: 'Innebygde webapper uavhengig av eksterne butikker',
+    },
+    da: {
+      title: 'Indbyggede XPENG Apps',
+      subtitle: 'Indlejrede webapps uafhængige af eksterne butikker',
+    },
+    zh: {
+      title: 'XPENG 内置应用',
+      subtitle: '不依赖外部商店的嵌入式网页应用',
+    },
+    ar: {
+      title: 'تطبيقات XPENG المدمجة',
+      subtitle: 'تطبيقات ويب مدمجة مستقلة عن المتاجر الخارجية',
+    },
+    he: {
+      title: 'אפליקציות XPENG מובנות',
+      subtitle: 'אפליקציות אינטרנט מוטמעות שאינן תלויות בחנויות חיצוניות',
+    },
+  },
+
+  'xpeng-documentation': {
+    en: {
+      title: 'XPENG Documentation',
+      subtitle: 'User manuals, guides and official resources',
+      highlight: 'Official',
+    },
+    fr: {
+      title: 'Documentation XPENG',
+      subtitle: 'Manuels utilisateurs, guides et ressources officielles',
+      highlight: 'Officiel',
+    },
+    de: {
+      title: 'XPENG Dokumentation',
+      subtitle: 'Benutzerhandbücher, Anleitungen und offizielle Ressourcen',
+      highlight: 'Offiziell',
+    },
+    es: {
+      title: 'Documentación XPENG',
+      subtitle: 'Manuales de usuario, guías y recursos oficiales',
+      highlight: 'Oficial',
+    },
+    it: {
+      title: 'Documentazione XPENG',
+      subtitle: 'Manuali utente, guide e risorse ufficiali',
+      highlight: 'Ufficiale',
+    },
+    nl: {
+      title: 'XPENG Documentatie',
+      subtitle: 'Gebruikershandleidingen, gidsen en officiële bronnen',
+      highlight: 'Officieel',
+    },
+    sv: {
+      title: 'XPENG Dokumentation',
+      subtitle: 'Användarhandböcker, guider och officiella resurser',
+      highlight: 'Officiellt',
+    },
+    no: {
+      title: 'XPENG Dokumentasjon',
+      subtitle: 'Brukerhåndbøker, guider og offisielle ressurser',
+      highlight: 'Offisiell',
+    },
+    da: {
+      title: 'XPENG Dokumentation',
+      subtitle: 'Brugervejledninger, guider og officielle ressourcer',
+      highlight: 'Officiel',
+    },
+    zh: {
+      title: 'XPENG 文档',
+      subtitle: '用户手册、指南和官方资源',
+      highlight: '官方',
+    },
+    ar: {
+      title: 'وثائق XPENG',
+      subtitle: 'أدلة المستخدم والإرشادات والموارد الرسمية',
+      highlight: 'رسمي',
+    },
+    he: {
+      title: 'תיעוד XPENG',
+      subtitle: 'מדריכי משתמש, הנחיות ומשאבים רשמיים',
+      highlight: 'רשמי',
+    },
+  },
+
+  'xpeng-community': {
+    en: {
+      title: 'XPENG Community',
+      subtitle: 'Forums, groups and resources shared by the community',
+    },
+    fr: {
+      title: 'Communauté XPENG',
+      subtitle: 'Forums, groupes et ressources partagées par la communauté',
+    },
+    de: {
+      title: 'XPENG Community',
+      subtitle: 'Foren, Gruppen und von der Community geteilte Ressourcen',
+    },
+    es: {
+      title: 'Comunidad XPENG',
+      subtitle: 'Foros, grupos y recursos compartidos por la comunidad',
+    },
+    it: {
+      title: 'Comunità XPENG',
+      subtitle: 'Forum, gruppi e risorse condivise dalla comunità',
+    },
+    nl: {
+      title: 'XPENG Community',
+      subtitle: 'Forums, groepen en door de community gedeelde bronnen',
+    },
+    sv: {
+      title: 'XPENG Community',
+      subtitle: 'Forum, grupper och resurser delade av communityn',
+    },
+    no: {
+      title: 'XPENG Community',
+      subtitle: 'Forum, grupper og ressurser delt av fellesskapet',
+    },
+    da: {
+      title: 'XPENG Community',
+      subtitle: 'Fora, grupper og ressourcer delt af fællesskabet',
+    },
+    zh: {
+      title: 'XPENG 社区',
+      subtitle: '社区分享的论坛、群组和资源',
+    },
+    ar: {
+      title: 'مجتمع XPENG',
+      subtitle: 'المنتديات والمجموعات والموارد المشتركة من المجتمع',
+    },
+    he: {
+      title: 'קהילת XPENG',
+      subtitle: 'פורומים, קבוצות ומשאבים משותפים על ידי הקהילה',
+    },
+  },
 };
 
 // Helper function to get category translation
