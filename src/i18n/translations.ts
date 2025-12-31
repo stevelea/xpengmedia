@@ -132,6 +132,16 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     error: 'Error',
     success: 'Success',
 
+    // Settings
+    settings: 'Settings',
+
+    // Footer
+    createdWith: 'Created with',
+    by: 'by',
+    source: 'Source',
+    support: 'Support',
+    footerDisclaimer: 'Unofficial platform for XPENG drivers',
+
     // Platform Tags
     tagPremium: 'Premium',
     tag4K: '4K',
@@ -275,6 +285,16 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Chargement...',
     error: 'Erreur',
     success: 'Succès',
+
+    // Settings
+    settings: 'Paramètres',
+
+    // Footer
+    createdWith: 'Créé avec',
+    by: 'par',
+    source: 'Source',
+    support: 'Support',
+    footerDisclaimer: 'Plateforme non officielle pour conducteurs XPENG',
 
     // Platform Tags
     tagPremium: 'Premium',
@@ -420,6 +440,16 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     error: 'Fehler',
     success: 'Erfolg',
 
+    // Settings
+    settings: 'Einstellungen',
+
+    // Footer
+    createdWith: 'Erstellt mit',
+    by: 'von',
+    source: 'Quelle',
+    support: 'Support',
+    footerDisclaimer: 'Inoffizielle Plattform für XPENG-Fahrer',
+
     // Platform Tags
     tagPremium: 'Premium',
     tag4K: '4K',
@@ -563,6 +593,16 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Cargando...',
     error: 'Error',
     success: 'Éxito',
+
+    // Settings
+    settings: 'Configuración',
+
+    // Footer
+    createdWith: 'Creado con',
+    by: 'por',
+    source: 'Fuente',
+    support: 'Soporte',
+    footerDisclaimer: 'Plataforma no oficial para conductores XPENG',
 
     // Platform Tags
     tagPremium: 'Premium',
@@ -708,6 +748,16 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     error: 'Errore',
     success: 'Successo',
 
+    // Settings
+    settings: 'Impostazioni',
+
+    // Footer
+    createdWith: 'Creato con',
+    by: 'da',
+    source: 'Fonte',
+    support: 'Supporto',
+    footerDisclaimer: 'Piattaforma non ufficiale per conducenti XPENG',
+
     // Platform Tags
     tagPremium: 'Premium',
     tag4K: '4K',
@@ -833,6 +883,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nieuws',
     tagDocumentary: 'Documentaire',
+    settings: 'Instellingen',
+    createdWith: 'Gemaakt met',
+    by: 'door',
+    source: 'Bron',
+    support: 'Ondersteuning',
+    footerDisclaimer: 'Onofficieel platform voor XPENG-bestuurders',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -944,6 +1000,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nyheter',
     tagDocumentary: 'Dokumentär',
+    settings: 'Inställningar',
+    createdWith: 'Skapad med',
+    by: 'av',
+    source: 'Källa',
+    support: 'Support',
+    footerDisclaimer: 'Inofficiell plattform för XPENG-förare',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1055,6 +1117,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nyheter',
     tagDocumentary: 'Dokumentar',
+    settings: 'Innstillinger',
+    createdWith: 'Laget med',
+    by: 'av',
+    source: 'Kilde',
+    support: 'Støtte',
+    footerDisclaimer: 'Uoffisiell plattform for XPENG-sjåfører',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1166,6 +1234,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nyheder',
     tagDocumentary: 'Dokumentar',
+    settings: 'Indstillinger',
+    createdWith: 'Lavet med',
+    by: 'af',
+    source: 'Kilde',
+    support: 'Support',
+    footerDisclaimer: 'Uofficiel platform for XPENG-chauffører',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1277,6 +1351,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: '体育',
     tagNews: '新闻',
     tagDocumentary: '纪录片',
+    settings: '设置',
+    createdWith: '制作于',
+    by: '由',
+    source: '源码',
+    support: '支持',
+    footerDisclaimer: 'XPENG车主非官方平台',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1388,6 +1468,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'رياضة',
     tagNews: 'أخبار',
     tagDocumentary: 'وثائقي',
+    settings: 'الإعدادات',
+    createdWith: 'أُنشئ بـ',
+    by: 'بواسطة',
+    source: 'المصدر',
+    support: 'الدعم',
+    footerDisclaimer: 'منصة غير رسمية لسائقي XPENG',
   },
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -1499,6 +1585,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'ספורט',
     tagNews: 'חדשות',
     tagDocumentary: 'תיעודי',
+    settings: 'הגדרות',
+    createdWith: 'נוצר עם',
+    by: 'על ידי',
+    source: 'מקור',
+    support: 'תמיכה',
+    footerDisclaimer: 'פלטפורמה לא רשמית לנהגי XPENG',
   },
 };
 
