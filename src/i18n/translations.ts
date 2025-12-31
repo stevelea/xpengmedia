@@ -132,6 +132,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     error: 'Error',
     success: 'Success',
 
+    // Other Services Page
+    otherServicesTitle: 'Community Services & EV Tools',
+    otherServicesSubtitle: 'Discover third-party portals optimized for the XPENG screen, EV entertainment hubs and practical tools for planning your trips and managing charging.',
+    otherServicesEntertainment: 'Entertainment portals',
+    otherServicesTools: 'Tools & utilities',
+
     // Settings
     settings: 'Settings',
     settingsAppearance: 'Appearance',
@@ -302,6 +308,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Chargement...',
     error: 'Erreur',
     success: 'Succès',
+
+    // Other Services Page
+    otherServicesTitle: 'Services communautaires & outils EV',
+    otherServicesSubtitle: 'Découvrez des portails tiers optimisés pour l\'écran XPENG, des hubs de divertissement EV et des outils pratiques pour planifier vos trajets et gérer la recharge.',
+    otherServicesEntertainment: 'Portails divertissement',
+    otherServicesTools: 'Outils & utilitaires',
 
     // Settings
     settings: 'Paramètres',
@@ -474,6 +486,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     error: 'Fehler',
     success: 'Erfolg',
 
+    // Other Services Page
+    otherServicesTitle: 'Community-Dienste & EV-Tools',
+    otherServicesSubtitle: 'Entdecken Sie Drittanbieter-Portale, die für den XPENG-Bildschirm optimiert sind, EV-Unterhaltungs-Hubs und praktische Tools zur Planung Ihrer Fahrten und Verwaltung des Ladens.',
+    otherServicesEntertainment: 'Unterhaltungsportale',
+    otherServicesTools: 'Tools & Dienstprogramme',
+
     // Settings
     settings: 'Einstellungen',
     settingsAppearance: 'Erscheinungsbild',
@@ -644,6 +662,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     loading: 'Cargando...',
     error: 'Error',
     success: 'Éxito',
+
+    // Other Services Page
+    otherServicesTitle: 'Servicios comunitarios y herramientas EV',
+    otherServicesSubtitle: 'Descubre portales de terceros optimizados para la pantalla XPENG, hubs de entretenimiento EV y herramientas prácticas para planificar tus viajes y gestionar la carga.',
+    otherServicesEntertainment: 'Portales de entretenimiento',
+    otherServicesTools: 'Herramientas y utilidades',
 
     // Settings
     settings: 'Configuración',
@@ -816,6 +840,12 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     error: 'Errore',
     success: 'Successo',
 
+    // Other Services Page
+    otherServicesTitle: 'Servizi comunitari e strumenti EV',
+    otherServicesSubtitle: 'Scopri portali di terze parti ottimizzati per lo schermo XPENG, hub di intrattenimento EV e strumenti pratici per pianificare i tuoi viaggi e gestire la ricarica.',
+    otherServicesEntertainment: 'Portali intrattenimento',
+    otherServicesTools: 'Strumenti e utilità',
+
     // Settings
     settings: 'Impostazioni',
     settingsAppearance: 'Aspetto',
@@ -968,6 +998,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nieuws',
     tagDocumentary: 'Documentaire',
+    otherServicesTitle: 'Communitydiensten & EV-tools',
+    otherServicesSubtitle: 'Ontdek portals van derden geoptimaliseerd voor het XPENG-scherm, EV-entertainmenthubs en praktische tools voor het plannen van uw ritten en het beheren van het opladen.',
+    otherServicesEntertainment: 'Entertainmentportals',
+    otherServicesTools: 'Tools & hulpprogramma\'s',
     settings: 'Instellingen',
     settingsAppearance: 'Uiterlijk',
     settingsTheme: 'Thema',
@@ -1102,6 +1136,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nyheter',
     tagDocumentary: 'Dokumentär',
+    otherServicesTitle: 'Communitytjänster & EV-verktyg',
+    otherServicesSubtitle: 'Upptäck tredjepartsportaler optimerade för XPENG-skärmen, EV-underhållningshubbar och praktiska verktyg för att planera dina resor och hantera laddning.',
+    otherServicesEntertainment: 'Underhållningsportaler',
+    otherServicesTools: 'Verktyg & hjälpmedel',
     settings: 'Inställningar',
     settingsAppearance: 'Utseende',
     settingsTheme: 'Tema',
@@ -1236,6 +1274,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nyheter',
     tagDocumentary: 'Dokumentar',
+    otherServicesTitle: 'Fellesskapstjenester & EV-verktøy',
+    otherServicesSubtitle: 'Oppdag tredjepartsportaler optimalisert for XPENG-skjermen, EV-underholdningshuber og praktiske verktøy for å planlegge turene dine og administrere lading.',
+    otherServicesEntertainment: 'Underholdningsportaler',
+    otherServicesTools: 'Verktøy og hjelpemidler',
     settings: 'Innstillinger',
     settingsAppearance: 'Utseende',
     settingsTheme: 'Tema',
@@ -1370,6 +1412,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'Sport',
     tagNews: 'Nyheder',
     tagDocumentary: 'Dokumentar',
+    otherServicesTitle: 'Fællesskabstjenester & EV-værktøjer',
+    otherServicesSubtitle: 'Opdag tredjepartsportaler optimeret til XPENG-skærmen, EV-underholdningshubs og praktiske værktøjer til at planlægge dine ture og administrere opladning.',
+    otherServicesEntertainment: 'Underholdningsportaler',
+    otherServicesTools: 'Værktøjer & hjælpeprogrammer',
     settings: 'Indstillinger',
     settingsAppearance: 'Udseende',
     settingsTheme: 'Tema',
@@ -1504,6 +1550,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: '体育',
     tagNews: '新闻',
     tagDocumentary: '纪录片',
+    otherServicesTitle: '社区服务与电动车工具',
+    otherServicesSubtitle: '发现为XPENG屏幕优化的第三方门户、电动车娱乐中心以及规划行程和管理充电的实用工具。',
+    otherServicesEntertainment: '娱乐门户',
+    otherServicesTools: '工具与实用程序',
     settings: '设置',
     settingsAppearance: '外观',
     settingsTheme: '主题',
@@ -1638,6 +1688,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'رياضة',
     tagNews: 'أخبار',
     tagDocumentary: 'وثائقي',
+    otherServicesTitle: 'خدمات المجتمع وأدوات السيارات الكهربائية',
+    otherServicesSubtitle: 'اكتشف بوابات الطرف الثالث المحسّنة لشاشة XPENG ومراكز الترفيه للسيارات الكهربائية والأدوات العملية لتخطيط رحلاتك وإدارة الشحن.',
+    otherServicesEntertainment: 'بوابات الترفيه',
+    otherServicesTools: 'أدوات ومرافق',
     settings: 'الإعدادات',
     settingsAppearance: 'المظهر',
     settingsTheme: 'السمة',
@@ -1772,6 +1826,10 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     tagSport: 'ספורט',
     tagNews: 'חדשות',
     tagDocumentary: 'תיעודי',
+    otherServicesTitle: 'שירותי קהילה וכלי רכב חשמלי',
+    otherServicesSubtitle: 'גלה פורטלים של צד שלישי המותאמים למסך XPENG, מרכזי בידור לרכב חשמלי וכלים מעשיים לתכנון הנסיעות שלך וניהול הטעינה.',
+    otherServicesEntertainment: 'פורטלי בידור',
+    otherServicesTools: 'כלים ותוכנות עזר',
     settings: 'הגדרות',
     settingsAppearance: 'מראה',
     settingsTheme: 'ערכת נושא',
