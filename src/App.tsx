@@ -1,11 +1,11 @@
 import { useTheme } from './context/ThemeContext';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { HomePage } from './pages/HomePage';
+import HomePage from './pages/HomePage';
 import { SettingsPage } from './pages/SettingsPage';
 import { Navbar } from './components/layout/Navbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { Footer } from './components/layout/Footer';
-import { CategoriesPage } from './pages/CategoriesPage';
+import CategoriesPage from './pages/CategoriesPage';
 import AllServicesPage from './pages/AllServicesPage';
 import VideosPage from './pages/VideosPage';
 import MusicPage from './pages/MusicPage';

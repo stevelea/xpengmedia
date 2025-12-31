@@ -18,8 +18,9 @@ export const EditablePlatformCard: React.FC<EditablePlatformCardProps> = ({
 }) => {
   const { tPlatform, t } = useLocale();
 
-  // ✅ Get translated description
-  const description = tPlatform(platform.id) || platform.description;
+  // ✅ Get translated description (for future tooltip/hover use)
+  const _description = tPlatform(platform.id) || platform.description;
+  void _description; // Silence unused variable warning
 
   const handleClick = (e: React.MouseEvent) => {
     if (isEditable) {

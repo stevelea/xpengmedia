@@ -1,17 +1,15 @@
 // Updated FavoritesPage.tsx with full i18n support
-// Replace your existing src/pages/FavoritesPage.tsx with this file
 
 import React, { useState, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useLocale } from '../context/LocaleContext';
 import { useFavorites } from '../context/FavoritesContext';
-import { PlatformCard } from '../components/platforms/PlatformCard';
 
 type SortOption = 'alphabetical' | 'recent' | 'popular' | 'category';
 
 const FavoritesPage: React.FC = () => {
   const { t } = useLocale();
-  const { favorites, pinnedFavorites, recentFavorites } = useFavorites();
+  const { favorites } = useFavorites();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<SortOption>('recent');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -130,48 +128,6 @@ const FavoritesPage: React.FC = () => {
           </select>
         </div>
       </div>
-
-      {/* Pinned Favorites */}
-      {pinnedFavorites && pinnedFavorites.length > 0 && (
-        <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-white">
-            <span>📌</span>
-            {t('favoritesPinnedTitle')}
-          </h2>
-          <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
-            {pinnedFavorites.map((favorite) => (
-              <motion.div
-                key={favorite.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <FavoriteCard favorite={favorite} />
-              </motion.div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Recent Favorites */}
-      {recentFavorites && recentFavorites.length > 0 && (
-        <section>
-          <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-slate-900 dark:text-white">
-            <span>🕐</span>
-            {t('favoritesRecentTitle')}
-          </h2>
-          <div className="grid grid-cols-4 gap-3 md:grid-cols-6 lg:grid-cols-8">
-            {recentFavorites.slice(0, 8).map((favorite) => (
-              <motion.div
-                key={favorite.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-              >
-                <FavoriteCard favorite={favorite} />
-              </motion.div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* All Favorites */}
       <section>

@@ -4,20 +4,21 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useLocale } from '../context/LocaleContext';
-import { 
-  videoCategories, 
-  musicCategories, 
-  gamesCategories, 
+import {
+  videoCategories,
+  musicCategories,
+  gamesCategories,
   otherServices,
-  type PlatformLink,
-  type AvailabilityScope 
+  type PlatformLink
 } from '../data/platforms';
 import { EditablePlatformCard } from '../components/platforms/EditablePlatformCard';
 import { filterByRegion } from '../utils/regionFilter';
 
 const HomePage: React.FC = () => {
   const { t, tCategory, locale } = useLocale();
-  const [isEditMode, setIsEditMode] = useState(false);
+  // Edit mode for future use
+  const [isEditMode, _setIsEditMode] = useState(false);
+  void _setIsEditMode;
   const [removedPlatforms, setRemovedPlatforms] = useState<Set<string>>(new Set());
 
   // Filter platforms by region

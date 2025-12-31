@@ -129,7 +129,8 @@ const detectBrowserLocale = (): Locale => {
     };
 
     const detectedRegion = timezoneToRegion[timezone] || 'france'; // Default to France
-    const detectedLanguage = langToCode[browserLang] || langToCode[browserLang.split('-')[0]] || 'fr';
+    const baseLang = browserLang.split('-')[0] || 'en';
+    const detectedLanguage = langToCode[browserLang] || langToCode[baseLang] || 'fr';
 
     console.log('🌍 Auto-detection:', { timezone, browserLang, detectedRegion, detectedLanguage });
 

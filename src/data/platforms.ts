@@ -1960,3 +1960,6 @@ export const otherServicesCategories: PlatformCategory[] = [
     ],
   },
 ];
+
+// Alias for backwards compatibility
+export const otherServices = otherServicesCategories;

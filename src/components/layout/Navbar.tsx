@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '../../context/LocaleContext';
-import { LocaleSelector } from './LocaleSelector';
+import { LocaleSelector } from '../locale/LocaleSelector';
 import { ThemeToggle } from './ThemeToggle';
 
 interface NavItem {

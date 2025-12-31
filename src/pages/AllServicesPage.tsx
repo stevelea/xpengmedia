@@ -20,7 +20,9 @@ const AllServicesPage: React.FC = () => {
   const { t, tPlatform, locale } = useLocale();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  // Category filter for future use
+  const [_selectedCategory, _setSelectedCategory] = useState<string>('all');
+  void _selectedCategory; void _setSelectedCategory;
 
   // Collect all platforms from all categories
   const allPlatforms = useMemo(() => {

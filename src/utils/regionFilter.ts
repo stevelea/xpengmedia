@@ -94,16 +94,19 @@ export function countPlatformsByCategory(
 export function getSuggestedRegionsForUser(userRegion: Region): Region[] {
   const metadata = regionsMetadata.find(r => r.code === userRegion);
   if (!metadata) return [];
-  
+
   const suggestions = new Set<Region>();
-  
+
   // Ajouter les voisins
   metadata.neighbors.forEach(n => suggestions.add(n));
-  
+
   // Ajouter les régions du même groupe
   regionsMetadata
     .filter(r => r.group === metadata.group && r.code !== userRegion)
     .forEach(r => suggestions.add(r.code));
-  
+
   return Array.from(suggestions);
 }
+
+// Alias for backwards compatibility
+export const filterByRegion = filterPlatformsByRegion;

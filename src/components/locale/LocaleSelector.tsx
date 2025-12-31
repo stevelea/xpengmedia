@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '../../context/LocaleContext';
-import type { Region } from '../../context/LocaleContext';
+import type { Region, Language } from '../../context/LocaleContext';
 import { ChevronDownIcon, CheckIcon } from '@heroicons/react/24/outline';
 
 export const LocaleSelector: React.FC = () => {
-  const { locale, setLocale, availableRegions, t } = useLocale();
+  const { locale, setLocale, regions, t } = useLocale();
   const [isOpen, setIsOpen] = useState(false);
   const [buttonPosition, setButtonPosition] = useState({ top: 0, right: 0 });
   const dropdownRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const defaultRegion: { code: Region; name: string; flag: string; language: string } = {
+  const defaultRegion: { code: Region; name: string; flag: string; language: Language } = {
     code: 'global',
     name: 'Global',
     flag: '🌍',
@@ -20,7 +20,7 @@ export const LocaleSelector: React.FC = () => {
   };
 
   const currentRegion =
-    availableRegions.find((r) => r.code === locale.region) || availableRegions[0] || defaultRegion;
+    regions.find((r) => r.code === locale.region) || regions[0] || defaultRegion;
 
   // Calculer la position du bouton
   useEffect(() => {
@@ -54,7 +54,7 @@ export const LocaleSelector: React.FC = () => {
     };
   }, [isOpen]);
 
-  const handleSelect = (regionCode: Region, language: string) => {
+  const handleSelect = (regionCode: Region, language: Language) => {
     console.log('🚩 LocaleSelector: Changing to', { region: regionCode, language });
     console.log('📍 Locale actuel dans selector:', locale);
     const newLocale = { region: regionCode, language };
@@ -96,7 +96,7 @@ export const LocaleSelector: React.FC = () => {
                 {t('selectRegion')}
               </div>
               <div className="max-h-80 space-y-1 overflow-y-auto">
-                {availableRegions.map((region) => {
+                {regions.map((region) => {
                   const isSelected = region.code === locale.region;
                   return (
                     <motion.button
