@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>XPENG Timer</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .timer-container {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: 0 24px 80px rgba(15,23,42,0.95);
+      padding: 18px 18px 20px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #22c55e;
+    }
+    .subtitle {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+    .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(74,222,128,0.6);
+      color: #bbf7d0;
+      background: radial-gradient(circle at top left, rgba(34,197,94,0.35), transparent 55%);
+    }
+    .display {
+      margin-top: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .time {
+      font-size: 40px;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+    .hint {
+      font-size: 11px;
+      color: #6b7280;
+    }
+    .controls {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .presets {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      flex: 1;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 13px;
+      padding: 10px 0;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-color: transparent;
+      color: #ecfdf5;
+      box-shadow: 0 12px 30px rgba(34,197,94,0.55);
+    }
+    .btn:active { transform: translateY(1px) scale(0.99); }
+    .footer {
+      font-size: 10px;
+      color: #6b7280;
+      text-align: right;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="timer-container">
+    <div>
+      <div class="header">
+        <div>
+          <div class="title">XPENG TIMER</div>
+          <div class="subtitle">Chronomètre simple pour vos pauses et recharges</div>
+        </div>
+        <div class="pill" id="statusPill">⏹️ Arrêté</div>
+      </div>
+    </div>
+
+    <div class="display">
+      <div id="time" class="time">00:00:00</div>
+      <div id="hint" class="hint">Touchez « Démarrer » pour lancer le chronomètre</div>
+    </div>
+
+    <div class="controls">
+      <button id="btnStartStop" class="btn btn-primary">▶️ Démarrer</button>
+      <button id="btnReset" class="btn">⏱️ Réinitialiser</button>
+    </div>
+
+    <div class="presets">
+      <button class="btn" data-minutes="5">5 min</button>
+      <button class="btn" data-minutes="10">10 min</button>
+      <button class="btn" data-minutes="15">15 min</button>
+    </div>
+
+    <div class="footer">⚠️ Ne pas utiliser en conduisant. Pour arrêts / stationnement uniquement.</div>
+  </div>
+
+  <script>
+    const timeEl = document.getElementById('time');
+    const btnStartStop = document.getElementById('btnStartStop');
+    const btnReset = document.getElementById('btnReset');
+    const statusPill = document.getElementById('statusPill');
+    const hintEl = document.getElementById('hint');
+    const presetButtons = Array.from(document.querySelectorAll('.presets .btn'));
+
+    let startTime = null;
+    let elapsed = 0; // en ms
+    let timerId = null;
+
+    // mode: 'stopwatch' (par défaut) ou 'countdown'
+    let mode = 'stopwatch';
+    let countdownDuration = 0; // en ms
+    let countdownEndTime = null;
+
+    function format(ms) {
+      const totalSec = Math.floor(ms / 1000);
+      const h = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+      const m = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+      const s = String(totalSec % 60).padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    }
+
+    function update() {
+      const now = Date.now();
+      const current = elapsed + (startTime ? now - startTime : 0);
+      timeEl.textContent = format(current);
+    }
+
+    function updateCountdown() {
+      if (!countdownEndTime) return;
+      const remaining = countdownEndTime - Date.now();
+      if (remaining <= 0) {
+        clearInterval(timerId);
+        timerId = null;
+        countdownEndTime = null;
+        timeEl.textContent = format(0);
+        statusPill.textContent = '✅ Terminé';
+        hintEl.textContent = 'Compte à rebours terminé';
+        btnStartStop.textContent = '▶️ Démarrer';
+        if (navigator.vibrate) {
+          navigator.vibrate([60, 80, 60]);
+        }
+      } else {
+        timeEl.textContent = format(remaining);
+      }
+    }
+
+    function start() {
+      if (timerId) return;
+
+      if (mode === 'countdown') {
+        if (!countdownDuration) {
+          countdownDuration = 5 * 60 * 1000; // défaut 5 min
+        }
+        countdownEndTime = Date.now() + countdownDuration;
+        timerId = setInterval(updateCountdown, 250);
+        statusPill.textContent = '⏳ Compte à rebours';
+        hintEl.textContent = 'Compte à rebours en cours';
+        btnStartStop.textContent = '⏸️ Arrêter';
+      } else {
+        // mode chronomètre
+        startTime = Date.now();
+        timerId = setInterval(update, 250);
+        statusPill.textContent = '▶️ En cours';
+        hintEl.textContent = 'Chronomètre en cours';
+        btnStartStop.textContent = '⏸️ Pause';
+      }
+    }
+
+    function stop() {
+      if (!timerId) return;
+      clearInterval(timerId);
+      timerId = null;
+
+      if (mode === 'countdown') {
+        countdownEndTime = null;
+        timeEl.textContent = format(countdownDuration || 0);
+        statusPill.textContent = '⏹️ Arrêté';
+        hintEl.textContent = 'Compte à rebours arrêté';
+        btnStartStop.textContent = '▶️ Démarrer';
+      } else {
+        const now = Date.now();
+        elapsed += now - startTime;
+        startTime = null;
+        update();
+        statusPill.textContent = '⏹️ Arrêté';
+        hintEl.textContent = 'Chronomètre arrêté';
+        btnStartStop.textContent = '▶️ Démarrer';
+      }
+    }
+
+    btnStartStop.addEventListener('click', () => {
+      if (timerId) {
+        stop();
+      } else {
+        start();
+      }
+    });
+
+    btnReset.addEventListener('click', () => {
+      const hadTime = elapsed > 0 || timerId;
+      stop();
+      if (mode === 'countdown') {
+        countdownDuration = 0;
+        countdownEndTime = null;
+        timeEl.textContent = '00:00:00';
+        statusPill.textContent = '⏹️ Arrêté';
+        hintEl.textContent = 'Choisissez une durée (5/10/15 min)';
+      } else {
+        elapsed = 0;
+        update();
+      }
+      if (hadTime && navigator.vibrate) {
+        navigator.vibrate(30);
+      }
+    });
+
+    // Presets compte à rebours
+    presetButtons.forEach((btn) => {
+      const minutes = Number(btn.getAttribute('data-minutes')) || 0;
+      btn.addEventListener('click', () => {
+        if (timerId) {
+          stop();
+        }
+        mode = 'countdown';
+        countdownDuration = minutes * 60 * 1000;
+        countdownEndTime = null;
+        timeEl.textContent = format(countdownDuration);
+        statusPill.textContent = `⏹️ Prêt (${minutes} min)`;
+        hintEl.textContent = 'Touchez « Démarrer » pour lancer le compte à rebours';
+      });
+    });
+
+    update();
+  </script>
+</body>
+</html>
