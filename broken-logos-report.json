@@ -1,0 +1,453 @@
+{
+  "total": 208,
+  "simpleIcons": 68,
+  "clearbit": 89,
+  "flaticon": 34,
+  "wikipedia": 0,
+  "other": 17,
+  "clearbitServices": [
+    {
+      "id": "hidive",
+      "name": "HIDIVE"
+    },
+    {
+      "id": "rakuten-viki",
+      "name": "Viki"
+    },
+    {
+      "id": "espn-plus",
+      "name": "ESPN+"
+    },
+    {
+      "id": "dazn",
+      "name": "DAZN"
+    },
+    {
+      "id": "roku-channel",
+      "name": "The Roku Channel"
+    },
+    {
+      "id": "xumo",
+      "name": "Xumo"
+    },
+    {
+      "id": "stirr",
+      "name": "Stirr"
+    },
+    {
+      "id": "redbox",
+      "name": "Redbox"
+    },
+    {
+      "id": "vudu",
+      "name": "Vudu"
+    },
+    {
+      "id": "hoopla",
+      "name": "Hoopla"
+    },
+    {
+      "id": "kanopy",
+      "name": "Kanopy"
+    },
+    {
+      "id": "curiositystream",
+      "name": "CuriosityStream"
+    },
+    {
+      "id": "free-tv",
+      "name": "Livestream"
+    },
+    {
+      "id": "molotov",
+      "name": "Molotov TV"
+    },
+    {
+      "id": "tvmucho",
+      "name": "TVMucho"
+    },
+    {
+      "id": "europe",
+      "name": "France.tv"
+    },
+    {
+      "id": "bbc-iplayer",
+      "name": "BBC iPlayer"
+    },
+    {
+      "id": "rtlplay",
+      "name": "RTL Play"
+    },
+    {
+      "id": "pickx",
+      "name": "Pickx"
+    },
+    {
+      "id": "playsuisse",
+      "name": "Play Suisse"
+    },
+    {
+      "id": "dazn-europe",
+      "name": "DAZN France"
+    },
+    {
+      "id": "justwatch",
+      "name": "JustWatch"
+    },
+    {
+      "id": "adn",
+      "name": "ADN (Anime Digital Network)"
+    },
+    {
+      "id": "wakanim",
+      "name": "Wakanim"
+    },
+    {
+      "id": "stan",
+      "name": "Stan"
+    },
+    {
+      "id": "abc-iview",
+      "name": "ABC iview"
+    },
+    {
+      "id": "sbs-on-demand",
+      "name": "SBS On Demand"
+    },
+    {
+      "id": "7plus",
+      "name": "7plus"
+    },
+    {
+      "id": "9now",
+      "name": "9Now"
+    },
+    {
+      "id": "10play",
+      "name": "10 play"
+    },
+    {
+      "id": "kayo-sports",
+      "name": "Kayo Sports"
+    },
+    {
+      "id": "iqiyi",
+      "name": "iQIYI"
+    },
+    {
+      "id": "tencent-video",
+      "name": "Tencent Video"
+    },
+    {
+      "id": "youku",
+      "name": "Youku"
+    },
+    {
+      "id": "douyin",
+      "name": "Douyin 抖音"
+    },
+    {
+      "id": "mango-tv",
+      "name": "Mango TV"
+    },
+    {
+      "id": "masterclass",
+      "name": "MasterClass"
+    },
+    {
+      "id": "anghami",
+      "name": "Anghami"
+    },
+    {
+      "id": "asia-music",
+      "name": "QQ Music"
+    },
+    {
+      "id": "boosteroid",
+      "name": "Boosteroid"
+    },
+    {
+      "id": "poki",
+      "name": "Poki"
+    },
+    {
+      "id": "miniclip",
+      "name": "Miniclip"
+    },
+    {
+      "id": "armor-games",
+      "name": "Armor Games"
+    },
+    {
+      "id": "kongregate",
+      "name": "Kongregate"
+    },
+    {
+      "id": "y8",
+      "name": "Y8"
+    },
+    {
+      "id": "newgrounds",
+      "name": "Newgrounds"
+    },
+    {
+      "id": "addicting-games",
+      "name": "Addicting Games"
+    },
+    {
+      "id": "friv",
+      "name": "Friv"
+    },
+    {
+      "id": "agame",
+      "name": "Agame"
+    },
+    {
+      "id": "gamesnacks",
+      "name": "GameSnacks"
+    },
+    {
+      "id": "pbs-kids",
+      "name": "PBS Kids Games"
+    },
+    {
+      "id": "xpeng-supercharging",
+      "name": "XPENG Stations"
+    },
+    {
+      "id": "chargemap",
+      "name": "Chargemap"
+    },
+    {
+      "id": "abrp",
+      "name": "A Better Route Planner"
+    },
+    {
+      "id": "total-ev-charge",
+      "name": "Total EV Charge"
+    },
+    {
+      "id": "abettertheater",
+      "name": "A Better Theater"
+    },
+    {
+      "id": "abettertheater-members",
+      "name": "ABT Members"
+    },
+    {
+      "id": "teslaos",
+      "name": "TeslaOS.io"
+    },
+    {
+      "id": "myteslanu",
+      "name": "MyTesla.nu"
+    },
+    {
+      "id": "teslafi",
+      "name": "TeslaFi"
+    },
+    {
+      "id": "tessie",
+      "name": "Tessie"
+    },
+    {
+      "id": "teslatheatre",
+      "name": "TeslaTheatre"
+    },
+    {
+      "id": "tezlab",
+      "name": "TezLab"
+    },
+    {
+      "id": "ev-tools",
+      "name": "A Better Route Planner"
+    },
+    {
+      "id": "zap-map",
+      "name": "Zap-Map"
+    },
+    {
+      "id": "electrify-america",
+      "name": "Electrify America"
+    },
+    {
+      "id": "open-charge-map",
+      "name": "Open Charge Map"
+    },
+    {
+      "id": "ev-trip-planner",
+      "name": "EV Trip Planner"
+    },
+    {
+      "id": "news-info",
+      "name": "CNN"
+    },
+    {
+      "id": "bbc-news",
+      "name": "BBC News"
+    },
+    {
+      "id": "reuters",
+      "name": "Reuters"
+    },
+    {
+      "id": "lemonde",
+      "name": "Le Monde"
+    },
+    {
+      "id": "xpeng-p5-manual",
+      "name": "XPENG P5 - Manuel"
+    },
+    {
+      "id": "xpeng-g6-manual",
+      "name": "XPENG G6 - Manuel"
+    },
+    {
+      "id": "xpeng-p7-manual",
+      "name": "XPENG P7 - Manuel"
+    },
+    {
+      "id": "xpeng-g9-manual",
+      "name": "XPENG G9 - Manuel"
+    },
+    {
+      "id": "xpeng-xmart-os",
+      "name": "Xmart OS - Guide"
+    },
+    {
+      "id": "xpeng-charging-guide",
+      "name": "Guide de Recharge"
+    },
+    {
+      "id": "xpeng-xpilot-guide",
+      "name": "XPILOT - Guide"
+    },
+    {
+      "id": "xpeng-faq",
+      "name": "FAQ XPENG"
+    },
+    {
+      "id": "xpeng-service-centers",
+      "name": "Centres de Service"
+    },
+    {
+      "id": "google-search",
+      "name": "Google"
+    },
+    {
+      "id": "xpeng-europe",
+      "name": "XPENG Europe"
+    },
+    {
+      "id": "xpeng-france",
+      "name": "XPENG France"
+    },
+    {
+      "id": "xpeng-tech-reviews",
+      "name": "XPENG Tech Reviews"
+    },
+    {
+      "id": "xpeng-owners-club",
+      "name": "XPENG Owners Club"
+    },
+    {
+      "id": "ev-reviewers-xpeng",
+      "name": "EV YouTubers - XPENG"
+    },
+    {
+      "id": "xpeng-accessories-fr",
+      "name": "Accessoires XPENG France"
+    },
+    {
+      "id": "xpeng-discord",
+      "name": "Discord XPENG France"
+    }
+  ],
+  "otherServices": [
+    {
+      "id": "canal-plus",
+      "name": "Canal+",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Canal%2B.svg"
+    },
+    {
+      "id": "oqee-tv",
+      "name": "Oqee by Orange",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Orange_logo.svg"
+    },
+    {
+      "id": "pluto-tv",
+      "name": "Pluto TV",
+      "icon": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/pluto.svg"
+    },
+    {
+      "id": "tubi",
+      "name": "Tubi",
+      "icon": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tubi.svg"
+    },
+    {
+      "id": "archive-org",
+      "name": "Internet Archive",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/8/84/Internet_Archive_logo_and_wordmark.svg"
+    },
+    {
+      "id": "free-tv-plus",
+      "name": "Free TV+",
+      "icon": "https://upload.wikimedia.org/wikipedia/fr/3/35/Free_%28logo%29.svg"
+    },
+    {
+      "id": "arte",
+      "name": "Arte",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Arte_Logo_2017.svg"
+    },
+    {
+      "id": "francetv",
+      "name": "France.tv",
+      "icon": "https://upload.wikimedia.org/wikipedia/fr/3/3b/France_T%C3%A9l%C3%A9visions_2018.svg"
+    },
+    {
+      "id": "zdf",
+      "name": "ZDF Mediathek",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/e/e5/ZDF_logo.svg"
+    },
+    {
+      "id": "ard-mediathek",
+      "name": "ARD Mediathek",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/5/5c/ARD_logo.svg"
+    },
+    {
+      "id": "6play",
+      "name": "6Play (M6+)",
+      "icon": "https://upload.wikimedia.org/wikipedia/fr/e/e8/6play_logo_2018.svg"
+    },
+    {
+      "id": "tf1plus",
+      "name": "TF1+",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/d/da/TF1_logo_2013.svg"
+    },
+    {
+      "id": "bfmtv",
+      "name": "BFM TV",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/3/3c/BFMTV_logo_%282019%29.svg"
+    },
+    {
+      "id": "lci",
+      "name": "LCI",
+      "icon": "https://upload.wikimedia.org/wikipedia/fr/d/de/Logo_LCI_2016.svg"
+    },
+    {
+      "id": "cnews",
+      "name": "CNews",
+      "icon": "https://upload.wikimedia.org/wikipedia/fr/2/20/CNews_2017.svg"
+    },
+    {
+      "id": "asia-streaming",
+      "name": "Bilibili",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/1/12/Bilibili_Logo_Blue.svg"
+    },
+    {
+      "id": "weibo",
+      "name": "Weibo 微博",
+      "icon": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/sinaweibo.svg"
+    }
+  ]
+}

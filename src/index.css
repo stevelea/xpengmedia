@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 190 75% 96%;
+    --foreground: 220 50% 20%;
+    --card: 190 70% 94%;
+    --card-foreground: 220 50% 20%;
+    --popover: 195 55% 95%;
+    --popover-foreground: 220 45% 12%;
+    --primary: 191 92% 48%;
+    --primary-foreground: 205 50% 98%;
+    --secondary: 199 90% 52%;
+    --secondary-foreground: 205 50% 98%;
+    --muted: 195 45% 90%;
+    --muted-foreground: 220 35% 42%;
+    --accent: 191 85% 86%;
+    --accent-foreground: 220 45% 15%;
+    --destructive: 2 87% 58%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 195 50% 86%;
+    --input: 195 50% 86%;
+    --ring: 191 92% 48%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 220 50% 4%;
+    --foreground: 210 40% 98%;
+    --card: 220 45% 8%;
+    --card-foreground: 210 40% 98%;
+    --popover: 220 45% 8%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 191 92% 58%;
+    --primary-foreground: 220 50% 4%;
+    --secondary: 199 95% 52%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 220 45% 12%;
+    --muted-foreground: 214 32% 82%;
+    --accent: 191 100% 48%;
+    --accent-foreground: 220 50% 4%;
+    --destructive: 356 78% 60%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 220 45% 15%;
+    --input: 220 45% 15%;
+    --ring: 191 92% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    font-family: 'Urbanist', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    min-height: 100vh;
+    background-color: #E8F7FC;
+    background-image: 
+      radial-gradient(ellipse at top left, rgba(6, 182, 212, 0.35), transparent 50%),
+      radial-gradient(ellipse at top right, rgba(14, 165, 233, 0.28), transparent 50%),
+      radial-gradient(ellipse at bottom center, rgba(56, 189, 248, 0.22), transparent 60%),
+      radial-gradient(ellipse at center, rgba(125, 211, 252, 0.18), transparent 70%);
+    background-attachment: fixed;
+    @apply text-foreground;
+  }
+  
+  .dark body {
+    background-image: 
+      radial-gradient(ellipse at top left, rgba(6, 182, 212, 0.18), transparent 45%),
+      radial-gradient(ellipse at top right, rgba(14, 165, 233, 0.15), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(8, 145, 178, 0.12), transparent 55%),
+      radial-gradient(ellipse at bottom right, rgba(56, 189, 248, 0.1), transparent 60%);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight text-slate-800 dark:text-slate-50;
+  }
+  a {
+    @apply text-primary transition-colors;
+  }
+  a:hover {
+    @apply text-secondary;
+  }
+}
+
+@layer utilities {
+  .glass-panel {
+    @apply rounded-3xl border border-white/10 bg-white/40 shadow-[0_25px_60px_-30px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-cyan-500/20 dark:bg-slate-900/60;
+  }
+  
+  .xpeng-glass {
+    @apply rounded-2xl border border-cyan-500/20 bg-gradient-to-br from-slate-900/70 via-slate-900/60 to-slate-800/70 shadow-[0_8px_32px_0_rgba(6,182,212,0.15)] backdrop-blur-2xl dark:shadow-[0_8px_32px_0_rgba(6,182,212,0.25)];
+  }
+  
+  .xpeng-card {
+    @apply rounded-2xl border border-slate-800/80 bg-gradient-to-br from-slate-900/90 via-slate-900/80 to-slate-950/90 shadow-lg backdrop-blur-xl transition-all duration-300 hover:border-cyan-500/40 hover:shadow-[0_0_25px_rgba(6,182,212,0.3)] dark:border-slate-800/60 dark:bg-gradient-to-br dark:from-slate-900/95 dark:via-slate-900/85 dark:to-slate-950/95;
+  }
+  
+  .xpeng-glow {
+    @apply shadow-[0_0_20px_rgba(6,182,212,0.4)];
+  }
+  
+  .xpeng-glow-strong {
+    @apply shadow-[0_0_35px_rgba(6,182,212,0.6),0_0_60px_rgba(14,165,233,0.3)];
+  }
+  
+  .xpeng-text-glow {
+    text-shadow: 0 0 20px rgba(6, 182, 212, 0.5), 0 0 40px rgba(14, 165, 233, 0.3);
+  }
+  
+  .xpeng-gradient {
+    @apply bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-400;
+  }
+  
+  .xpeng-gradient-dark {
+    @apply bg-gradient-to-br from-slate-900 via-slate-800 to-blue-950;
+  }
+  
+  /* Animation de pulsation subtile */
+  @keyframes xpeng-pulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+  }
+  
+  .xpeng-pulse {
+    animation: xpeng-pulse 3s ease-in-out infinite;
+  }
+  
+  /* Effet de scan lumineux */
+  @keyframes xpeng-scan {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .xpeng-scan {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .xpeng-scan::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.3), transparent);
+    animation: xpeng-scan 3s ease-in-out infinite;
+  }
+}

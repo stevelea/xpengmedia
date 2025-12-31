@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>XPENG Web Notes</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at top, #020617 0, #020617 40%, #000 100%);
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .notes-container {
+      width: 100%;
+      max-width: 900px;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.25), transparent 55%),
+                  radial-gradient(circle at bottom right, rgba(34,197,94,0.18), transparent 55%),
+                  rgba(15,23,42,0.96);
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: 0 24px 80px rgba(15,23,42,0.95);
+      padding: 18px;
+      backdrop-filter: blur(16px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+    .title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #38bdf8;
+    }
+    .subtitle {
+      font-size: 11px;
+      color: #9ca3af;
+      margin-top: 2px;
+    }
+    .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(148,163,184,0.5);
+      color: #cbd5f5;
+      background: rgba(15,23,42,0.9);
+      white-space: nowrap;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .toolbar-left {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .toolbar-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+      padding: 6px 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn:hover { border-color: #38bdf8; }
+    .btn:active { transform: translateY(1px) scale(0.99); }
+    .last-saved {
+      font-size: 10px;
+      color: #6b7280;
+      text-align: right;
+    }
+    .note-selector {
+      min-width: 150px;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.9);
+      color: #e5e7eb;
+      font-size: 11px;
+      padding: 6px 10px;
+      outline: none;
+    }
+    .textarea {
+      margin-top: 6px;
+      flex: 1;
+      border-radius: 18px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.95);
+      padding: 14px 14px;
+      font-size: 14px;
+      color: #e5e7eb;
+      resize: none;
+      min-height: 260px;
+      outline: none;
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.9);
+    }
+  </style>
+</head>
+<body>
+  <div class="notes-container">
+    <div>
+      <div class="header">
+        <div>
+          <div class="title">XPENG WEB NOTES</div>
+          <div class="subtitle">Bloc-notes persistant pour vos trajets (XPENG navigateur uniquement)</div>
+        </div>
+        <div class="pill">📝 Sauvegarde automatique</div>
+      </div>
+      <div class="toolbar">
+        <div class="toolbar-left">
+          <select id="noteSelector" class="note-selector"></select>
+          <button class="btn" id="btnNewNote">➕ Nouvelle</button>
+          <button class="btn" id="btnDeleteNote">🗑️ Suppr. note</button>
+        </div>
+        <div class="toolbar-right">
+          <button class="btn" id="btnInsertTime">⏱️ Horodatage</button>
+          <button class="btn" id="btnClear">🧹 Effacer le texte</button>
+        </div>
+      </div>
+    </div>
+    <textarea id="notesArea" class="textarea" placeholder="Écrivez vos notes ici..."></textarea>
+    <div class="last-saved" id="lastSaved"></div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'xpeng_web_notes_v2';
+    const LEGACY_KEY = 'xpeng_web_notes';
+
+    const notesArea = document.getElementById('notesArea');
+    const lastSavedEl = document.getElementById('lastSaved');
+    const noteSelector = document.getElementById('noteSelector');
+    const btnNewNote = document.getElementById('btnNewNote');
+    const btnDeleteNote = document.getElementById('btnDeleteNote');
+    const btnClear = document.getElementById('btnClear');
+    const btnInsertTime = document.getElementById('btnInsertTime');
+
+    let state = {
+      activeId: '',
+      notes: [],
+    };
+
+    function formatDate(d) {
+      return new Date(d).toLocaleString('fr-FR');
+    }
+
+    function createDefaultState() {
+      const now = Date.now();
+      const id = 'note-' + now;
+      return {
+        activeId: id,
+        notes: [
+          {
+            id,
+            title: 'Note principale',
+            text: '',
+            updatedAt: now,
+          },
+        ],
+      };
+    }
+
+    function migrateLegacy() {
+      try {
+        const raw = localStorage.getItem(LEGACY_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        const text = typeof parsed === 'string' ? parsed : parsed.text || '';
+        const updatedAt = parsed.updatedAt || Date.now();
+        const id = 'note-legacy';
+        return {
+          activeId: id,
+          notes: [
+            {
+              id,
+              title: 'Note principale',
+              text,
+              updatedAt,
+            },
+          ],
+        };
+      } catch (e) {
+        console.error('Erreur migration notes legacy', e);
+        return null;
+      }
+    }
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && Array.isArray(parsed.notes) && parsed.notes.length > 0 && typeof parsed.activeId === 'string') {
+            state = parsed;
+            return;
+          }
+        }
+        const migrated = migrateLegacy();
+        state = migrated || createDefaultState();
+      } catch (e) {
+        console.error('Erreur chargement notes', e);
+        state = createDefaultState();
+      }
+    }
+
+    function updateLastSaved() {
+      const active = state.notes.find((n) => n.id === state.activeId);
+      if (!active) {
+        lastSavedEl.textContent = '';
+        return;
+      }
+      lastSavedEl.textContent = 'Dernière sauvegarde : ' + formatDate(active.updatedAt);
+    }
+
+    function saveState() {
+      try {
+        const active = state.notes.find((n) => n.id === state.activeId);
+        if (active) {
+          active.text = notesArea.value;
+          active.updatedAt = Date.now();
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        updateLastSaved();
+      } catch (e) {
+        console.error('Erreur sauvegarde notes', e);
+      }
+    }
+
+    function renderSelector() {
+      noteSelector.innerHTML = '';
+      if (!state.notes.length) {
+        state = createDefaultState();
+      }
+      state.notes.forEach((note) => {
+        const opt = document.createElement('option');
+        opt.value = note.id;
+        opt.textContent = note.title;
+        noteSelector.appendChild(opt);
+      });
+      if (!state.notes.find((n) => n.id === state.activeId)) {
+        state.activeId = state.notes[0].id;
+      }
+      noteSelector.value = state.activeId;
+    }
+
+    function applyActiveNote() {
+      const active = state.notes.find((n) => n.id === state.activeId);
+      if (!active) return;
+      notesArea.value = active.text || '';
+      updateLastSaved();
+    }
+
+    function switchNote(newId) {
+      const current = state.notes.find((n) => n.id === state.activeId);
+      if (current) {
+        current.text = notesArea.value;
+        current.updatedAt = Date.now();
+      }
+      state.activeId = newId;
+      applyActiveNote();
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.error('Erreur sauvegarde lors du changement de note', e);
+      }
+    }
+
+    // Autosave
+    let saveTimeout = null;
+    notesArea.addEventListener('input', () => {
+      if (saveTimeout) clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(saveState, 400);
+    });
+
+    // Boutons actions
+    btnClear.addEventListener('click', () => {
+      if (!notesArea.value) return;
+      if (confirm('Effacer le contenu de cette note ?')) {
+        notesArea.value = '';
+        saveState();
+      }
+    });
+
+    btnInsertTime.addEventListener('click', () => {
+      const now = formatDate(Date.now());
+      const prefix = notesArea.value ? '\n\n' : '';
+      notesArea.value += prefix + '[' + now + '] ';
+      saveState();
+    });
+
+    noteSelector.addEventListener('change', () => {
+      const newId = noteSelector.value;
+      if (!newId) return;
+      switchNote(newId);
+    });
+
+    btnNewNote.addEventListener('click', () => {
+      let title = prompt('Nom de la nouvelle note :', 'Nouvelle note');
+      if (title === null) return;
+      title = title.trim();
+      if (!title) {
+        title = 'Nouvelle note ' + (state.notes.length + 1);
+      }
+      const id = 'note-' + Date.now();
+      const newNote = {
+        id,
+        title,
+        text: '',
+        updatedAt: Date.now(),
+      };
+      state.notes.push(newNote);
+      state.activeId = id;
+      renderSelector();
+      applyActiveNote();
+      saveState();
+    });
+
+    btnDeleteNote.addEventListener('click', () => {
+      if (!state.notes.length) return;
+      if (state.notes.length === 1) {
+        if (confirm('Effacer le contenu de la seule note ?')) {
+          notesArea.value = '';
+          saveState();
+        }
+        return;
+      }
+      const active = state.notes.find((n) => n.id === state.activeId);
+      const label = active ? `"${active.title}"` : 'cette note';
+      if (!confirm('Supprimer ' + label + ' ?')) return;
+      state.notes = state.notes.filter((n) => n.id !== state.activeId);
+      if (!state.notes.length) {
+        state = createDefaultState();
+      }
+      state.activeId = state.notes[0].id;
+      renderSelector();
+      applyActiveNote();
+      saveState();
+    });
+
+    // Initialisation
+    loadState();
+    renderSelector();
+    applyActiveNote();
+  </script>
+</body>
+</html>

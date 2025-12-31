@@ -1,0 +1,120 @@
+{
+  "totalServices": 194,
+  "issuesFound": 19,
+  "issues": [
+    {
+      "service": "Canal+",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "Molotov TV",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "Arte",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "ZDF Mediathek",
+      "problem": "Service allemand sans availability Germany",
+      "current": "europe",
+      "suggested": "germany ou northern_europe"
+    },
+    {
+      "service": "France.tv",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "France.tv",
+      "problem": "Availability \"europe\" trop large pour service national",
+      "current": "europe",
+      "suggested": "Spécifier le pays exact"
+    },
+    {
+      "service": "BBC iPlayer",
+      "problem": "Service UK sans availability UK",
+      "current": "europe",
+      "suggested": "uk ou anglophone"
+    },
+    {
+      "service": "ARD Mediathek",
+      "problem": "Service allemand sans availability Germany",
+      "current": "europe",
+      "suggested": "germany ou northern_europe"
+    },
+    {
+      "service": "DAZN France",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "DAZN France",
+      "problem": "Availability \"europe\" trop large pour service national",
+      "current": "europe",
+      "suggested": "Spécifier le pays exact"
+    },
+    {
+      "service": "Youku",
+      "problem": "Service UK sans availability UK",
+      "current": "china, asia",
+      "suggested": "uk ou anglophone"
+    },
+    {
+      "service": "Info Trafic",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "BBC News",
+      "problem": "Service UK sans availability UK",
+      "current": "global",
+      "suggested": "uk ou anglophone"
+    },
+    {
+      "service": "Le Monde",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "XPENG Europe",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "Accessoires XPENG France",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "Accessoires XPENG France",
+      "problem": "Availability \"europe\" trop large pour service national",
+      "current": "europe",
+      "suggested": "Spécifier le pays exact"
+    },
+    {
+      "service": "Discord XPENG France",
+      "problem": "Service français sans availability France",
+      "current": "europe",
+      "suggested": "france ou western_europe"
+    },
+    {
+      "service": "Discord XPENG France",
+      "problem": "Availability \"europe\" trop large pour service national",
+      "current": "europe",
+      "suggested": "Spécifier le pays exact"
+    }
+  ]
+}

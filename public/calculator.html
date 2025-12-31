@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>XPENG Web Calculator</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 55%, #000 100%);
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .calc-container {
+      width: 100%;
+      max-width: 420px;
+      background: linear-gradient(145deg, rgba(15,23,42,0.96), rgba(15,23,42,0.9));
+      border-radius: 24px;
+      border: 1px solid rgba(148,163,184,0.35);
+      box-shadow: 0 24px 70px rgba(15,23,42,0.9);
+      padding: 18px 18px 20px;
+      backdrop-filter: blur(14px);
+    }
+    .calc-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .calc-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #38bdf8;
+    }
+    .pill {
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      border: 1px solid rgba(148,163,184,0.45);
+      color: #cbd5f5;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.35), transparent 55%);
+    }
+    .display {
+      margin-top: 4px;
+      background: radial-gradient(circle at top right, rgba(59,130,246,0.3), rgba(15,23,42,0.95));
+      border-radius: 18px;
+      padding: 14px 16px;
+      border: 1px solid rgba(55,65,81,0.7);
+      min-height: 72px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 4px;
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.8);
+    }
+    .display-expression {
+      font-size: 12px;
+      color: #9ca3af;
+      text-align: right;
+      min-height: 16px;
+      word-wrap: break-word;
+    }
+    .display-value {
+      font-size: 28px;
+      font-weight: 600;
+      text-align: right;
+      color: #f9fafb;
+      letter-spacing: 0.03em;
+      word-wrap: break-word;
+    }
+    .keypad {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 14px 0;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      color: #e5e7eb;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(31,41,55,0.9);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.9);
+      transition: all 0.12s ease-out;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active {
+      transform: translateY(1px) scale(0.99);
+      box-shadow: 0 4px 10px rgba(15,23,42,0.9);
+    }
+    .btn-operator {
+      color: #38bdf8;
+      border-color: rgba(56,189,248,0.7);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(15,23,42,0.9));
+    }
+    .btn-equal {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      border-color: transparent;
+      color: #ecfdf5;
+      box-shadow: 0 12px 28px rgba(34,197,94,0.55);
+    }
+    .btn-accent {
+      color: #f97316;
+      border-color: rgba(248, 113, 113, 0.65);
+    }
+    .span-2 {
+      grid-column: span 2 / span 2;
+    }
+    .footer-hint {
+      margin-top: 12px;
+      font-size: 10px;
+      text-align: right;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="calc-container">
+    <div class="calc-header">
+      <div>
+        <div class="calc-title">XPENG WEB CALCULATOR</div>
+        <div style="font-size:11px;color:#9ca3af;margin-top:2px;">Optimisée pour navigateur XPENG</div>
+      </div>
+      <div class="pill">≡ Mode plein écran recommandé</div>
+    </div>
+
+    <div class="display">
+      <div id="expression" class="display-expression"></div>
+      <div id="value" class="display-value">0</div>
+    </div>
+
+    <div class="keypad">
+      <button class="btn-accent" data-action="clear">AC</button>
+      <button class="btn-accent" data-action="sign">±</button>
+      <button class="btn-accent" data-action="percent">%</button>
+      <button class="btn-operator" data-value="/">÷</button>
+
+      <button data-value="7">7</button>
+      <button data-value="8">8</button>
+      <button data-value="9">9</button>
+      <button class="btn-operator" data-value="*">×</button>
+
+      <button data-value="4">4</button>
+      <button data-value="5">5</button>
+      <button data-value="6">6</button>
+      <button class="btn-operator" data-value="-">−</button>
+
+      <button data-value="1">1</button>
+      <button data-value="2">2</button>
+      <button data-value="3">3</button>
+      <button class="btn-operator" data-value="+">+</button>
+
+      <button class="span-2" data-value="0">0</button>
+      <button data-value="," data-action="dot">,</button>
+      <button class="btn-equal" data-action="equal">=</button>
+    </div>
+
+    <div class="footer-hint">⚠️ Ne pas utiliser en conduisant. Réservée aux arrêts / stationnement.</div>
+  </div>
+
+  <script>
+    const exprEl = document.getElementById('expression');
+    const valueEl = document.getElementById('value');
+
+    let currentValue = '0';
+    let expression = '';
+    let lastOperator = null;
+    let resetOnNextDigit = false;
+
+    function updateDisplay() {
+      exprEl.textContent = expression;
+      valueEl.textContent = currentValue.replace('.', ',');
+    }
+
+    function applyOperation(op, a, b) {
+      const x = parseFloat(a);
+      const y = parseFloat(b);
+      switch (op) {
+        case '+': return x + y;
+        case '-': return x - y;
+        case '*': return x * y;
+        case '/': return y === 0 ? NaN : x / y;
+        default: return y;
+      }
+    }
+
+    function handleDigit(d) {
+      if (resetOnNextDigit) {
+        currentValue = '0';
+        resetOnNextDigit = false;
+      }
+      if (currentValue === '0') {
+        currentValue = d;
+      } else {
+        if (currentValue.length < 16) {
+          currentValue += d;
+        }
+      }
+      updateDisplay();
+    }
+
+    function handleDot() {
+      if (resetOnNextDigit) {
+        currentValue = '0';
+        resetOnNextDigit = false;
+      }
+      if (!currentValue.includes('.')) {
+        currentValue += '.';
+      }
+      updateDisplay();
+    }
+
+    function handleOperator(op) {
+      if (lastOperator === null) {
+        expression = currentValue + ' ' + op;
+      } else {
+        const result = applyOperation(lastOperator, expression.split(' ')[0], currentValue);
+        expression = (isNaN(result) ? 'Erreur' : result.toString()) + ' ' + op;
+        currentValue = isNaN(result) ? '0' : result.toString();
+      }
+      lastOperator = op;
+      resetOnNextDigit = true;
+      updateDisplay();
+    }
+
+    function handleEqual() {
+      if (lastOperator === null) return;
+      const parts = expression.split(' ');
+      const a = parts[0];
+      const result = applyOperation(lastOperator, a, currentValue);
+      expression = '';
+      currentValue = isNaN(result) ? 'Erreur' : result.toString();
+      lastOperator = null;
+      resetOnNextDigit = true;
+      updateDisplay();
+    }
+
+    function handleClear() {
+      currentValue = '0';
+      expression = '';
+      lastOperator = null;
+      resetOnNextDigit = false;
+      updateDisplay();
+    }
+
+    function handleSign() {
+      if (currentValue === '0' || currentValue === 'Erreur') return;
+      currentValue = currentValue.startsWith('-') ? currentValue.slice(1) : '-' + currentValue;
+      updateDisplay();
+    }
+
+    function handlePercent() {
+      const x = parseFloat(currentValue);
+      if (isNaN(x)) return;
+      currentValue = (x / 100).toString();
+      updateDisplay();
+    }
+
+    document.querySelectorAll('button').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const action = btn.getAttribute('data-action');
+        const value = btn.getAttribute('data-value');
+
+        if (action === 'clear') return handleClear();
+        if (action === 'sign') return handleSign();
+        if (action === 'percent') return handlePercent();
+        if (action === 'dot') return handleDot();
+        if (action === 'equal') return handleEqual();
+
+        if (['+', '-', '*', '/'].includes(value)) {
+          return handleOperator(value);
+        }
+
+        if (value && /[0-9]/.test(value)) {
+          return handleDigit(value);
+        }
+      });
+    });
+
+    // Initial display
+    updateDisplay();
+  </script>
+</body>
+</html>
