@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, type ReactNode } from 'react';
+import { useAuth } from './AuthContext';
+import { debouncedSyncFavorites, fetchFavoritesFromCloud } from '../services/syncService';
 
 type Country = {
   code: string;
@@ -46,6 +48,7 @@ const SUPPORTED_COUNTRIES: Country[] = [
 ];
 
 export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { user, isAuthenticated } = useAuth();
   const [favorites, setFavorites] = useState<FavoriteItem[]>(() => {
     // Charger les favoris depuis le stockage local au démarrage
     if (typeof window !== 'undefined') {
@@ -56,13 +59,31 @@ export const FavoritesProvider: React.FC<{ children: ReactNode }> = ({ children 
   });
 
   const [currentCountry, setCurrentCountryState] = useState<string>('FR');
+  const hasLoadedFromCloud = useRef(false);
+
+  // Load favorites from cloud when authenticated
+  useEffect(() => {
+    if (isAuthenticated && user?.id && !hasLoadedFromCloud.current) {
+      hasLoadedFromCloud.current = true;
+      fetchFavoritesFromCloud(user.id).then(cloudFavorites => {
+        if (cloudFavorites && cloudFavorites.length > 0) {
+          setFavorites(cloudFavorites as FavoriteItem[]);
+        }
+      });
+    }
+  }, [isAuthenticated, user?.id]);
 
   // Sauvegarder les favoris dans le stockage local à chaque changement
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('favorites', JSON.stringify(favorites));
     }
-  }, [favorites]);
+
+    // Sync to cloud if authenticated
+    if (isAuthenticated && user?.id) {
+      debouncedSyncFavorites(user.id, favorites);
+    }
+  }, [favorites, isAuthenticated, user?.id]);
 
   // Charger le pays depuis le stockage local ou détecter la langue du navigateur
   useEffect(() => {

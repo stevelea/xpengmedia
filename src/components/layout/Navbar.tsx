@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '../../context/LocaleContext';
 import { LocaleSelector } from '../locale/LocaleSelector';
 import { ThemeToggle } from './ThemeToggle';
+import { UserMenu } from '../auth/UserMenu';
 
 interface NavItem {
   id: string;
@@ -104,6 +105,9 @@ export const Navbar: React.FC = () => {
 
             {/* Locale Selector */}
             <LocaleSelector />
+
+            {/* User Menu */}
+            <UserMenu />
 
             {/* Mobile Menu Button */}
             <button

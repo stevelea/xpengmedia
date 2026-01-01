@@ -1,10 +1,12 @@
 // Updated LocaleContext.tsx with full i18n support
 // Replace your existing src/context/LocaleContext.tsx with this file
 
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react';
 import { translations, type SupportedLanguage } from '../i18n/translations';
 import { getPlatformDescription } from '../i18n/platformTranslations';
 import { getCategoryTranslation, type CategoryTranslation } from '../i18n/categoryTranslations';
+import { useAuth } from './AuthContext';
+import { debouncedSyncLocale } from '../services/syncService';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // TYPES
@@ -132,8 +134,6 @@ const detectBrowserLocale = (): Locale => {
     const baseLang = browserLang.split('-')[0] || 'en';
     const detectedLanguage = langToCode[browserLang] || langToCode[baseLang] || 'fr';
 
-    console.log('🌍 Auto-detection:', { timezone, browserLang, detectedRegion, detectedLanguage });
-
     return {
       region: detectedRegion,
       language: detectedLanguage,
@@ -153,6 +153,8 @@ const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 const STORAGE_KEY = 'xpeng_locale';
 
 export const LocaleProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const { user, preferences, isAuthenticated } = useAuth();
+
   const [locale, setLocaleState] = useState<Locale>(() => {
     // Try to load from localStorage first
     try {
@@ -160,48 +162,60 @@ export const LocaleProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       if (stored) {
         const parsed = JSON.parse(stored);
         if (parsed.region && parsed.language) {
-          console.log('📦 Loaded locale from storage:', parsed);
           return parsed;
         }
       }
     } catch (e) {
       console.warn('Failed to load locale from storage:', e);
     }
-    
+
     // Otherwise detect from browser
     return detectBrowserLocale();
   });
+
+  // Load locale from cloud preferences when authenticated
+  useEffect(() => {
+    if (isAuthenticated && preferences?.region && preferences?.language) {
+      setLocaleState({
+        region: preferences.region as Region,
+        language: preferences.language as Language,
+      });
+    }
+  }, [isAuthenticated, preferences?.region, preferences?.language]);
 
   // Save to localStorage when locale changes
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(locale));
-      console.log('💾 Saved locale to storage:', locale);
+
+      // Sync to cloud if authenticated
+      if (isAuthenticated && user?.id) {
+        debouncedSyncLocale(user.id, locale.region, locale.language);
+      }
     } catch (e) {
-      console.warn('Failed to save locale to storage:', e);
+      // Silently fail
     }
-  }, [locale]);
+  }, [locale, isAuthenticated, user?.id]);
 
   // Translation function for UI strings
-  const t = (key: string): string => {
+  const t = useCallback((key: string): string => {
     const lang = locale.language;
     return translations[lang]?.[key] || translations.en?.[key] || key;
-  };
+  }, [locale.language]);
 
   // Translation function for platform descriptions
-  const tPlatform = (platformId: string): string => {
+  const tPlatform = useCallback((platformId: string): string => {
     return getPlatformDescription(platformId, locale.language);
-  };
+  }, [locale.language]);
 
   // Translation function for category titles/subtitles
-  const tCategory = (categoryId: string): CategoryTranslation => {
+  const tCategory = useCallback((categoryId: string): CategoryTranslation => {
     return getCategoryTranslation(categoryId, locale.language);
-  };
+  }, [locale.language]);
 
-  const setLocale = (newLocale: Locale) => {
-    console.log('🔄 Changing locale to:', newLocale);
+  const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale);
-  };
+  }, []);
 
   const currentRegion = regions.find(r => r.code === locale.region);
 

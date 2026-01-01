@@ -175,6 +175,29 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     settingsAbout: 'About',
     settingsVersion: 'Version',
     settingsDeveloper: 'Developed by',
+    settingsLocalDataDescriptionLoggedIn: 'Reset local cache. Your cloud data will remain intact.',
+    resetLocalDataConfirmLoggedIn: 'This will reset your local data. Your cloud data will be preserved. Continue?',
+
+    // Authentication
+    signIn: 'Sign In',
+    signInWithGoogle: 'Sign in with Google',
+    signOut: 'Sign Out',
+    signingIn: 'Signing in...',
+    signInError: 'Failed to sign in. Please try again.',
+    account: 'Account',
+    accountDescription: 'Sign in to sync your preferences across devices.',
+    signedInAs: 'Signed in via',
+    cloudSyncEnabled: 'Cloud sync enabled',
+    cloudSyncInfo: 'Your settings will be saved to the cloud',
+
+    // Profile
+    displayName: 'Display Name',
+    carModel: 'XPENG Model',
+    carNickname: 'Car Nickname',
+    carNicknamePlaceholder: 'e.g., My G6, Road Runner',
+    selectCarModel: 'Select your XPENG model',
+    saveChanges: 'Save Changes',
+    saved: 'Saved',
 
     // Footer
     createdWith: 'Created with',
@@ -370,6 +393,29 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     settingsAbout: 'À propos',
     settingsVersion: 'Version',
     settingsDeveloper: 'Développé par',
+    settingsLocalDataDescriptionLoggedIn: 'Réinitialiser le cache local. Vos données cloud seront conservées.',
+    resetLocalDataConfirmLoggedIn: 'Cela réinitialisera vos données locales. Vos données cloud seront conservées. Continuer ?',
+
+    // Authentication
+    signIn: 'Connexion',
+    signInWithGoogle: 'Se connecter avec Google',
+    signOut: 'Déconnexion',
+    signingIn: 'Connexion en cours...',
+    signInError: 'Échec de connexion. Veuillez réessayer.',
+    account: 'Compte',
+    accountDescription: 'Connectez-vous pour synchroniser vos préférences sur tous vos appareils.',
+    signedInAs: 'Connecté via',
+    cloudSyncEnabled: 'Synchronisation cloud activée',
+    cloudSyncInfo: 'Vos paramètres seront enregistrés dans le cloud',
+
+    // Profile
+    displayName: 'Nom d\'affichage',
+    carModel: 'Modèle XPENG',
+    carNickname: 'Surnom du véhicule',
+    carNicknamePlaceholder: 'ex: Mon G6, Éclair',
+    selectCarModel: 'Sélectionnez votre modèle XPENG',
+    saveChanges: 'Enregistrer',
+    saved: 'Enregistré',
 
     // Footer
     createdWith: 'Créé avec',
@@ -565,6 +611,29 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     settingsAbout: 'Über',
     settingsVersion: 'Version',
     settingsDeveloper: 'Entwickelt von',
+    settingsLocalDataDescriptionLoggedIn: 'Lokalen Cache zurücksetzen. Ihre Cloud-Daten bleiben erhalten.',
+    resetLocalDataConfirmLoggedIn: 'Ihre lokalen Daten werden zurückgesetzt. Ihre Cloud-Daten bleiben erhalten. Fortfahren?',
+
+    // Authentication
+    signIn: 'Anmelden',
+    signInWithGoogle: 'Mit Google anmelden',
+    signOut: 'Abmelden',
+    signingIn: 'Anmeldung läuft...',
+    signInError: 'Anmeldung fehlgeschlagen. Bitte erneut versuchen.',
+    account: 'Konto',
+    accountDescription: 'Melden Sie sich an, um Ihre Einstellungen zu synchronisieren.',
+    signedInAs: 'Angemeldet über',
+    cloudSyncEnabled: 'Cloud-Sync aktiviert',
+    cloudSyncInfo: 'Ihre Einstellungen werden in der Cloud gespeichert',
+
+    // Profile
+    displayName: 'Anzeigename',
+    carModel: 'XPENG Modell',
+    carNickname: 'Fahrzeug-Spitzname',
+    carNicknamePlaceholder: 'z.B. Mein G6, Blitz',
+    selectCarModel: 'Wählen Sie Ihr XPENG Modell',
+    saveChanges: 'Speichern',
+    saved: 'Gespeichert',
 
     // Footer
     createdWith: 'Erstellt mit',
@@ -760,6 +829,29 @@ export const translations: Record<SupportedLanguage, Record<string, string>> = {
     settingsAbout: 'Acerca de',
     settingsVersion: 'Versión',
     settingsDeveloper: 'Desarrollado por',
+    settingsLocalDataDescriptionLoggedIn: 'Restablecer caché local. Tus datos en la nube se conservarán.',
+    resetLocalDataConfirmLoggedIn: 'Se restablecerán tus datos locales. Tus datos en la nube se conservarán. ¿Continuar?',
+
+    // Authentication
+    signIn: 'Iniciar sesión',
+    signInWithGoogle: 'Iniciar sesión con Google',
+    signOut: 'Cerrar sesión',
+    signingIn: 'Iniciando sesión...',
+    signInError: 'Error al iniciar sesión. Inténtalo de nuevo.',
+    account: 'Cuenta',
+    accountDescription: 'Inicia sesión para sincronizar tus preferencias en todos tus dispositivos.',
+    signedInAs: 'Conectado vía',
+    cloudSyncEnabled: 'Sincronización en la nube activada',
+    cloudSyncInfo: 'Tus ajustes se guardarán en la nube',
+
+    // Profile
+    displayName: 'Nombre para mostrar',
+    carModel: 'Modelo XPENG',
+    carNickname: 'Apodo del vehículo',
+    carNicknamePlaceholder: 'ej: Mi G6, Rayo',
+    selectCarModel: 'Selecciona tu modelo XPENG',
+    saveChanges: 'Guardar cambios',
+    saved: 'Guardado',
 
     // Footer
     createdWith: 'Creado con',

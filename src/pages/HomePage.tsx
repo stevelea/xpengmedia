@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLocale } from '../context/LocaleContext';
+import { useAuth } from '../context/AuthContext';
 import {
   videoCategories,
   musicCategories,
@@ -11,13 +12,17 @@ import {
 import { EditablePlatformCard } from '../components/platforms/EditablePlatformCard';
 import { filterByRegion } from '../utils/regionFilter';
 import { PencilIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { debouncedSyncDashboard, fetchDashboardFromCloud } from '../services/syncService';
 
 const STORAGE_KEY_HIDDEN = 'xpeng-hidden-platforms';
 const STORAGE_KEY_FAVORITES = 'xpeng-favorite-platforms';
 
 const HomePage: React.FC = () => {
   const { t, tCategory, locale } = useLocale();
+  const { user, isAuthenticated } = useAuth();
   const [isEditMode, setIsEditMode] = useState(false);
+  const hasLoadedFromCloud = useRef(false);
+
   const [removedPlatforms, setRemovedPlatforms] = useState<Set<string>>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY_HIDDEN);
@@ -35,14 +40,41 @@ const HomePage: React.FC = () => {
     }
   });
 
-  // Persist to localStorage
+  // Load from cloud when authenticated
+  useEffect(() => {
+    if (isAuthenticated && user?.id && !hasLoadedFromCloud.current) {
+      hasLoadedFromCloud.current = true;
+      fetchDashboardFromCloud(user.id).then(cloudDashboard => {
+        if (cloudDashboard) {
+          if (cloudDashboard.hidden_platforms?.length > 0) {
+            setRemovedPlatforms(new Set(cloudDashboard.hidden_platforms));
+          }
+          if (cloudDashboard.favorite_platforms?.length > 0) {
+            setFavoritePlatforms(new Set(cloudDashboard.favorite_platforms));
+          }
+        }
+      });
+    }
+  }, [isAuthenticated, user?.id]);
+
+  // Persist to localStorage and sync to cloud
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_HIDDEN, JSON.stringify([...removedPlatforms]));
-  }, [removedPlatforms]);
+
+    // Sync to cloud if authenticated
+    if (isAuthenticated && user?.id) {
+      debouncedSyncDashboard(user.id, [...removedPlatforms], [...favoritePlatforms]);
+    }
+  }, [removedPlatforms, isAuthenticated, user?.id, favoritePlatforms]);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY_FAVORITES, JSON.stringify([...favoritePlatforms]));
-  }, [favoritePlatforms]);
+
+    // Sync to cloud if authenticated
+    if (isAuthenticated && user?.id) {
+      debouncedSyncDashboard(user.id, [...removedPlatforms], [...favoritePlatforms]);
+    }
+  }, [favoritePlatforms, isAuthenticated, user?.id, removedPlatforms]);
 
   // Get all platforms for favorites lookup
   const getAllPlatforms = (): PlatformLink[] => {

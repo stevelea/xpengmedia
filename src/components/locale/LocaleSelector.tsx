@@ -55,12 +55,7 @@ export const LocaleSelector: React.FC = () => {
   }, [isOpen]);
 
   const handleSelect = (regionCode: Region, language: Language) => {
-    console.log('🚩 LocaleSelector: Changing to', { region: regionCode, language });
-    console.log('📍 Locale actuel dans selector:', locale);
-    const newLocale = { region: regionCode, language };
-    console.log('🆕 Nouveau locale créé:', newLocale);
-    setLocale(newLocale);
-    console.log('✅ setLocale appelé depuis selector');
+    setLocale({ region: regionCode, language });
     setIsOpen(false);
   };
 
