@@ -3,6 +3,8 @@ import { useTheme } from '../context/ThemeContext';
 import { useLocale } from '../context/LocaleContext';
 import { useAuth } from '../context/AuthContext';
 import { ProfileSection } from '../components/profile/ProfileSection';
+import { AddServiceForm } from '../components/settings/AddServiceForm';
+import { CustomServicesList } from '../components/settings/CustomServicesList';
 
 export const SettingsPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -35,6 +37,25 @@ export const SettingsPage: React.FC = () => {
 
       {/* Account Section - ProfileSection handles both logged in and logged out states */}
       <ProfileSection />
+
+      {/* Custom Services */}
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-lg font-semibold mb-2 dark:text-white">
+          {t('myCustomServices') || 'My Custom Services'}
+        </h3>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          {t('customServicesDescription') || 'Add your own services like Home Assistant, NAS, or any other web app.'}
+        </p>
+
+        <AddServiceForm />
+
+        <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+            {t('yourServices') || 'Your Services'}
+          </h4>
+          <CustomServicesList />
+        </div>
+      </div>
 
       {/* Appearance */}
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">

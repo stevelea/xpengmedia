@@ -1,7 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { useLocale } from '../context/LocaleContext';
 import { useAuth } from '../context/AuthContext';
+import { useCustomServices } from '../context/CustomServicesContext';
 import {
   videoCategories,
   musicCategories,
@@ -11,7 +13,7 @@ import {
 } from '../data/platforms';
 import { EditablePlatformCard } from '../components/platforms/EditablePlatformCard';
 import { filterByRegion } from '../utils/regionFilter';
-import { PencilIcon, XMarkIcon, ArrowPathIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, XMarkIcon, ArrowPathIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { debouncedSyncDashboard, fetchDashboardFromCloud } from '../services/syncService';
 
 const STORAGE_KEY_HIDDEN = 'xpeng-hidden-platforms';
@@ -20,6 +22,7 @@ const STORAGE_KEY_FAVORITES = 'xpeng-favorite-platforms';
 const HomePage: React.FC = () => {
   const { t, tCategory, locale } = useLocale();
   const { user, isAuthenticated } = useAuth();
+  const { customServices, removeService } = useCustomServices();
   const [isEditMode, setIsEditMode] = useState(false);
   const hasLoadedFromCloud = useRef(false);
 
@@ -274,6 +277,96 @@ const HomePage: React.FC = () => {
                   onRemove={handleRemovePlatform}
                   onToggleFavorite={handleToggleFavorite}
                 />
+              ))}
+            </div>
+          </motion.section>
+        )}
+      </AnimatePresence>
+
+      {/* My Services Section (Custom Services) */}
+      <AnimatePresence>
+        {customServices.length > 0 && (
+          <motion.section
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+          >
+            <div className="mb-2 overflow-hidden rounded-xl border border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-teal-500/10 p-3 shadow-md backdrop-blur-xl dark:border-emerald-500/20 md:mb-4 md:rounded-3xl md:p-6 md:shadow-lg">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-2 md:gap-3">
+                    <div className="h-1 w-6 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 md:h-1 md:w-12" />
+                    <h2 className="bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-sm font-bold text-transparent md:text-2xl lg:text-3xl">
+                      {t('myServices') || 'My Services'}
+                    </h2>
+                  </div>
+                  <p className="mt-1 ml-8 text-[11px] leading-tight text-slate-600 dark:text-slate-400 md:ml-0 md:mt-1 md:text-sm line-clamp-1">
+                    {t('myServicesSubtitle') || 'Your custom services'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/settings"
+                    className="flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-1 text-xs text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/30 transition md:px-3"
+                  >
+                    <PlusIcon className="h-3 w-3" />
+                    <span className="hidden md:inline">{t('addMore') || 'Add'}</span>
+                  </Link>
+                  <div className="text-lg font-semibold text-slate-700 dark:text-slate-300 md:text-xl">
+                    {customServices.length}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid grid-cols-5 gap-1.5 landscape:grid-cols-8 landscape:gap-2 md:grid-cols-6 md:gap-3 lg:grid-cols-8">
+              {customServices.map((service) => (
+                <div
+                  key={service.id}
+                  className="group relative flex flex-col items-center"
+                >
+                  {/* Remove button in edit mode */}
+                  {isEditMode && (
+                    <button
+                      onClick={() => removeService(service.id)}
+                      className="absolute -right-1 -top-1 z-10 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-white text-xs shadow-lg hover:bg-red-600 transition md:h-6 md:w-6"
+                    >
+                      ×
+                    </button>
+                  )}
+                  {/* Service card */}
+                  <a
+                    href={isEditMode ? undefined : service.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => isEditMode && e.preventDefault()}
+                    className={`flex flex-col items-center w-full p-2 rounded-xl transition ${
+                      isEditMode
+                        ? 'cursor-default'
+                        : 'hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer'
+                    }`}
+                  >
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-xl bg-white dark:bg-slate-700 shadow-sm flex items-center justify-center overflow-hidden">
+                      {service.icon ? (
+                        <img
+                          src={service.icon}
+                          alt={service.name}
+                          className="w-10 h-10 md:w-12 md:h-12 object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none';
+                            (e.target as HTMLImageElement).parentElement!.innerHTML = `<span class="text-xl md:text-2xl font-medium text-slate-600 dark:text-slate-300">${service.name.charAt(0).toUpperCase()}</span>`;
+                          }}
+                        />
+                      ) : (
+                        <span className="text-xl md:text-2xl font-medium text-slate-600 dark:text-slate-300">
+                          {service.name.charAt(0).toUpperCase()}
+                        </span>
+                      )}
+                    </div>
+                    <span className="mt-1 text-[10px] md:text-xs text-center text-slate-700 dark:text-slate-300 line-clamp-2 w-full">
+                      {service.name}
+                    </span>
+                  </a>
+                </div>
               ))}
             </div>
           </motion.section>

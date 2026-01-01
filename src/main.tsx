@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { LocaleProvider } from './context/LocaleContext';
+import { CustomServicesProvider } from './context/CustomServicesContext';
 import './index.css';
 import App from './App';
 
@@ -32,7 +33,9 @@ createRoot(document.getElementById('root')!).render(
         <ThemeProvider>
           <LocaleProvider>
             <FavoritesProvider>
-              <App />
+              <CustomServicesProvider>
+                <App />
+              </CustomServicesProvider>
             </FavoritesProvider>
           </LocaleProvider>
         </ThemeProvider>

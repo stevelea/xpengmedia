@@ -1,5 +1,14 @@
 export type XpengModel = 'G3' | 'G3i' | 'P5' | 'P7' | 'P7i' | 'G6' | 'G9' | 'X9' | 'MONA M03' | null;
 
+// Custom service added by user
+export interface CustomService {
+  id: string;
+  name: string;
+  url: string;
+  icon: string;
+  created_at?: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -66,6 +75,7 @@ export interface Database {
           user_id: string;
           hidden_platforms: string[];
           favorite_platforms: string[];
+          custom_services: CustomService[];
           created_at: string;
           updated_at: string;
         };
@@ -74,12 +84,14 @@ export interface Database {
           user_id: string;
           hidden_platforms?: string[];
           favorite_platforms?: string[];
+          custom_services?: CustomService[];
           created_at?: string;
           updated_at?: string;
         };
         Update: {
           hidden_platforms?: string[];
           favorite_platforms?: string[];
+          custom_services?: CustomService[];
           updated_at?: string;
         };
       };

@@ -1,5 +1,5 @@
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
-import type { UserPreferences, UserDashboard } from '../types/database';
+import type { UserPreferences, UserDashboard, CustomService } from '../types/database';
 
 // Debounce helper - creates a debounced version of any function
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -167,8 +167,45 @@ export const fetchDashboardFromCloud = async (userId: string): Promise<UserDashb
   }
 };
 
+// Sync custom services to Supabase
+export const syncCustomServicesToCloud = async (userId: string, customServices: CustomService[]) => {
+  if (!isSupabaseConfigured()) return;
+
+  try {
+    await supabase
+      .from('user_dashboard')
+      .upsert({
+        user_id: userId,
+        custom_services: customServices,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'user_id' });
+  } catch (error) {
+    console.error('Error syncing custom services:', error);
+  }
+};
+
+// Fetch custom services from Supabase
+export const fetchCustomServicesFromCloud = async (userId: string): Promise<CustomService[] | null> => {
+  if (!isSupabaseConfigured()) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('user_dashboard')
+      .select('custom_services')
+      .eq('user_id', userId)
+      .single();
+
+    if (error) throw error;
+    return data?.custom_services || [];
+  } catch (error) {
+    console.error('Error fetching custom services from cloud:', error);
+    return null;
+  }
+};
+
 // Create debounced sync functions (500ms delay)
 export const debouncedSyncTheme = debounce(syncThemeToCloud, 500);
 export const debouncedSyncLocale = debounce(syncLocaleToCloud, 500);
 export const debouncedSyncDashboard = debounce(syncDashboardToCloud, 500);
 export const debouncedSyncFavorites = debounce(syncFavoritesToCloud, 500);
+export const debouncedSyncCustomServices = debounce(syncCustomServicesToCloud, 500);
